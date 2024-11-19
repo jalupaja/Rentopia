@@ -21,11 +21,10 @@ public class Device {
     private String description;
 
     @Column(nullable = false)
-    private Double price;
+    private Double price = 0.0;
 
-    @ManyToOne
-    @JoinColumn(name = "owner_id", nullable = false)
-    private Account owner;
+    @Column(nullable = false)
+    private Long ownerId;
 
     @ManyToMany
     @JoinTable(
@@ -38,5 +37,5 @@ public class Device {
     private Location location;
 
     @Column(nullable = false)
-    private Boolean isPublic;
+    private Boolean isPublic = true;
 }

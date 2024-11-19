@@ -12,20 +12,18 @@ public class Chat {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "from_account_id", nullable = false)
-    private Account from;
+    @Column(nullable = false)
+    private Long fromId;
 
-    @ManyToOne
-    @JoinColumn(name = "to_account_id", nullable = false)
-    private Account to;
+    @Column(nullable = false)
+    private Long toId;
 
     @Column(nullable = false, length = 1024)
     private String msg;
 
     @Column(nullable = false)
-    private LocalDateTime timestamp;
+    private LocalDateTime timestamp = LocalDateTime.now();
 
     @Column(nullable = false)
-    private Boolean read;
+    private Boolean read = false;
 }

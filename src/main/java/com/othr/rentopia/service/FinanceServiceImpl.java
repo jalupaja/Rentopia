@@ -2,6 +2,7 @@ package com.othr.rentopia.service;
 
 import java.util.List;
 import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,7 @@ public class FinanceServiceImpl implements FinanceService {
     private EntityManager entityManager;
 
     @Override
+    @Transactional
     public void saveFinance(Finance finance) {
 	entityManager.persist(finance);
     }
@@ -24,7 +26,7 @@ public class FinanceServiceImpl implements FinanceService {
     public List<Finance> getFinancesByAccount(Long accountId) {
 	List<Finance> finances = null;
 
-	String query = "SELECT f FROM Finance f WHERE f.account = :accountId";
+	String query = "SELECT f FROM Finance f WHERE f.accountId = :accountId";
 	try {
 	    finances = entityManager
 		    .createQuery(query, Finance.class)

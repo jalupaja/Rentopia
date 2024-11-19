@@ -2,8 +2,10 @@ package com.othr.rentopia.service;
 
 import java.util.List;
 import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.PersistenceException;
 import org.springframework.stereotype.Service;
 
 import com.othr.rentopia.model.Device;
@@ -16,19 +18,36 @@ public class DeviceServiceImpl implements DeviceService {
     private EntityManager entityManager;
 
     @Override
+    @Transactional
     public void saveDevice(Device device) {
 	entityManager.persist(device);
+    }
+
+    @Override
+    public Device getDevice(Long deviceId) {
+	Device device = null;
+
+	String query = "SELECT DISTINCT d FROM Device d WHERE id = :deviceId";
+	try {
+	    device = entityManager
+		.createQuery(query, Device.class)
+		.setParameter("deviceId", deviceId)
+		.getSingleResult();
+	} catch (NoResultException e) {
+	}
+
+	return device ;
     }
 
     @Override
     public List<Device> getDevicesByOwner(Long ownerId) {
 	List<Device> devices = null;
 
-	String query = "SELECT d FROM Device d WHERE d.owner = :ownerId";
+	String query = "SELECT d FROM Device d WHERE d.ownerId = :ownerId";
 	try {
 	    devices = entityManager
 		    .createQuery(query, Device.class)
-		    .setParameter("owner", ownerId)
+		    .setParameter("ownerId", ownerId)
 		    .getResultList();
 	} catch (NoResultException e) {
 	}
@@ -53,13 +72,13 @@ public class DeviceServiceImpl implements DeviceService {
 
     @Override
     public void removeDevice(Long deviceId) {
-	String query = "DELETE d FROM Device d WHERE d.id = :deviceId";
+	String query = "DELETE FROM Device WHERE id = :deviceId";
 	try {
-	    entityManager
-		.createQuery(query, Device.class)
+	    entityManager.createQuery(query)
 		.setParameter("deviceId", deviceId)
 		.executeUpdate();
-	} catch (NoResultException e) {
+	} catch (PersistenceException e) {
+	    System.err.println("ERROR removing Device with ID " + deviceId + ": " + e.getMessage());
 	}
     }
 }

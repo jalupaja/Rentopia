@@ -11,11 +11,9 @@ public class Bookmark {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "owner_id", nullable = false)
-    private Account owner;
+    @Column(nullable = false)
+    private Long ownerId;
 
-    @ManyToOne
-    @JoinColumn(name = "device_id", nullable = false)
-    private Device device;
+    @Column(nullable = false)
+    private Long deviceId;
 }

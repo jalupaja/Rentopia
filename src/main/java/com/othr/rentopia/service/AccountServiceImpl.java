@@ -1,8 +1,9 @@
 package com.othr.rentopia.service;
 
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
 import jakarta.persistence.NoResultException;
+import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.PersistenceException;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
@@ -53,19 +54,19 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public boolean checkPassword(String email, String password) {
-	Account account = null;
+	String db_password = "";
 
 	String query = "SELECT a.password FROM Account a WHERE a.email = :email";
 	try {
-	    account = entityManager
-		.createQuery(query, Account.class)
+	    db_password = entityManager
+		.createQuery(query, String.class)
 		.setParameter("email", email)
 		.getSingleResult();
 	} catch (NoResultException e) {
 	    return false;
 	}
 
-	if (account.getPassword().equals(password)) {
+	if (db_password.equals(password)) {
 	    return true;
 	} else {
 	    return false;
@@ -74,13 +75,13 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public void removeAccount(Long accountId) {
-	String query = "DELETE a FROM Account a WHERE a.id = :accountId";
+	String query = "DELETE FROM Account WHERE id = :accountId";
 	try {
-	    entityManager
-		.createQuery(query, Account.class)
+	    entityManager.createQuery(query)
 		.setParameter("accountId", accountId)
 		.executeUpdate();
-	} catch (NoResultException e) {
+	} catch (PersistenceException e) {
+	    System.err.println("ERROR removing Account with ID " + accountId + ": " + e.getMessage());
 	}
     }
 }

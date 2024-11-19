@@ -12,16 +12,15 @@ public class Finance {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "account_id", nullable = false)
-    private Account account;
+    @Column(nullable = false)
+    private Long accountId;
 
     @Column(nullable = false)
     private Double amount;
 
     @Column(nullable = false)
-    private LocalDateTime timestamp;
+    private LocalDateTime timestamp = LocalDateTime.now();
 
     @Column(nullable = false)
-    private Boolean processed;
+    private Boolean processed = false;
 }

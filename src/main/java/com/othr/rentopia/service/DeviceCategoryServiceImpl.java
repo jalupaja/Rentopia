@@ -2,8 +2,10 @@ package com.othr.rentopia.service;
 
 import java.util.List;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
 import jakarta.persistence.NoResultException;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.PersistenceException;
 import org.springframework.stereotype.Service;
 
 import com.othr.rentopia.model.DeviceCategory;
@@ -16,6 +18,7 @@ public class DeviceCategoryServiceImpl implements DeviceCategoryService {
     private EntityManager entityManager;
 
     @Override
+    @Transactional
     public void saveDeviceCategory(DeviceCategory deviceCategory) {
 	entityManager.persist(deviceCategory);
     }
@@ -37,13 +40,14 @@ public class DeviceCategoryServiceImpl implements DeviceCategoryService {
 
     @Override
     public void removeDeviceCategory(Long deviceCategoryId) {
-	String query = "DELETE a FROM DeviceCategory a WHERE a.id = :deviceCategoryId";
+	String query = "DELETE FROM DeviceCategory WHERE id = :deviceCategoryId";
 	try {
 	    entityManager
-		.createQuery(query, DeviceCategory.class)
+		.createQuery(query)
 		.setParameter("deviceCategoryId", deviceCategoryId)
 		.executeUpdate();
-	} catch (NoResultException e) {
+	} catch (PersistenceException e) {
+	    System.err.println("ERROR removing DeviceCategory with ID " + deviceCategoryId + ": " + e.getMessage());
 	}
     }
 }
