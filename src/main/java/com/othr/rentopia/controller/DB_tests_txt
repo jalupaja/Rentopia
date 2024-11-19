@@ -1,0 +1,100 @@
+        try {
+	    Location location = new Location();
+	    location.setStreet("123 Elm Street");
+	    location.setCity("Springfield");
+	    location.setState("Illinois");
+	    location.setCountry("USA");
+	    location.setPostalCode("62704");
+
+            // Test Account Service
+            System.out.println("Testing AccountService...");
+            Account account = new Account();
+            account.setEmail("test@xample.com");
+            account.setPassword("password");
+            account.setName("John Doe");
+	    account.setRole(Account.Role.USER);
+            account.setLocation(location);
+            accountService.saveAccount(account);
+
+            Account fetchedAccount = accountService.getAccount("test@xample.com");
+            System.out.println("Fetched Account: " + fetchedAccount);
+
+            boolean passwordCheck = accountService.checkPassword("test@xample.com", "password");
+            System.out.println("Password Check: " + passwordCheck);
+
+            // Test Device Service
+            System.out.println("\nTesting DeviceService...");
+            Device device = new Device();
+            device.setTitle("Laptop");
+            device.setDescription("A powerful gaming laptop");
+            device.setPrice(1200.00);
+            device.setOwnerId(fetchedAccount.getId());
+	    location.setStreet("456 TEST");
+            device.setLocation(location);
+            device.setIsPublic(true);
+            deviceService.saveDevice(device);
+
+            List<Device> devices = deviceService.getDevicesByOwner(fetchedAccount.getId());
+            System.out.println("Devices owned by account: " + devices);
+
+            Device fetchedDevice = deviceService.getDevice(devices.get(0).getId());
+            System.out.println("Fetched Device: " + fetchedDevice);
+
+            deviceService.removeDevice(fetchedDevice.getId());
+            System.out.println("Device deleted: ");
+
+            // Test Bookmark Service
+            System.out.println("\nTesting BookmarkService...");
+            Bookmark bookmark = new Bookmark();
+            bookmark.setOwnerId(fetchedAccount.getId());
+            bookmark.setDeviceId(device.getId());
+            bookmarkService.saveBookmark(bookmark);
+
+            List<Bookmark> bookmarks = bookmarkService.getBookmarksByOwner(fetchedAccount.getId());
+            System.out.println("Bookmarks: " + bookmarks);
+
+            bookmarkService.removeBookmark(bookmarks.get(0).getId());
+            System.out.println("Bookmark deleted: ");
+
+            // Test Finance Service
+            System.out.println("\nTesting FinanceService...");
+            Finance finance = new Finance();
+            finance.setAccountId(fetchedAccount.getId());
+            finance.setAmount(100.50);
+            finance.setTimestamp(LocalDateTime.now());
+            finance.setProcessed(false);
+            financeService.saveFinance(finance);
+
+            List<Finance> finances = financeService.getFinancesByAccount(fetchedAccount.getId());
+            System.out.println("Finances: " + finances);
+
+            // Test Chat Service
+            System.out.println("\nTesting ChatService...");
+            Account recipient = new Account();
+            recipient.setEmail("recipient@xample.com");
+            recipient.setPassword("password123");
+            recipient.setName("Jane Smith");
+            recipient.setRole(Account.Role.USER);
+	    location.setStreet("789 TTTT");
+            recipient.setLocation(location);
+            accountService.saveAccount(recipient);
+
+            Chat chat = new Chat();
+            chat.setFromId(fetchedAccount.getId());
+            chat.setToId(recipient.getId());
+            chat.setMsg("Hello, how are you?");
+            chat.setTimestamp(LocalDateTime.now());
+            chat.setRead(false);
+            chatService.saveChat(chat);
+
+            List<Chat> chats = chatService.getChatsBetweenAccounts(fetchedAccount.getId(), recipient.getId());
+            System.out.println("Chats between accounts: " + chats);
+
+            List<Tuple> unreadChats = chatService.getChatsforAccount(recipient.getId());
+            System.out.println("Unread chats: " + unreadChats);
+
+            System.out.println("\nAll tests passed without errors!");
+        } catch (Exception e) {
+            e.printStackTrace();
+	}
+
