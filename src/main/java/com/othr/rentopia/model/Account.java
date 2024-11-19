@@ -1,12 +1,6 @@
 package com.othr.rentopia.model;
 
-import jakarta.persistence.Id;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
+import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
@@ -34,6 +28,9 @@ public class Account {
 
     @Column
     private Location location;
+
+    @Column
+    private String language;
 
     public enum Role {
         USER,
