@@ -1,5 +1,4 @@
 import {Box, Container, Grid, Typography} from "@mui/material";
-import { BottomNavigation } from '@mui/material';
 
 const FooterStyle = {
     position : "fixed",
@@ -15,9 +14,8 @@ function Footer(){
                 height: "auto",
                 paddingTop: "1rem",
                 paddingBottom: "0",
-                position : "fixed",
-                bottom : "0",
-                backgroundColor : "lightblue"
+                backgroundColor : "lightblue",
+                bottom: "0"
             }}
         >
             <Container maxWidth="lg">
@@ -29,7 +27,7 @@ function Footer(){
                     </Grid>
                     <Grid item xs={12}>
                         <Typography color="textSecondary" variant="subtitle1">
-                            {`${new Date().getFullYear()} | React | Material UI | React Router`}
+                            {`${new Date().getFullYear()} | Copyright DreamTeam inc.`}
                         </Typography>
                     </Grid>
                 </Grid>
