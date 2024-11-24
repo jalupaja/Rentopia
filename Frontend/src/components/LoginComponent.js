@@ -29,6 +29,29 @@ function LoginComponent(){
         event.preventDefault();
     };
 
+    //login
+    const [userEmail, setUserEmail] = React.useState("");
+    const [userPassword, setUserPassword] = React.useState("");
+    const SubmitLogin = () =>{
+        let loginData = {
+            useremail : userEmail,
+            userpassword : userPassword
+        }
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(loginData)
+        };
+        console.log(requestOptions);
+
+        fetch('http://localhost:8080/api/login', requestOptions)
+            .then(response => response.json())
+            .then(data => console.log(data))
+            .catch((error) => {
+                console.log(error)
+            });;
+    };
+
     return (
         <Box sx = {{ ...FrameStyle}}>
             <NavBar showLogin={false}/>
@@ -37,10 +60,13 @@ function LoginComponent(){
                 <Typography variant="button" gutterBottom variant="h5">
                     Welcome to Rentopia
                 </Typography>
-                <TextField sx={{...InputFieldStyle}} id="emailTextfield" label="Email" variant="outlined" />
+                <TextField sx={{...InputFieldStyle}} id="emailTextfield" label="Email" variant="outlined"
+                           value={userEmail} onChange={(event) =>  setUserEmail(event.target.value)}
+                />
                 <FormControl sx={{ ...InputFieldStyle }} variant="outlined">
                     <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
                     <OutlinedInput
+                        value={userPassword} onChange={(event)=> setUserPassword(event.target.value)}
                         id="outlined-adornment-password"
                         type={showPassword ? 'text' : 'password'}
                         endAdornment={
@@ -61,7 +87,7 @@ function LoginComponent(){
                         label="Password"
                     />
                 </FormControl>
-                <Button variant="contained" href="./" sx={{...InputFieldStyle}}>
+                <Button variant="contained" onClick={() => SubmitLogin()} sx={{...InputFieldStyle}}>
                     Login
                 </Button>
                 <Link href="./register" marginTop={2}>Create Account</Link>
