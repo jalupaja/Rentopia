@@ -5,9 +5,11 @@ import java.util.List;
 import com.othr.rentopia.model.Device;
 
 public interface DeviceService {
-    public void saveDevice(Device device);
-    public Device getDevice(Long deviceId);
-    public List<Device> getDevicesByOwner(Long ownerId);
-    public List<Device> getDevicesByCategory(Long categoryId);
-    public void removeDevice(Long deviceId);
+    void saveDevice(Device device);
+    Device getDevice(Long deviceId);
+    List<Device> getDevicesByOwner(Long ownerId);
+    List<Device> getDevicesByCategory(Long categoryId);
+    List<Device> getAllDevices();
+    void removeDevice(Long deviceId);
+
 }
