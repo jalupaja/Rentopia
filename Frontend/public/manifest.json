@@ -1,0 +1,15 @@
+{
+  "short_name": "Rentopia",
+  "name": "Create Rentopia",
+  "icons": [
+    {
+      "src": "RentopiaLogo64.jpg",
+      "type": "image/png",
+      "sizes": "64x64"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+}
