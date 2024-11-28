@@ -1,7 +1,6 @@
 import {
     Box,
     Card, CardActionArea,
-    CardActions,
     CardContent,
     CardMedia,
     Typography
@@ -11,19 +10,8 @@ import Appbar from './components/Appbar';
 import {useEffect, useState} from "react";
 import {styled} from "@mui/material/styles";
 
-/*const Item = styled(Paper)(({ theme }) => ({
-    backgroundColor: '#fff',
-    ...theme.typography.body2,
-    padding: theme.spacing(2),
-    textAlign: 'center',
-    color: theme.palette.text.secondary,
-    ...theme.applyStyles('dark', {
-        backgroundColor: '#1A2027',
-    }),
-}));*/
-
 const DeviceGrid = styled(Grid)(({theme}) => ({
-    marginTop: '25px',
+    margin: '2% 10%'
 }))
 
 function App() {
@@ -45,7 +33,7 @@ function App() {
               <DeviceGrid container spacing={{xs: 4}} justifyContent={'center'} >
                   {Array.from({ length: 15 }).map((_, index) => (
                       <Grid key={index}>
-                        <Card sx={{minWidth: 250}} >
+                        <Card sx={{width: 300, boxShadow: 3}} >
                             <CardActionArea /*component={RouterLink} to="/DevicesDetail" TODO: ADD Device Detail PAge here*/>
                                 <CardMedia
                                     component="img"
@@ -56,12 +44,10 @@ function App() {
                                     <Typography gutterBottom variant="h6" component="div">
                                         {"ToolNr " + index}
                                     </Typography>
-                                </CardContent>
-                                <CardActions>
-                                    <Typography variant="body1" sx={{ color: 'text.secondary' }}>
+                                    <Typography variant="h6" sx={{ color: 'text.secondary' }} justifySelf={'end'}>
                                         {index * 3 + " €"}
                                     </Typography>
-                                </CardActions>
+                                </CardContent>
                             </CardActionArea>
                         </Card>
                       </Grid>
