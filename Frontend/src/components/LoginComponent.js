@@ -9,17 +9,22 @@ import {
     Toolbar,
     Typography,
     InputLabel,
-    OutlinedInput, InputAdornment, IconButton, FormControl
+    OutlinedInput, InputAdornment, IconButton, FormControl, Alert
 } from "@mui/material";
 import Footer from "./Footer.js";
 import NavBar from "./NavBar.js";
 import {centeredDivStyle, FrameStyle, InputFieldStyle} from "./RegisterPage.js"
 import {Visibility, VisibilityOff} from "@mui/icons-material";
 import * as React from "react";
-
+import {JWT_TOKEN} from "../helper/BackendHelper.js";
+import {useNavigate} from "react-router-dom";
+import FetchBackend from "../helper/BackendHelper.js";
+import Cookies from "js-cookie"
 
 
 function LoginComponent(){
+    const navigation = useNavigate();
+
     const [showPassword, setShowPassword] = React.useState(false);
     const handleClickShowPassword = () => setShowPassword((show) => !show);
     const handleMouseDownPassword = (event) => {
@@ -36,27 +41,36 @@ function LoginComponent(){
         let loginData = {
             useremail : userEmail,
             userpassword : userPassword
-        }
-        const requestOptions = {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(loginData)
         };
-        console.log(requestOptions);
 
-        fetch('http://localhost:8080/api/login', requestOptions)
-            .then(response => response.json())
-            .then(data => console.log(data))
-            .catch((error) => {
-                console.log(error)
-            });;
+        FetchBackend('POST', 'login', loginData)
+        .then(response => response.json())
+        .then(data => {
+            if(data.status){
+                Cookies.set(JWT_TOKEN, data.jwt);
+                navigation("/");
+            }
+            else{
+                errorLabel = <Alert severity="error">Wrong email or password!</Alert>;
+            }
+            console.log(data);
+
+        })
+        .catch((error) => {
+            errorLabel = <Alert severity="error">An error occurred. Please try again.</Alert>;
+        });
     };
+
+    let errorLabel = null;
 
     return (
         <Box sx = {{ ...FrameStyle}}>
             <NavBar showLogin={false}/>
 
+            {errorLabel}
+
             <Stack sx = {{...centeredDivStyle}}>
+
                 <Typography variant="button" gutterBottom variant="h5">
                     Welcome to Rentopia
                 </Typography>

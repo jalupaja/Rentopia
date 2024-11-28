@@ -18,7 +18,7 @@ function App() {
               <Route path="/" >
                   <Route index element={<Home />} />
                   <Route path="login" element={<LoginComponent />} />
-                  <Route path="forgetPasword" element={<ForgetPasswordPage/>}/>
+                  <Route path="resetPassword" element={<ForgetPasswordPage/>}/>
                   <Route path="register" element={<RegisterPage/>}/>
               </Route>
           </Routes>

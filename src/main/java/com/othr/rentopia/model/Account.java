@@ -33,6 +33,11 @@ public class Account implements UserDetails {
 	return Collections.singletonList(() -> role.name());
     }
 
+    @Override
+    public String getUsername() {
+        return name;
+    }
+
     @Column(length = 500)
     private String description;
 

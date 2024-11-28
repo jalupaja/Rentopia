@@ -44,19 +44,26 @@ const Search = styled('div')(({ theme }) => ({
     },
 }));
 
-function NavBar({showLogin = true}){
+function NavBar({showLogin = true, authUser = null}){
     const navigate = useNavigate();
 
     let loginButton = <Button/>;
     if(showLogin){
-        loginButton = <Button onClick={()=>navigate("/login")} variant="outlined" color="inherit">Sign in</Button>;
+        if(authUser === null){
+            loginButton = <Button onClick={()=>navigate("/login")} variant="outlined" color="inherit">Sign in</Button>;
+        }
+        else{
+            loginButton = <Button onClick={()=>navigate("/user/"+authUser.id)} variant="outlined" color="inherit">Log out</Button>;
+        }
     }
 
     return (
         <Box sx={{ height: 'auto', width:'100%', display:'block' }}>
             <AppBar position="static">
                 <Toolbar>
-                    <img src={Logo} onClick={()=>navigate("/")} alt={"Rentopia Logo"}/>
+                    <Box sx={{height :'63px', width:'63px', borderRadius: 25, overflow: 'hidden'}}>
+                        <img src={Logo} onClick={()=>navigate("/")} alt={"Rentopia Logo"}/>
+                    </Box>
                     <Search sx={{ flexGrow: 0.5 }} >
                         <SearchIconWrapper>
                             <SearchIcon/>
