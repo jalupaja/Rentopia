@@ -5,6 +5,8 @@ import {alpha, styled} from "@mui/material";
 import * as React from 'react';
 import Logo from "../image/RentopiaLogo64.jpg";
 import {useNavigate} from "react-router-dom";
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import {Logout} from "../helper/BackendHelper.js"
 
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
     color: 'inherit',
@@ -82,7 +84,7 @@ function Appbar({showLogin = true, authUser = null}) {
             loginButton = <Button onClick={()=>navigate("/login")} variant="outlined" color="inherit">Sign in</Button>;
         }
         else{
-            loginButton = <Button onClick={()=>navigate("/user/"+authUser.id)} variant="outlined" color="inherit">Log out</Button>;
+            loginButton = <Button onClick={()=> {Logout();  window.location.reload();}} variant="outlined" color="inherit">Log out</Button>;
         }
     }
 
@@ -121,6 +123,9 @@ return (
                     />
                 </Search>
                 <Box sx={{flexGrow: 1}}></Box>
+                <Box sx={{marginRight: 2}}>
+                    <AccountCircleIcon onClick={() => {}}/>
+                </Box>
                 {loginButton}
             </Toolbar>
         </AppBar>

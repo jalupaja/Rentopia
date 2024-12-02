@@ -7,6 +7,11 @@ export function JWTTokenExists(){
     let cookie = Cookie.get(JWT_TOKEN);
     return cookie !== undefined && cookie !== "undefined";
 }
+
+export function Logout(){
+    Cookie.remove(JWT_TOKEN);
+    console.log(Cookie.get(JWT_TOKEN))
+}
 function FetchBackend(httpMethod, uri, json){
     const requestOptions = {
         method: httpMethod,
