@@ -15,6 +15,7 @@ import {
 } from "@mui/material";
 import {Visibility, VisibilityOff} from "@mui/icons-material";
 import Appbar from "./Appbar.js";
+import {ReturnHomeWhenLoggedIn} from "../helper/BackendHelper.js";
 
 export const centeredDivStyle = {
     alignItems : 'center',
@@ -44,6 +45,8 @@ export const InputFieldStyle = {
 }
 
 function RegisterPage(){
+    ReturnHomeWhenLoggedIn();
+    
     const [showPassword, setShowPassword] = React.useState(false);
 
     const handleClickShowPassword = () => setShowPassword((show) => !show);

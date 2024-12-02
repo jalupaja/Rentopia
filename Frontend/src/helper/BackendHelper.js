@@ -1,5 +1,6 @@
 import Cookie from 'js-cookie';
-import {json} from "react-router-dom";
+import {json, useNavigate} from "react-router-dom";
+import {useEffect} from "react";
 
 export const JWT_TOKEN = "jwtToken";
 
@@ -11,6 +12,15 @@ export function JWTTokenExists(){
 export function Logout(){
     Cookie.remove(JWT_TOKEN);
     console.log(Cookie.get(JWT_TOKEN))
+}
+
+export function ReturnHomeWhenLoggedIn(){
+    const navigation = useNavigate();
+    useEffect(() => {
+        if(JWTTokenExists()){
+            navigation("/");
+        }
+    }, [])
 }
 function FetchBackend(httpMethod, uri, json){
     const requestOptions = {

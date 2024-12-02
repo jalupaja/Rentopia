@@ -15,7 +15,7 @@ import Footer from "./Footer.js";
 import {centeredDivStyle, FrameStyle, InputFieldStyle} from "./RegisterPage.js"
 import {Visibility, VisibilityOff} from "@mui/icons-material";
 import * as React from "react";
-import {JWT_TOKEN} from "../helper/BackendHelper.js";
+import {JWT_TOKEN, ReturnHomeWhenLoggedIn} from "../helper/BackendHelper.js";
 import {useNavigate} from "react-router-dom";
 import FetchBackend from "../helper/BackendHelper.js";
 import Cookies from "js-cookie";
@@ -24,6 +24,9 @@ import Appbar from "./Appbar.js";
 
 function LoginComponent(){
     const navigation = useNavigate();
+
+    ReturnHomeWhenLoggedIn();
+
 
     const [showPassword, setShowPassword] = React.useState(false);
     const handleClickShowPassword = () => setShowPassword((show) => !show);

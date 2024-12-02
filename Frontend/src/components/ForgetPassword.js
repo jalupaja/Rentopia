@@ -3,17 +3,17 @@ import {Box, Typography, Stack, Button, TextField, Alert, Snackbar } from "@mui/
 import * as React from "react";
 import {centeredDivStyle, InputFieldStyle} from "./RegisterPage.js";
 import {useNavigate} from "react-router-dom";
-import FetchBackend from "../helper/BackendHelper.js";
+import FetchBackend, {ReturnHomeWhenLoggedIn} from "../helper/BackendHelper.js";
 import Appbar from "./Appbar.js";
 import {useState} from "react";
 function ForgetPasswordPage(){
+    ReturnHomeWhenLoggedIn();
 
     const [openSuccess, setOpenSuccess] = useState(false);
     const [openError, setOpenError] = useState(false);
 
     const [userEmail, setUserEmail] = React.useState("");
     const SendResetMail = () => {
-        console.log(userEmail)
         if(userEmail !== null && userEmail.length !== 0){
             console.log(userEmail);
             FetchBackend('POST','resetPasswordMail', {mail : userEmail})
