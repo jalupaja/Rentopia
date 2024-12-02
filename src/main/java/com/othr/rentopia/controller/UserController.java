@@ -22,7 +22,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@RestController
+@RestController()
+@RequestMapping("api")
 public class UserController {
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -34,7 +35,7 @@ public class UserController {
     @Autowired
     private AccountService userService;
 
-    @PostMapping(value="api/login", produces="application/json")
+    @PostMapping(value="login", produces="application/json")
     public @ResponseBody ResponseEntity<AuthResponse> processLoginRequest(@RequestBody String loginRequest) {
         //todo get email from request body
 
@@ -73,7 +74,7 @@ public class UserController {
         return new ResponseEntity<AuthResponse>(authResponse, HttpStatus.OK);
     }
 
-    @GetMapping(path="api/user/me", produces="application/json")
+    @GetMapping(path="user/me", produces="application/json")
     public @ResponseBody ResponseEntity<Account> GetAuthUser(Authentication authentication){
         String username = (String) authentication.getPrincipal();
 
@@ -83,5 +84,12 @@ public class UserController {
         account.setId(1312L);
 
         return new ResponseEntity<>( account, HttpStatus.OK);
+    }
+
+    @PostMapping(path="resetPasswordMail",  produces="application/json")
+    public @ResponseBody boolean SendResetPasswordMail(@RequestBody String userMail){
+        //todo:
+
+        return true;
     }
 }

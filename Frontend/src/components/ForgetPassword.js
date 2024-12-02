@@ -1,29 +1,40 @@
 import Footer from "./Footer.js";
-import {Box, Typography, Stack, Button, TextField, Alert} from "@mui/material";
+import {Box, Typography, Stack, Button, TextField, Alert, Snackbar } from "@mui/material";
 import * as React from "react";
 import {centeredDivStyle, InputFieldStyle} from "./RegisterPage.js";
 import {useNavigate} from "react-router-dom";
 import FetchBackend from "../helper/BackendHelper.js";
 import Appbar from "./Appbar.js";
-function ForgetPasswordPage({sendResetEmailSuccess = null}){//todo pass parameter when sending email
-    let resetFeedback = null;
-    if(sendResetEmailSuccess){
-        resetFeedback = <Alert>Send mail succeeded. Please look at your mail.</Alert>;
-    }
-    else if(sendResetEmailSuccess === false){
-        resetFeedback = <Alert severity="error">Sending Mail was not successful. Please try again.</Alert>;
-    }
+import {useState} from "react";
+function ForgetPasswordPage(){
 
-    const navigate = useNavigate();
+    const [openSuccess, setOpenSuccess] = useState(false);
+    const [openError, setOpenError] = useState(false);
+
+    const [userEmail, setUserEmail] = React.useState("");
     const SendResetMail = () => {
-        //todo post request backend
-        FetchBackend()
-        //todo success and error
+        console.log(userEmail)
+        if(userEmail !== null && userEmail.length !== 0){
+            console.log(userEmail);
+            FetchBackend('POST','resetPasswordMail', {mail : userEmail})
+                .then(response => response.json())
+                .then(success => {
+                    if(success){
+                        setOpenSuccess(true);
+                    }
+                })
+                .catch((error) => setOpenError(true))
+        }
     }
     return (
         <Box>
             <Appbar/>
-            {resetFeedback}
+            <Snackbar open={openError}>
+                <Alert severity="error">Sending Mail was not successful. Please try again.</Alert>
+            </Snackbar>
+            <Snackbar open={openSuccess}>
+                <Alert>Send mail succeeded. Please look at your mail.</Alert>
+            </Snackbar>
             <Stack sx = {{...centeredDivStyle}}>
                 <Typography variant="button" gutterBottom variant="h6">
                     Forget your password?
@@ -32,9 +43,10 @@ function ForgetPasswordPage({sendResetEmailSuccess = null}){//todo pass paramete
                     Type in your email for resetting your password:
                 </Typography>
 
-                <TextField sx={{...InputFieldStyle}} id="emailTextfield" label="Email" variant="outlined" />
+                <TextField sx={{...InputFieldStyle}} onChange={(e) => setUserEmail(e.target.value)} id="emailTextfield" label="Email" variant="outlined" />
 
-                <Button variant="contained" onClick={() => SendResetMail()} sx={{...InputFieldStyle}}>
+                <Button variant="contained" onClick={() => SendResetMail()}
+                         sx={{...InputFieldStyle}}>
                     Send Email
                 </Button>
             </Stack>
