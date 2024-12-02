@@ -52,6 +52,23 @@ public class AccountServiceImpl implements AccountService {
 	return account;
     }
 
+
+	public Account getAccountByUsername(String username) {
+		// TODO private!!!. no password info for normal getAccount
+		Account account = null;
+
+		String query = "SELECT a FROM Account a WHERE a.name = :name";
+		try {
+			account = entityManager
+					.createQuery(query, Account.class)
+					.setParameter("name", username)
+					.getSingleResult();
+		} catch (NoResultException e) {
+		}
+
+		return account;
+	}
+
     @Override
     public boolean checkPassword(String email, String password) {
 	String db_password = "";

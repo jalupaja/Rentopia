@@ -1,10 +1,12 @@
-import {AppBar, Box, FormControl, InputBase, Select, Toolbar} from "@mui/material";
+import {AppBar, Box, FormControl, InputBase, Select, Toolbar, Button, MenuItem } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
-import {alpha, styled} from "@mui/material/styles";
-import * as React from 'react';
-import Button from '@mui/material/Button';
-import MenuItem from '@mui/material/MenuItem';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
+import {alpha, styled} from "@mui/material";
+import * as React from 'react';
+import Logo from "../image/RentopiaLogo64.jpg";
+import {useNavigate} from "react-router-dom";
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import {Logout} from "../helper/BackendHelper.js"
 
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
     color: 'inherit',
@@ -68,18 +70,31 @@ const logo = {
     imageUrl: '/pictures/RentopiaLogo64.jpg',
 };
 
-function Appbar() {
+function Appbar({showLogin = true, authUser = null}) {
     const [category, setCategory] = React.useState("%");
 
     const handleCategoryChange = (event) => {
         setCategory(event.target.value);
     }
 
+    const navigate = useNavigate();
+    let loginButton = <Button/>;
+    if(showLogin){
+        if(authUser === null){
+            loginButton = <Button onClick={()=>navigate("/login")} variant="outlined" color="inherit">Sign in</Button>;
+        }
+        else{
+            loginButton = <Button onClick={()=> {Logout();  window.location.reload();}} variant="outlined" color="inherit">Log out</Button>;
+        }
+    }
+
 return (
-    <Box sx={{ flexGrow: 1 }}>
+    <Box sx={{ height: 'auto', width:'100%', display:'block' }}>
         <AppBar position="static">
             <Toolbar>
-                <img src={logo.imageUrl} alt={"Rentopia Logo"}/>
+                <Box sx={{height :'63px', width:'63px', borderRadius: 25, overflow: 'hidden'}}>
+                    <img src={Logo} onClick={()=>navigate("/")} alt={"Rentopia Logo"}/>
+                </Box>
                 <FormControl sx={{marginRight: 0, marginLeft: '7%', width: '150px' }} size="small">
                     <StyledSelect
                         value={category}
@@ -108,7 +123,10 @@ return (
                     />
                 </Search>
                 <Box sx={{flexGrow: 1}}></Box>
-                <Button variant="outlined" color="inherit">Sign in</Button>
+                <Box sx={{marginRight: 2}}>
+                    <AccountCircleIcon onClick={() => {}}/>
+                </Box>
+                {loginButton}
             </Toolbar>
         </AppBar>
     </Box>

@@ -2,10 +2,14 @@ package com.othr.rentopia.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.GrantedAuthority;
+import java.util.Collection;
+import java.util.Collections;
 
 @Entity
 @Data
-public class Account {
+public class Account implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,6 +27,16 @@ public class Account {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role = Role.USER;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+	return Collections.singletonList(() -> role.name());
+    }
+
+    @Override
+    public String getUsername() {
+        return name;
+    }
 
     @Column(length = 500)
     private String description;
