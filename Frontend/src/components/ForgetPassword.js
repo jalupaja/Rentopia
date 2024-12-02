@@ -1,10 +1,10 @@
 import Footer from "./Footer.js";
-import NavBar from "./NavBar.js";
 import {Box, Typography, Stack, Button, TextField, Alert} from "@mui/material";
 import * as React from "react";
 import {centeredDivStyle, InputFieldStyle} from "./RegisterPage.js";
 import {useNavigate} from "react-router-dom";
 import FetchBackend from "../helper/BackendHelper.js";
+import Appbar from "./Appbar.js";
 function ForgetPasswordPage({sendResetEmailSuccess = null}){//todo pass parameter when sending email
     let resetFeedback = null;
     if(sendResetEmailSuccess){
@@ -22,7 +22,7 @@ function ForgetPasswordPage({sendResetEmailSuccess = null}){//todo pass paramete
     }
     return (
         <Box>
-            <NavBar/>
+            <Appbar/>
             {resetFeedback}
             <Stack sx = {{...centeredDivStyle}}>
                 <Typography variant="button" gutterBottom variant="h6">

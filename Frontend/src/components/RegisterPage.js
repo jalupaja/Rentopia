@@ -11,10 +11,10 @@ import {
     Link,
     OutlinedInput,
     Stack,
-    TextField, Typography, RadioGroup, Radio,FormControlLabel
+    TextField, Typography, RadioGroup, Radio, FormControlLabel, AppBar
 } from "@mui/material";
-import NavBar from "./NavBar.js";
 import {Visibility, VisibilityOff} from "@mui/icons-material";
+import Appbar from "./Appbar.js";
 
 export const centeredDivStyle = {
     alignItems : 'center',
@@ -67,7 +67,7 @@ function RegisterPage(){
 
     return (
         <Box sx = {{ ...FrameStyle}}>
-            <NavBar showLogin={false}/>
+            <Appbar showLogin={false}/>
 
             <Stack sx = {{...centeredDivStyle}}>
                 <Typography variant="button" gutterBottom variant="h6">

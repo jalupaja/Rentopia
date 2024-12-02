@@ -1,4 +1,3 @@
-
 import {BrowserRouter, Routes, Route} from "react-router-dom";
 import LoginComponent from "./components/LoginComponent.js";
 import Home from "./components/Home.js";
@@ -8,10 +7,10 @@ import RegisterPage from "./components/RegisterPage.js";
 import { useEffect } from "react"
 
 function App() {
-    useEffect(() => {
+/*    useEffect(() => {
         document.title = "Rentopia"
     }, [])
-
+*/
   return (
       <BrowserRouter sx = {{    width : "100%", Height : "100%"}}>
           <Routes>

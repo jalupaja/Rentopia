@@ -9,17 +9,17 @@ import {
     Toolbar,
     Typography,
     InputLabel,
-    OutlinedInput, InputAdornment, IconButton, FormControl, Alert
+    OutlinedInput, InputAdornment, IconButton, FormControl, Alert, AppBar
 } from "@mui/material";
 import Footer from "./Footer.js";
-import NavBar from "./NavBar.js";
 import {centeredDivStyle, FrameStyle, InputFieldStyle} from "./RegisterPage.js"
 import {Visibility, VisibilityOff} from "@mui/icons-material";
 import * as React from "react";
 import {JWT_TOKEN} from "../helper/BackendHelper.js";
 import {useNavigate} from "react-router-dom";
 import FetchBackend from "../helper/BackendHelper.js";
-import Cookies from "js-cookie"
+import Cookies from "js-cookie";
+import Appbar from "./Appbar.js";
 
 
 function LoginComponent(){
@@ -65,7 +65,7 @@ function LoginComponent(){
 
     return (
         <Box sx = {{ ...FrameStyle}}>
-            <NavBar showLogin={false}/>
+            <Appbar showLogin={false}/>
 
             {errorLabel}
 
