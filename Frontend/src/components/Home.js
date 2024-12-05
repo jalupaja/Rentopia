@@ -46,7 +46,7 @@ function Home(){
                     {Array.from({ length: 15 }).map((_, index) => (
                         <Grid key={index}>
                             <Card sx={{width: 300, boxShadow: 3}} >
-                                <CardActionArea /*component={RouterLink} to="/DevicesDetail" TODO: ADD Device Detail PAge here*/>
+                                <CardActionArea onClick={()=>navigate("/device/" + index)} >
                                     <CardMedia
                                         component="img"
                                         alt={"ToolNr " + index}
