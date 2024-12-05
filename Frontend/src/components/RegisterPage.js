@@ -8,10 +8,9 @@ import {
     IconButton,
     InputAdornment,
     InputLabel,
-    Link,
     OutlinedInput,
     Stack,
-    TextField, Typography, RadioGroup, Radio, FormControlLabel, AppBar
+    TextField, Typography, RadioGroup, Radio, FormControlLabel
 } from "@mui/material";
 import {Visibility, VisibilityOff} from "@mui/icons-material";
 import Appbar from "./Appbar.js";

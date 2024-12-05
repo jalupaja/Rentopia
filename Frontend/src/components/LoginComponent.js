@@ -3,13 +3,10 @@ import {
     Stack,
     TextField,
     Link,
-    styled,
     Box,
-    InputBase,
-    Toolbar,
     Typography,
     InputLabel,
-    OutlinedInput, InputAdornment, IconButton, FormControl, Alert, AppBar
+    OutlinedInput, InputAdornment, IconButton, FormControl, Alert
 } from "@mui/material";
 import Footer from "./Footer.js";
 import {centeredDivStyle, FrameStyle, InputFieldStyle} from "./RegisterPage.js"

@@ -1,15 +1,9 @@
 import {
-    alpha,
-    AppBar,
     Box,
-    Button,
     Card,
     CardActionArea, CardContent,
     CardMedia,
-    InputBase,
-    Link,
-    styled,
-    Toolbar, Typography, Grid2, Grid
+    styled, Typography, Grid2, Grid
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import Footer from "./Footer.js";
