@@ -5,6 +5,7 @@ import ForgetPasswordPage from "./components/ForgetPassword.js";
 import RegisterPage from "./components/RegisterPage.js";
 
 import { useEffect } from "react"
+import ProfilePage from "./components/ProfilePage";
 
 function App() {
 /*    useEffect(() => {
@@ -19,6 +20,7 @@ function App() {
                   <Route path="login" element={<LoginComponent />} />
                   <Route path="resetPassword" element={<ForgetPasswordPage/>}/>
                   <Route path="register" element={<RegisterPage/>}/>
+                  <Route path="profilePage" element={<ProfilePage/>}/>
               </Route>
           </Routes>
       </BrowserRouter>

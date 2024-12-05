@@ -1,4 +1,4 @@
-import {AppBar, Box, FormControl, InputBase, Select, Toolbar, Button, MenuItem } from "@mui/material";
+import {AppBar, Box, FormControl, InputBase, Select, Toolbar, Button, MenuItem, IconButton} from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import {alpha, styled} from "@mui/material";
@@ -75,12 +75,15 @@ function Appbar({showLogin = true, authUser = null}) {
 
     const navigate = useNavigate();
     let loginButton = <Button/>;
+    let profileButton = <IconButton></IconButton>;
     if(showLogin){
         if(authUser === null){
             loginButton = <Button onClick={()=>navigate("/login")} variant="outlined" color="inherit">Sign in</Button>;
+            profileButton = <IconButton onClick={() => navigate("/login")} size="large"><AccountCircleIcon fontSize="inherit"/></IconButton>
         }
         else{
             loginButton = <Button onClick={()=> {Logout();  window.location.reload();}} variant="outlined" color="inherit">Log out</Button>;
+            profileButton = <IconButton onClick={() => navigate("/profilePage")} size="large"><AccountCircleIcon fontSize="inherit"/></IconButton>
         }
     }
 
@@ -119,9 +122,7 @@ return (
                     />
                 </Search>
                 <Box sx={{flexGrow: 1}}></Box>
-                <Box sx={{marginRight: 2}}>
-                    <AccountCircleIcon onClick={() => {}}/>
-                </Box>
+                {profileButton}
                 {loginButton}
             </Toolbar>
         </AppBar>
