@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import jakarta.persistence.PersistenceException;
 
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.UUID;
@@ -104,6 +105,18 @@ public class DeviceController {
             return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
         }
     }
+
+    @GetMapping("short/all")
+    public ResponseEntity<List<Map<String, Object>>> getDevice() {
+        System.out.println("iaernstist");
+        List<Map<String, Object>> deviceData = new ArrayList<>();
+
+        List<Device> devices = deviceService.getAllDevices();
+        for (Device device : devices) {
+            if (checkAllowed(device)) {
+                deviceData.add(parseDeviceShort(device));
+            }
+        }
 
         return new ResponseEntity<>(deviceData, HttpStatus.OK);
     }
