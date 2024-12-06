@@ -7,5 +7,5 @@ import com.othr.rentopia.model.DeviceCategory;
 public interface DeviceCategoryService {
     public void saveDeviceCategory(DeviceCategory deviceCategory);
     public List<String> getAllDeviceCategories();
-    public void removeDeviceCategory(Long deviceCategoryId);
+    public void removeDeviceCategory(String deviceCategory);
 }
