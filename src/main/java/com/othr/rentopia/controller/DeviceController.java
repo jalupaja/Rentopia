@@ -47,12 +47,29 @@ public class DeviceController {
     private static final String UPLOAD_DIR = System.getProperty("user.dir") + "/Frontend/public/images/";
     private static final String DEVICE_IMAGE_UPLOAD_DIR = UPLOAD_DIR + "devices/";
 
-    @GetMapping("{id}")
-    public ResponseEntity<Map<String, Object>> getDevice(@PathVariable("id") Long id) {
-        // TODO check NULL, if (! device.hidden || device.owner == logged_in_acc)
-        Device device = deviceService.getDevice(id);
+    private Boolean checkAllowed(Device device) {
+        // TODO check NULL, if (! device.getHidden || device.owner == logged_in_acc)
+        return device != null;
+    }
 
+    private Map<String, Object> parseDeviceShort(Device device) {
         Map<String, Object> deviceData = new HashMap<>();
+
+        // deviceData.put("id", device.id);
+        deviceData.put("title", device.getTitle());
+        deviceData.put("price", device.getPrice());
+        deviceData.put("categories", device.getCategories());
+        deviceData.put("owner", accountService.getAccountName(device.getOwnerId()));
+        deviceData.put("price", device.getPrice());
+        deviceData.put("location", device.getLocation());
+        deviceData.put("image", deviceImageService.getFirstDeviceImage(device.getId()));
+
+        return deviceData;
+    }
+
+    private Map<String, Object> parseDevice(Device device) {
+        Map<String, Object> deviceData = new HashMap<>();
+
         // deviceData.put("id", device.id);
         deviceData.put("title", device.getTitle());
         deviceData.put("description", device.getDescription());
@@ -63,22 +80,30 @@ public class DeviceController {
         deviceData.put("isPublic", device.getIsPublic());
         deviceData.put("images", deviceImageService.getAllDeviceImages(device.getId()));
 
-        return new ResponseEntity<>(deviceData, HttpStatus.OK);
+        return deviceData;
+    }
+
+    @GetMapping("{id}")
+    public ResponseEntity<Map<String, Object>> getDevice(@PathVariable("id") Long id) {
+        Device device = deviceService.getDevice(id);
+
+        if (checkAllowed(device)) {
+            return new ResponseEntity<>(parseDevice(device), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
+        }
     }
 
     @GetMapping("/short/{id}")
     public ResponseEntity<Map<String, Object>> getDeviceShort(@PathVariable("id") Long id) {
-        // TODO check NULL, if (! device.hidden || device.owner == logged_in_acc)
         Device device = deviceService.getDevice(id);
-        Map<String, Object> deviceData = new HashMap<>();
-        // deviceData.put("id", device.id);
-        deviceData.put("title", device.getTitle());
-        deviceData.put("price", device.getPrice());
-        deviceData.put("categories", device.getCategories());
-        deviceData.put("owner", accountService.getAccountName(device.getOwnerId()));
-        deviceData.put("price", device.getPrice());
-        deviceData.put("location", device.getLocation());
-        deviceData.put("image", deviceImageService.getFirstDeviceImage(device.getId()));
+
+        if (checkAllowed(device)) {
+            return new ResponseEntity<>(parseDeviceShort(device), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
+        }
+    }
 
         return new ResponseEntity<>(deviceData, HttpStatus.OK);
     }
