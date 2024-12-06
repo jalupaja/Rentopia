@@ -11,18 +11,18 @@ import {
     InputLabel,
     OutlinedInput, InputAdornment, IconButton, FormControl, Alert, AppBar
 } from "@mui/material";
-import Footer from "./Footer.js";
-import {centeredDivStyle, FrameStyle, InputFieldStyle} from "./RegisterPage.js"
+import Footer from "../components/Footer.js";
+import {centeredDivStyle, FrameStyle, InputFieldStyle} from "./Register.js"
 import {Visibility, VisibilityOff} from "@mui/icons-material";
 import * as React from "react";
 import {JWT_TOKEN, ReturnHomeWhenLoggedIn} from "../helper/BackendHelper.js";
 import {useNavigate} from "react-router-dom";
 import FetchBackend from "../helper/BackendHelper.js";
 import Cookies from "js-cookie";
-import Appbar from "./Appbar.js";
+import Appbar from "../components/Appbar.js";
 
 
-function LoginComponent(){
+function LoginSite(){
     const navigation = useNavigate();
 
     ReturnHomeWhenLoggedIn();
@@ -117,4 +117,4 @@ function LoginComponent(){
     )
 }
 
-export default LoginComponent;
+export default LoginSite;

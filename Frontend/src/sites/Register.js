@@ -1,4 +1,4 @@
-import Footer  from "./Footer.js";
+import Footer  from "../components/Footer.js";
 import * as React from 'react';
 
 import {
@@ -14,7 +14,7 @@ import {
     TextField, Typography, RadioGroup, Radio, FormControlLabel, AppBar
 } from "@mui/material";
 import {Visibility, VisibilityOff} from "@mui/icons-material";
-import Appbar from "./Appbar.js";
+import Appbar from "../components/Appbar.js";
 import {ReturnHomeWhenLoggedIn} from "../helper/BackendHelper.js";
 
 export const centeredDivStyle = {
@@ -44,7 +44,7 @@ export const InputFieldStyle = {
     marginBottom : "5px"
 }
 
-function RegisterPage(){
+function RegisterSite(){
     ReturnHomeWhenLoggedIn();
     
     const [showPassword, setShowPassword] = React.useState(false);
@@ -146,4 +146,4 @@ function RegisterPage(){
     )
 }
 
-export default RegisterPage;
+export default RegisterSite;
