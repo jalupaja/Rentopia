@@ -7,6 +7,7 @@ import com.othr.rentopia.model.Account;
 public interface AccountService {
     public void saveAccount(Account account);
     public Account getAccount(String email);
+    public String getAccountName(Long accountId);
     public boolean checkPassword(String email, String password);
     public void removeAccount(Long accountId);
 }
