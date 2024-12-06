@@ -24,6 +24,20 @@ public class DeviceImageServiceImpl implements DeviceImageService {
     }
 
     @Override
+    public String getFirstDeviceImage(Long deviceId) {
+        String query = "SELECT c.name FROM DeviceImage c WHERE deviceId = :deviceId";
+        try {
+            return entityManager
+                .createQuery(query, String.class)
+                .setParameter("deviceId", deviceId)
+                .setMaxResults(1)
+                .getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+
+    @Override
     public List<String> getAllDeviceImages(Long deviceId) {
         List<String> deviceImages = null;
 
