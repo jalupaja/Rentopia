@@ -15,10 +15,10 @@ function App() {
       <BrowserRouter sx = {{    width : "100%", Height : "100%"}}>
           <Routes>
               <Route path="/" >
-                  <Route index element={<Home />} />
-                  <Route path="login" element={<LoginComponent />} />
-                  <Route path="resetPassword" element={<ForgetPasswordPage/>}/>
-                  <Route path="register" element={<RegisterPage/>}/>
+                  <Route index element={<HomeSite />} />
+                  <Route path="login" element={<LoginSite />} />
+                  <Route path="resetPassword" element={<ForgetPasswordSite/>}/>
+                  <Route path="register" element={<RegisterSite/>}/>
               </Route>
           </Routes>
       </BrowserRouter>
