@@ -52,6 +52,17 @@ public class AccountServiceImpl implements AccountService {
 	return account;
     }
 
+    public String getAccountName(Long accountId) {
+        String query = "SELECT a.name FROM Account a WHERE a.id = :accountId";
+        try {
+            return entityManager
+                .createQuery(query, String.class)
+                .setParameter("accountId", accountId)
+                .getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
 
 	public Account getAccountByUsername(String username) {
 		// TODO private!!!. no password info for normal getAccount
