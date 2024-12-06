@@ -3,8 +3,10 @@ package com.othr.rentopia.controller;
 import com.othr.rentopia.model.Account;
 import com.othr.rentopia.model.Device;
 import com.othr.rentopia.model.Location;
+import com.othr.rentopia.model.DeviceImage;
 import com.othr.rentopia.service.AccountService;
 import com.othr.rentopia.service.DeviceService;
+import com.othr.rentopia.service.DeviceImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,6 +25,9 @@ public class DebugController {
 
     @Autowired
     private DeviceService deviceService;
+
+    @Autowired
+    private DeviceImageService deviceImageService;
 
     @GetMapping(value="db")
     public void dbFiller() {
@@ -127,6 +132,20 @@ public class DebugController {
         d8.setDescription("Cut and engrave materials like wood, acrylic, and metal with this industrial-grade laser cutter.\nPerfect for makers, designers, or small business owners who need precision cutting for their projects.\nRent it for a few days to complete your next big idea.");
         d8.setPrice(75.00);
         deviceService.saveDevice(d8);
+
+        for (long i = 1; i <= 9; i++) {
+                DeviceImage deviceImage = new DeviceImage();
+                deviceImage.setDeviceId(i);
+                deviceImage.setName("afccebc1-db63-40ec-a5f7-2421b8f48ec8.jpg");
+                deviceImageService.saveDeviceImage(deviceImage);
+        }
+
+        for (long i = 1; i <= 9; i++) {
+                DeviceImage deviceImage = new DeviceImage();
+                deviceImage.setDeviceId(i);
+                deviceImage.setName("fe7f047f-1227-4b88-b620-ba1c878eb346.jpg");
+                deviceImageService.saveDeviceImage(deviceImage);
+        }
 
     }
 }
