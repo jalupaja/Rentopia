@@ -12,10 +12,10 @@ import {
     Toolbar, Typography, Grid2, Grid
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import Footer from "./Footer.js";
+import Footer from "../components/Footer.js";
 import FetchBackend, {JWTTokenExists} from "../helper/BackendHelper.js";
 import {useEffect, useState} from "react";
-import Appbar from "./Appbar.js";
+import Appbar from "../components/Appbar.js";
 
 const DeviceGrid = styled(Grid2)(({theme}) => ({
     margin: '2% 10%'
