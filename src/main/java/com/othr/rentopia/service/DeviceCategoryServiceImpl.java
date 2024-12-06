@@ -39,15 +39,15 @@ public class DeviceCategoryServiceImpl implements DeviceCategoryService {
     }
 
     @Override
-    public void removeDeviceCategory(Long deviceCategoryId) {
-	String query = "DELETE FROM DeviceCategory WHERE id = :deviceCategoryId";
+    public void removeDeviceCategory(String deviceCategory) {
+	String query = "DELETE FROM DeviceCategory WHERE name = :deviceCategory";
 	try {
 	    entityManager
 		.createQuery(query)
-		.setParameter("deviceCategoryId", deviceCategoryId)
+		.setParameter("deviceCategory", deviceCategory)
 		.executeUpdate();
 	} catch (PersistenceException e) {
-	    System.err.println("ERROR removing DeviceCategory with ID " + deviceCategoryId + ": " + e.getMessage());
+	    System.err.println("ERROR removing DeviceCategory " + deviceCategory + ": " + e.getMessage());
 	}
     }
 }
