@@ -9,6 +9,10 @@ import java.util.Objects;
 public class DeviceImage {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false, unique = false) // TODO use @Id here and remove above if actual images are used
     private String name;
 
     @Column(nullable = false)
