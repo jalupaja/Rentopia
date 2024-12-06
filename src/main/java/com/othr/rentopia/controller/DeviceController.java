@@ -108,7 +108,6 @@ public class DeviceController {
 
     @GetMapping("short/all")
     public ResponseEntity<List<Map<String, Object>>> getDevice() {
-        System.out.println("iaernstist");
         List<Map<String, Object>> deviceData = new ArrayList<>();
 
         List<Device> devices = deviceService.getAllDevices();
