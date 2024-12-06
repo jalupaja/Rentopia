@@ -44,7 +44,7 @@ export const InputFieldStyle = {
     marginBottom : "5px"
 }
 
-function RegisterPage(){
+function RegisterSite(){
     ReturnHomeWhenLoggedIn();
     
     const [showPassword, setShowPassword] = React.useState(false);
@@ -146,4 +146,4 @@ function RegisterPage(){
     )
 }
 
-export default RegisterPage;
+export default RegisterSite;
