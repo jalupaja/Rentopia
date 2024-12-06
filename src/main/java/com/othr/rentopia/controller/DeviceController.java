@@ -61,6 +61,7 @@ public class DeviceController {
         deviceData.put("owner", accountService.getAccountName(device.getOwnerId()));
         deviceData.put("location", device.getLocation());
         deviceData.put("isPublic", device.getIsPublic());
+        deviceData.put("images", deviceImageService.getAllDeviceImages(device.getId()));
 
         return new ResponseEntity<>(deviceData, HttpStatus.OK);
     }
@@ -77,18 +78,9 @@ public class DeviceController {
         deviceData.put("owner", accountService.getAccountName(device.getOwnerId()));
         deviceData.put("price", device.getPrice());
         deviceData.put("location", device.getLocation());
+        deviceData.put("image", deviceImageService.getFirstDeviceImage(device.getId()));
 
         return new ResponseEntity<>(deviceData, HttpStatus.OK);
-    }
-
-    @GetMapping("{id}/images")
-    public ResponseEntity<List<String>> getDeviceImages(@PathVariable("id") Long deviceId) {
-        // TODO check if (! device.hidden || device.owner == logged_in_acc)
-        List<String> deviceImages = deviceImageService.getAllDeviceImages(deviceId);
-        System.out.println("deviceId: " + deviceId);
-        System.out.println("deviceImages: " + deviceImages);
-
-        return new ResponseEntity<>(deviceImages, HttpStatus.OK);
     }
 
     @PostMapping("{id}/image")
@@ -137,7 +129,6 @@ public class DeviceController {
                     deviceImageService.saveDeviceImage(deviceImage);
                 } catch (PersistenceException e) {
                     // "random" UUID already exists
-                    System.out.println("Erroriersntioarnst while uploading file!\n" + e.getMessage());
                     continue;
                 }
 
