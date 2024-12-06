@@ -25,6 +25,7 @@ function HomeSite(){
     const navigate = useNavigate();
 
     const [authUser, setAuthUser] = useState(null);
+    const [devices, setDevices] = useState([]);
 
     useEffect(() =>{
         if(JWTTokenExists()){
@@ -35,7 +36,13 @@ function HomeSite(){
                 })
                 .catch(error => console.log(error))
         }
+    }, []);
 
+    useEffect(() => {
+        FetchBackend('GET', 'device/short/all',null)
+            .then(response => response.json())
+            .then(data => setDevices(data))
+            .catch(error => console.log(error))
     }, []);
 
     return (
@@ -43,21 +50,21 @@ function HomeSite(){
             <Appbar authUser={authUser}/>
             <Box sx={{ flexGrow: 1}} >
                 <DeviceGrid container spacing={{xs: 4}} justifyContent={'center'} >
-                    {Array.from({ length: 15 }).map((_, index) => (
+                  {devices.map((device, index) => (
                         <Grid key={index}>
                             <Card sx={{width: 300, boxShadow: 3}} >
                                 <CardActionArea /*component={RouterLink} to="/DevicesDetail" TODO: ADD Device Detail PAge here*/>
                                     <CardMedia
                                         component="img"
-                                        alt={"ToolNr " + index}
+                                      alt={device.title}
                                         height="125"
-                                        image="" />
+                                      image={"images/devices/" + device.image} />
                                     <CardContent>
                                         <Typography gutterBottom variant="h6" component="div">
-                                            {"ToolNr " + index}
+                                            {device.title}
                                         </Typography>
                                         <Typography variant="h6" sx={{ color: 'text.secondary' }} justifySelf={'end'}>
-                                            {index * 3 + " €"}
+                                          {device.price + " €"}
                                         </Typography>
                                     </CardContent>
                                 </CardActionArea>
