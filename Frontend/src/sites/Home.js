@@ -21,7 +21,7 @@ const DeviceGrid = styled(Grid2)(({theme}) => ({
     margin: '2% 10%'
 }))
 
-function Home(){
+function HomeSite(){
     const navigate = useNavigate();
 
     const [authUser, setAuthUser] = useState(null);
@@ -71,4 +71,4 @@ function Home(){
     );
 }
 
-export default Home;
+export default HomeSite;

@@ -22,7 +22,7 @@ import Cookies from "js-cookie";
 import Appbar from "./Appbar.js";
 
 
-function LoginComponent(){
+function LoginSite(){
     const navigation = useNavigate();
 
     ReturnHomeWhenLoggedIn();
@@ -117,4 +117,4 @@ function LoginComponent(){
     )
 }
 
-export default LoginComponent;
+export default LoginSite;
