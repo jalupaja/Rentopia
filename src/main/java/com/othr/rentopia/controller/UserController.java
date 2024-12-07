@@ -1,14 +1,13 @@
 package com.othr.rentopia.controller;
 
-import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.othr.rentopia.config.AuthResponse;
 import com.othr.rentopia.config.JwtProvider;
 import com.othr.rentopia.model.Account;
 import com.othr.rentopia.service.AccountService;
 import com.othr.rentopia.service.AccountServiceImpl;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -16,11 +15,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController()
 @RequestMapping("api")
@@ -37,22 +32,12 @@ public class UserController {
 
     @PostMapping(value="login", produces="application/json")
     public @ResponseBody ResponseEntity<AuthResponse> processLoginRequest(@RequestBody String loginRequest) {
-        //todo get email from request body
+        JSONObject request = new JSONObject(loginRequest);
 
-        // todo remove
-        String username = "user";
-        String password = "user";
+        String email = (String) request.get("useremail");
+        String password = (String) request.get("userpassword");
 
-        UserDetails userDetails;// = customUserDetails.getAccount(email);
-
-        //todo only for testing
-        Account account = new Account();
-        account.setEmail("user");
-        account.setPassword(passwordEncoder.encode("user"));
-        account.setId(12L);
-        account.setName("huan");
-
-        userDetails = account;
+        UserDetails userDetails = customUserDetails.getAccount(email);
 
         if(userDetails == null) {
             throw new BadCredentialsException("Invalid username and password");
@@ -61,6 +46,7 @@ public class UserController {
         if(!passwordEncoder.matches(password,userDetails.getPassword())) {
             throw new BadCredentialsException("Invalid password");
         }
+
         Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails,null,userDetails.getAuthorities());
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -78,11 +64,8 @@ public class UserController {
     public @ResponseBody ResponseEntity<Account> GetAuthUser(Authentication authentication){
         String username = (String) authentication.getPrincipal();
 
-        //todo only for testing
-        Account account = new Account();//customUserDetails.getAccountByUsername(username);
-        account.setName("Christian");
-        account.setId(1312L);
-
+        Account account = customUserDetails.loadUserByUsername(username);
+        account.removeNonPublicProperties();
         return new ResponseEntity<>( account, HttpStatus.OK);
     }
 
@@ -91,5 +74,42 @@ public class UserController {
         //todo:
 
         return true;
+    }
+
+    @PostMapping(path="register", produces="application/json")
+    public @ResponseBody String RegisterUser(@RequestBody String userInfo){
+        JSONObject request = new JSONObject(userInfo);
+        JSONObject response = new JSONObject();
+
+        String email = (String) request.get("email");
+        Account account = customUserDetails.getAccount(email);
+        if(account != null){
+            response.put("registrationSuccess",false);
+            response.put("reason","There is already an account for this email");
+            return response.toString();
+        }
+
+        Account newAccount = new Account();
+        newAccount.setEmail((String) request.get("email"));
+        newAccount.setName((String) request.get("name"));
+        newAccount.setEmail((String) request.get("email"));
+
+        String password = (String) request.get("password1");
+        newAccount.setPassword(passwordEncoder.encode(password));
+
+        String usageReason = (String) request.get("usage");
+        if(usageReason.equals("private")){
+            newAccount.setRole(Account.Role.USER);
+        }
+        else if(usageReason.equals("commercial")){
+            newAccount.setRole(Account.Role.COMPANY);
+            String companyName = (String) request.get("company");
+            newAccount.setCompany(companyName);
+        }
+
+        customUserDetails.saveAccount(newAccount);
+
+        response.put("registrationSuccess",true);
+        return response.toString();
     }
 }

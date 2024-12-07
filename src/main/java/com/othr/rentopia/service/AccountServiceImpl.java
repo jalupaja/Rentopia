@@ -6,13 +6,16 @@ import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.PersistenceException;
 import jakarta.transaction.Transactional;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
 import com.othr.rentopia.model.Account;
 
 @Service
-public class AccountServiceImpl implements AccountService {
+public class AccountServiceImpl implements AccountService, UserDetailsService {
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -52,16 +55,16 @@ public class AccountServiceImpl implements AccountService {
 	return account;
     }
 
-
-	public Account getAccountByUsername(String username) {
+	@Override
+	public Account loadUserByUsername(String email) {
 		// TODO private!!!. no password info for normal getAccount
 		Account account = null;
 
-		String query = "SELECT a FROM Account a WHERE a.name = :name";
+		String query = "SELECT a FROM Account a WHERE a.email = :email";
 		try {
 			account = entityManager
 					.createQuery(query, Account.class)
-					.setParameter("name", username)
+					.setParameter("email", email)
 					.getSingleResult();
 		} catch (NoResultException e) {
 		}

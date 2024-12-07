@@ -11,11 +11,11 @@ import {
     Link,
     OutlinedInput,
     Stack,
-    TextField, Typography, RadioGroup, Radio, FormControlLabel, AppBar
+    TextField, Typography, RadioGroup, Radio, FormControlLabel, AppBar, Alert
 } from "@mui/material";
 import {Visibility, VisibilityOff} from "@mui/icons-material";
 import Appbar from "./Appbar.js";
-import {ReturnHomeWhenLoggedIn} from "../helper/BackendHelper.js";
+import FetchBackend, {JWT_TOKEN, ReturnHomeWhenLoggedIn} from "../helper/BackendHelper.js";
 
 export const centeredDivStyle = {
     alignItems : 'center',
@@ -57,13 +57,7 @@ function RegisterPage(){
         event.preventDefault();
     };
 
-    //register logic
-    const [userInfo, setUserInfo] = React.useState({
-        prename:{
-            value:'',
-            error:false,
-            errorMessage:''
-        },
+    const defaultUserInfo = {
         name:{
             value:'',
             error:false,
@@ -94,7 +88,9 @@ function RegisterPage(){
             error:false,
             errorMessage:''
         }
-    })
+    };
+    //register logic
+    const [userInfo, setUserInfo] = React.useState(defaultUserInfo);
     const postSubmitValidation = (userInfo) => {
         //all necessary values nonempty
         for(let attribute in userInfo){
@@ -104,8 +100,6 @@ function RegisterPage(){
             }
 
             if(!userInfo[attribute].value){
-                console.log(attribute);
-                console.log(attribute.value);
                 return false;
             }
         }
@@ -130,12 +124,25 @@ function RegisterPage(){
 
         //validate
         if(postSubmitValidation(userInfo)){
-            //post request
-            // Perform login logic here with lo
+            let registerData = {};
+            for(let attribute in userInfo){
+                registerData[attribute] = userInfo[attribute].value;
+            }
 
-            //todo extract register data from user data with usage reason
-            console.log('Login data:', userInfo);
-            return;//remove
+            FetchBackend('POST', 'register', registerData)
+                .then(response => response.json())
+                .then(data => {
+                    if(data.registrationSuccess){
+                        setErrorLabel(<Alert>Registration successful</Alert>);
+                        setUserInfo(defaultUserInfo);
+                    }
+                    else{
+                        setErrorLabel(<Alert severity="error">{data.reason}</Alert>);
+                    }
+                })
+                .catch((error) => {
+                    setErrorLabel(<Alert severity="error">An error occurred. Please try again.</Alert>);
+                });
         };
     };
     const handleChange = (e) => {
@@ -159,10 +166,11 @@ function RegisterPage(){
         });
     };
 
+    const [errorLabel, setErrorLabel] = React.useState(null);
     return (
         <Box sx = {{ ...FrameStyle}}>
-            <Appbar showLogin={false}/>
-
+            <Appbar/>
+            {errorLabel}
             <Stack sx = {{...centeredDivStyle}}>
                 <Typography variant="button" gutterBottom variant="h6" >
                     How do you want to use Rentopia?
@@ -181,9 +189,6 @@ function RegisterPage(){
                 <Typography sx={{marginTop:"10px"}} variant="button" gutterBottom variant="h6">
                     Your Account Information
                 </Typography>
-                <TextField sx={{...InputFieldStyle}} name="prename" label="Prename" variant="outlined" required
-                           onChange={handleChange} value={userInfo.prename.value} error = {userInfo.prename.error}
-                           helperText={userInfo.prename.error ? userInfo.prename.errorMessage : ""}/>
                 <TextField sx={{...InputFieldStyle}} name="name" label="Name" variant="outlined" required
                            onChange={handleChange} value={userInfo.name.value} error = {userInfo.name.error}
                            helperText={userInfo.name.error ? userInfo.name.errorMessage : ""}/>

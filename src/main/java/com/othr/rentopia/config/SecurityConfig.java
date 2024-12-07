@@ -4,6 +4,7 @@ import java.beans.BeanProperty;
 import java.util.Arrays;
 import java.util.Collections;
 
+import com.othr.rentopia.service.AccountServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -76,7 +77,7 @@ public class SecurityConfig {
 		.password(passwordEncoder().encode("user"))
 		.roles("USER")
 		.build();
-	return new InMemoryUserDetailsManager(user);
+	return new AccountServiceImpl();
 
     }
 
