@@ -1,4 +1,5 @@
 import Footer  from "./Footer.js";
+import ResponsePopup from "./ResponsePopup.js";
 import * as React from 'react';
 
 import {
@@ -133,15 +134,15 @@ function RegisterPage(){
                 .then(response => response.json())
                 .then(data => {
                     if(data.registrationSuccess){
-                        setErrorLabel(<Alert>Registration successful</Alert>);
+                        setRegisterStatusLabel(<ResponsePopup reason={"success"} message={"Registration successful"}/>);
                         setUserInfo(defaultUserInfo);
                     }
                     else{
-                        setErrorLabel(<Alert severity="error">{data.reason}</Alert>);
+                        setRegisterStatusLabel(<ResponsePopup reason={"error"} message={data.reason}/>);
                     }
                 })
                 .catch((error) => {
-                    setErrorLabel(<Alert severity="error">An error occurred. Please try again.</Alert>);
+                    setRegisterStatusLabel(<ResponsePopup message={"An error occurred. Please try again."} reason={"error"}/>);
                 });
         };
     };
@@ -166,11 +167,11 @@ function RegisterPage(){
         });
     };
 
-    const [errorLabel, setErrorLabel] = React.useState(null);
+    const [registerStatusLabel, setRegisterStatusLabel] = React.useState(null);
     return (
         <Box sx = {{ ...FrameStyle}}>
             <Appbar/>
-            {errorLabel}
+            {registerStatusLabel}
             <Stack sx = {{...centeredDivStyle}}>
                 <Typography variant="button" gutterBottom variant="h6" >
                     How do you want to use Rentopia?

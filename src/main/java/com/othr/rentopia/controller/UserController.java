@@ -39,24 +39,27 @@ public class UserController {
 
         UserDetails userDetails = customUserDetails.getAccount(email);
 
-        if(userDetails == null) {
-            throw new BadCredentialsException("Invalid username and password");
-        }
-
-        if(!passwordEncoder.matches(password,userDetails.getPassword())) {
-            throw new BadCredentialsException("Invalid password");
-        }
-
-        Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails,null,userDetails.getAuthorities());
-
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        String token = JwtProvider.generateToken(authentication);
         AuthResponse authResponse = new AuthResponse();
+        if(userDetails == null) {
+            authResponse.setStatus(false);
+            authResponse.setMessage("Invalid username and password");
+        }
+        else if(!passwordEncoder.matches(password,userDetails.getPassword())) {
+            authResponse.setStatus(false);
+            authResponse.setMessage("Invalid password");
+        }
+        else{
+            Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails,null,userDetails.getAuthorities());
 
-        authResponse.setMessage("Login success");
-        authResponse.setJwt(token);
-        authResponse.setStatus(true);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            String token = JwtProvider.generateToken(authentication);
+
+            authResponse.setMessage("Login success");
+            authResponse.setJwt(token);
+            authResponse.setStatus(true);
+        }
+
         return new ResponseEntity<AuthResponse>(authResponse, HttpStatus.OK);
     }
 

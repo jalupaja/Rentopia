@@ -20,6 +20,7 @@ import {useNavigate} from "react-router-dom";
 import FetchBackend from "../helper/BackendHelper.js";
 import Cookies from "js-cookie";
 import Appbar from "./Appbar.js";
+import ResponsePopup from "./ResponsePopup.js";
 
 
 function LoginComponent(){
@@ -54,23 +55,22 @@ function LoginComponent(){
                 navigation("/");
             }
             else{
-                errorLabel = <Alert severity="error">Wrong email or password!</Alert>;
+                setRegisterStatusLabel(<ResponsePopup message={"Wrong email or password!"} reason={"error"}/>);
             }
-            console.log(data);
 
         })
         .catch((error) => {
-            errorLabel = <Alert severity="error">An error occurred. Please try again.</Alert>;
+            setRegisterStatusLabel(<ResponsePopup message={"An error occurred. Please try again."} reason={"error"}/>);
         });
     };
 
-    let errorLabel = null;
+    const [registerStatusLabel, setRegisterStatusLabel] = React.useState(null);
 
     return (
         <Box sx = {{ ...FrameStyle}}>
             <Appbar showLogin={false}/>
 
-            {errorLabel}
+            {registerStatusLabel}
 
             <Stack sx = {{...centeredDivStyle}}>
 
