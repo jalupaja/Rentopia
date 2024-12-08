@@ -13,16 +13,16 @@ import {
     ImageListItem
 } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
-import Footer from "./Footer.js";
+import Footer from "../components/Footer.js";
 import FetchBackend, {JWTTokenExists} from "../helper/BackendHelper.js";
 import {useEffect, useState} from "react";
-import Appbar from "./Appbar.js";
+import Appbar from "../components/Appbar.js";
 
 const DeviceGrid = styled(Grid2)(({theme}) => ({
     margin: '2% 10%'
 }))
 
-function DevicePage() {
+function DeviceSite() {
     const navigate = useNavigate();
     const { deviceId } = useParams();
     const [authUser, setAuthUser] = useState(null);
@@ -131,4 +131,4 @@ function DevicePage() {
   );
 }
 
-export default DevicePage;
+export default DeviceSite;

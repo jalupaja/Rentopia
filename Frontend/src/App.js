@@ -1,11 +1,11 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import LoginSite from "./sites/Login.js";
 import HomeSite from "./sites/Home.js";
 import DeviceSite from "./sites/Device.js";
 import ForgetPasswordSite from "./sites/ForgetPassword.js";
 import RegisterSite from "./sites/Register.js";
 
-import { useEffect } from "react"
+import { useEffect } from "react";
 
 function App() {
     return (
