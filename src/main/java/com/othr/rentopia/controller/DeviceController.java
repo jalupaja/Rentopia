@@ -56,7 +56,7 @@ public class DeviceController {
     private Map<String, Object> parseDeviceShort(Device device) {
         Map<String, Object> deviceData = new HashMap<>();
 
-        // deviceData.put("id", device.id);
+        deviceData.put("id", device.getId());
         deviceData.put("title", device.getTitle());
         deviceData.put("price", device.getPrice());
         deviceData.put("categories", device.getCategories());
@@ -71,7 +71,7 @@ public class DeviceController {
     private Map<String, Object> parseDevice(Device device) {
         Map<String, Object> deviceData = new HashMap<>();
 
-        // deviceData.put("id", device.id);
+        deviceData.put("id", device.getId());
         deviceData.put("title", device.getTitle());
         deviceData.put("description", device.getDescription());
         deviceData.put("price", device.getPrice());
