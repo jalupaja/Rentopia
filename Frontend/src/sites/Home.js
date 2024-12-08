@@ -53,7 +53,7 @@ function HomeSite(){
                   {devices.map((device, index) => (
                         <Grid key={index}>
                             <Card sx={{width: 300, boxShadow: 3}} >
-                                <CardActionArea onClick={()=>navigate("/device/" + index)} >
+                                <CardActionArea onClick={()=>navigate("/device/" + device.id)} >
                                     <CardMedia
                                         component="img"
                                       alt={device.title}
