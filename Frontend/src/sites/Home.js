@@ -58,7 +58,7 @@ function HomeSite(){
                                         component="img"
                                       alt={device.title}
                                         height="125"
-                                      image={"images/devices/" + device.image} />
+                                      image={"/images/devices/" + device.image} />
                                     <CardContent>
                                         <Typography gutterBottom variant="h6" component="div">
                                             {device.title}
