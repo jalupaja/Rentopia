@@ -3,7 +3,7 @@ import {
     Card,
     CardActionArea, CardContent,
     CardMedia,
-    styled, Typography, Grid2, Grid
+    styled, Typography, Grid2
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import Footer from "./Footer.js";
@@ -34,11 +34,11 @@ function Home(){
 
     return (
         <Box>
-            <Appbar authUser={authUser}/>
+            <Appbar authUser={authUser} searchVisibility={'visible'}/>
             <Box sx={{ flexGrow: 1}} >
                 <DeviceGrid container spacing={{xs: 4}} justifyContent={'center'} >
                     {Array.from({ length: 15 }).map((_, index) => (
-                        <Grid key={index}>
+                        <Grid2 key={index}>
                             <Card sx={{width: 300, boxShadow: 3}} >
                                 <CardActionArea /*component={RouterLink} to="/DevicesDetail" TODO: ADD Device Detail PAge here*/>
                                     <CardMedia
@@ -56,7 +56,7 @@ function Home(){
                                     </CardContent>
                                 </CardActionArea>
                             </Card>
-                        </Grid>
+                        </Grid2>
                     ))}
                 </DeviceGrid>
             </Box>

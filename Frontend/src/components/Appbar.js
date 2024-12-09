@@ -66,7 +66,7 @@ const Search = styled('div')(({ theme }) => ({
     },
 }));
 
-function Appbar({showLogin = true, authUser = null}) {
+function Appbar({showLogin = true, authUser = null, searchVisibility = 'hidden'}) {
     const [category, setCategory] = React.useState("%");
 
     const handleCategoryChange = (event) => {
@@ -74,12 +74,12 @@ function Appbar({showLogin = true, authUser = null}) {
     }
 
     const navigate = useNavigate();
-    let loginButton = <Button/>;
-    let profileButton = <IconButton></IconButton>;
+    let loginButton = <Button sx={{visibility: 'hidden'}}/>;
+    let profileButton = <IconButton sx={{visibility: 'hidden'}}></IconButton>;
     if(showLogin){
         if(authUser === null){
             loginButton = <Button onClick={()=>navigate("/login")} variant="outlined" color="inherit">Sign in</Button>;
-            profileButton = <IconButton onClick={() => navigate("/login")} size="large"><AccountCircleIcon fontSize="inherit"/></IconButton>
+            profileButton = <IconButton onClick={() => navigate("/profilePage")} size="large"><AccountCircleIcon fontSize="inherit"/></IconButton>
         }
         else{
             loginButton = <Button onClick={()=> {Logout();  window.location.reload();}} variant="outlined" color="inherit">Log out</Button>;
@@ -94,7 +94,7 @@ return (
                 <Box sx={{height :'63px', width:'63px', borderRadius: 25, overflow: 'hidden'}}>
                     <img src={Logo} onClick={()=>navigate("/")} alt={"Rentopia Logo"}/>
                 </Box>
-                <FormControl sx={{marginRight: 0, marginLeft: '7%', width: '150px' }} size="small">
+                <FormControl sx={{marginRight: 0, marginLeft: '7%', width: '150px', visibility: searchVisibility }} size="small">
                     <StyledSelect
                         value={category}
                         onChange={handleCategoryChange}
@@ -105,7 +105,7 @@ return (
                         <MenuItem value={"home"}>Home</MenuItem>
                     </StyledSelect>
                 </FormControl>
-                <Search sx={{ marginLeft: 0, marginRight: 0 }}>
+                <Search sx={{ marginLeft: 0, marginRight: 0, visibility: searchVisibility }}>
                     <SearchIconWrapper>
                         <SearchIcon/>
                     </SearchIconWrapper>
@@ -113,7 +113,7 @@ return (
                         placeholder="Search…"
                     />
                 </Search>
-                <Search sx={{ marginLeft: 0 }} >
+                <Search sx={{ marginLeft: 0, visibility: searchVisibility }} >
                     <SearchIconWrapper>
                         <LocationOnIcon/>
                     </SearchIconWrapper>

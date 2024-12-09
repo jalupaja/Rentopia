@@ -139,7 +139,7 @@ function RegisterPage(){
                     Create Account
                 </Button>
             </Stack>
-
+            <Box flex={"auto"}/>
             <Footer/>
         </Box>
     )

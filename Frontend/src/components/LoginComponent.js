@@ -107,7 +107,7 @@ function LoginComponent(){
                 <Link href="./register" marginTop={2}>Create Account</Link>
                 <Link href="/resetPassword" >Forget your password?</Link>
             </Stack>
-
+            <Box flex={"auto"}/>
             <Footer/>
         </Box>
 

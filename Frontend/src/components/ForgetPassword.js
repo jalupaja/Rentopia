@@ -1,7 +1,7 @@
 import Footer from "./Footer.js";
 import {Box, Typography, Stack, Button, TextField, Alert, Snackbar } from "@mui/material";
 import * as React from "react";
-import {centeredDivStyle, InputFieldStyle} from "./RegisterPage.js";
+import {centeredDivStyle, FrameStyle, InputFieldStyle} from "./RegisterPage.js";
 import {useNavigate} from "react-router-dom";
 import FetchBackend, {ReturnHomeWhenLoggedIn} from "../helper/BackendHelper.js";
 import Appbar from "./Appbar.js";
@@ -27,7 +27,7 @@ function ForgetPasswordPage(){
         }
     }
     return (
-        <Box>
+        <Box sx = {{ ...FrameStyle}}>
             <Appbar/>
             <Snackbar open={openError}>
                 <Alert severity="error">Sending Mail was not successful. Please try again.</Alert>
@@ -50,6 +50,7 @@ function ForgetPasswordPage(){
                     Send Email
                 </Button>
             </Stack>
+            <Box flex={"auto"}/>
             <Footer/>
         </Box>
     )
