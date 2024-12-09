@@ -71,6 +71,7 @@ const logo = {
 };
 
 function Appbar({showLogin = true, authUser = null}) {
+    console.log(authUser);
     const [category, setCategory] = React.useState("%");
 
     const handleCategoryChange = (event) => {

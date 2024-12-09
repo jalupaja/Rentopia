@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.GrantedAuthority;
+
 import java.util.Collection;
 import java.util.Collections;
 
@@ -35,7 +36,7 @@ public class Account implements UserDetails {
 
     @Override
     public String getUsername() {
-        return name;
+        return email;
     }
 
     @Column(length = 500)
@@ -47,9 +48,15 @@ public class Account implements UserDetails {
     @Column
     private String language;
 
+    @Column
+    private String company;
     public enum Role {
         USER,
         COMPANY,
         ADMIN
+    }
+
+    public void removeNonPublicProperties(){
+        this.password = null;
     }
 }

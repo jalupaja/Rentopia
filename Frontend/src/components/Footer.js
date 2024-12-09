@@ -16,7 +16,7 @@ function Footer(){
                 paddingBottom: "0",
                 backgroundColor : "lightblue",
                 bottom: "0",
-                position : "fixed"
+                position : "relative"
             }}
         >
             <Container maxWidth="lg">
