@@ -3,6 +3,7 @@ package com.othr.rentopia.controller;
 import com.othr.rentopia.config.AuthResponse;
 import com.othr.rentopia.config.JwtProvider;
 import com.othr.rentopia.model.Account;
+import com.othr.rentopia.model.Location;
 import com.othr.rentopia.service.AccountService;
 import com.othr.rentopia.service.AccountServiceImpl;
 import org.json.JSONObject;
@@ -96,6 +97,13 @@ public class UserController {
         newAccount.setEmail((String) request.get("email"));
         newAccount.setName((String) request.get("name"));
         newAccount.setEmail((String) request.get("email"));
+
+        Location location = new Location();
+        location.setCity((String) request.get("city"));
+        location.setPostalCode((String) request.get("postalCode"));
+        location.setStreet((String) request.get("street"));
+        location.setCountry((String) request.get("country"));
+        newAccount.setLocation(location);
 
         String password = (String) request.get("password1");
         newAccount.setPassword(passwordEncoder.encode(password));
