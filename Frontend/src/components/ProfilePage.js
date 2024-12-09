@@ -7,27 +7,42 @@ import {
     Button,
     Paper,
     TextField,
-    styled, List, Typography
+    styled, List, Typography, IconButton, Fab
 } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import * as React from "react";
 import DeviceListItem from "./DeviceListItem";
 import {FrameStyle} from "./RegisterPage";
+import AddIcon from '@mui/icons-material/Add';
 
 const Item = styled(Paper)(({ theme }) => ({
     padding: theme.spacing(1),
     textAlign: 'center'
 }));
 
+const fabStyle = {
+    alignSelf: "flex-start",
+    margin: "2% 0 0 5%",
+};
+
 function ProfilePage() {
 
     const [authUser, setAuthUser] = useState(null);
+    const [open, setOpen] = React.useState(false);
+
+    const handleAddDialogOpen = () => {
+        setOpen(true);
+    }
+
+    const handleAddDialogClose = () => {
+        setOpen(false);
+    }
 
     return (
         <Box sx = {{ ...FrameStyle}}>
             <Appbar authUser={authUser}/>
-            <Box sx={{width: '80%', display: 'grid', justifySelf: 'center'}}>
-                <Grid container direction='row' columnSpacing={3}>
+            <Box sx={{width: '100%'}}>
+                <Grid container direction='row' columnSpacing={3} margin={'2% 10%'} sx={{justifyContent: 'center'}}>
                     <Grid container columns={2} rowSpacing={2} direction='column' width={"49%"}>
                         <Item>
                             <Grid container spacing={2} alignItems="center">
@@ -55,15 +70,18 @@ function ProfilePage() {
                         </Item>
                     </Grid>
                     <Grid width={"49%"}>
-                        <Item sx={{maxHeight: 'fit-content'}} >
-                            <Typography>Your Tools</Typography>
-                            <List sx={{overflow: 'auto', maxHeight: '50%', minHeight: '50%', width: '90%'}}>
-                                {Array.from({ length: 2 }).map((_, index) => (
+                        <Item sx={{ height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+                            <Typography variant={'h5'}>Your Tools</Typography>
+                            <List sx={{overflow: 'auto', height: '50vh', width: '90%'}}>
+                                {Array.from({ length: 10 }).map((_, index) => (
                                     <div>
                                         <DeviceListItem DeviceName={"Insert Device Name here"} DeviceId={index}/>
                                     </div>))
                                 }
                             </List>
+                            <Fab color="primary" aria-label="add" style={fabStyle} onClick={handleAddDialogOpen}>
+                                <AddIcon />
+                            </Fab>
                         </Item>
                     </Grid>
                 </Grid>
