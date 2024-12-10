@@ -30,8 +30,10 @@ function ProfilePage() {
 
     const [authUser, setAuthUser] = useState(null);
     const [open, setOpen] = React.useState(false);
+    const [oName, setOName] = React.useState("");
 
-    const handleAddDialogOpen = () => {
+    const handleAddDialogOpen = (name) => {
+        setOName(name);
         setOpen(true);
     }
 
@@ -77,11 +79,14 @@ function ProfilePage() {
                                 <List sx={{overflow: 'auto', height: '50vh', width: '90%'}}>
                                     {Array.from({ length: 10 }).map((_, index) => (
                                         <div>
-                                            <DeviceListItem DeviceName={"Insert Device Name here"} DeviceId={index}/>
+                                            <DeviceListItem
+                                                DeviceName={"Insert Device Name here"}
+                                                DeviceId={index}
+                                                handleOpenDeviceEdit={() => handleAddDialogOpen("Tool Nr " + index)} />
                                         </div>))
                                     }
                                 </List>
-                                <Fab color="primary" aria-label="add" style={fabStyle} onClick={handleAddDialogOpen}>
+                                <Fab color="primary" aria-label="add" style={fabStyle} onClick={() => handleAddDialogOpen(oName)}>
                                     <AddIcon />
                                 </Fab>
                             </Item>
@@ -90,7 +95,11 @@ function ProfilePage() {
                 </Box>
                 <Box flex={"auto"}/>
                 <Footer/>
-                <AddDeviceDialog open={open} handleAddDialogClose={handleAddDialogClose}/>
+                <div>
+                    {open ? (
+                        <AddDeviceDialog open={open} handleAddDialogClose={handleAddDialogClose} iName={oName}/> //TODO: pass device datatype
+                    ) : ('')}
+                </div>
             </Box>
         </React.Fragment>
     )

@@ -3,14 +3,14 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import * as React from "react";
 
-function DeviceListItem({DeviceName="Test Tool", DeviceId=null}) {
+function DeviceListItem({DeviceName="Test Tool", DeviceId=null, handleOpenDeviceEdit}) {
 
     return (
         <div>
             <ListItem >
                 <ListItemAvatar></ListItemAvatar>
                 <ListItemText primary={DeviceName} />
-                <IconButton edge="end" aria-label="edit">
+                <IconButton edge="end" aria-label="edit" onClick={handleOpenDeviceEdit}>
                     <EditIcon/>
                 </IconButton>
                 <IconButton edge="end" aria-label="delte">

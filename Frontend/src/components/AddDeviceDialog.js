@@ -25,13 +25,13 @@ const StyledSelect = styled(Select)(({ theme }) => ({
     color: 'inherit',
 }))
 
-function AddDeviceDialog({open, handleAddDialogClose}) {
+function AddDeviceDialog({open, handleAddDialogClose, iName="", iPrice=0, iCategory="%", iDescription=""}) {
 
     const [images, setImages] = useState([]);
-    const [name, setName] = useState('');
-    const [description, setDescription] = useState('');
-    const [category, setCategory] = React.useState("%");
-    const [price, setPrice] = useState(0);
+    const [name, setName] = useState(iName);
+    const [description, setDescription] = useState(iDescription);
+    const [category, setCategory] = React.useState(iCategory);
+    const [price, setPrice] = useState(iPrice);
 
     const handleFileChange = (event) => {
         const selectedFiles = Array.from(event.target.files);
@@ -68,7 +68,7 @@ function AddDeviceDialog({open, handleAddDialogClose}) {
         price: false
     });
 
-    const closeDialog = () => {
+    const closeDialog = (event) => {
         setCategory("%");
         setName("");
         setDescription("");
@@ -92,21 +92,14 @@ function AddDeviceDialog({open, handleAddDialogClose}) {
             closeDialog();
         }
     }
+
     return (
         <React.Fragment>
             <Dialog
                 open={open}
                 onClose={handleAddDialogClose}
                 PaperProps={{
-                    component: 'form',
-                    onSubmit: (event) => {
-                        event.preventDefault();
-                        const formData = new FormData(event.currentTarget);
-                        const formJson = Object.fromEntries(formData.entries());
-                        const email = formJson.email;
-                        console.log(email);
-                        handleAddDialogClose();
-                    },
+                    component: 'form'
                 }}
             >
                 <DialogTitle>Add new Tool</DialogTitle>
