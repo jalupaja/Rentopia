@@ -1,4 +1,4 @@
-import Footer  from "./Footer.js";
+import Footer  from "../components/Footer.js";
 import * as React from 'react';
 
 import {
@@ -13,7 +13,7 @@ import {
     TextField, Typography, RadioGroup, Radio, FormControlLabel
 } from "@mui/material";
 import {Visibility, VisibilityOff} from "@mui/icons-material";
-import Appbar from "./Appbar.js";
+import Appbar from "../components/Appbar.js";
 import {ReturnHomeWhenLoggedIn} from "../helper/BackendHelper.js";
 
 export const centeredDivStyle = {

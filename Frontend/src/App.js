@@ -1,11 +1,11 @@
 import {BrowserRouter, Routes, Route} from "react-router-dom";
-import LoginComponent from "./components/LoginComponent.js";
-import Home from "./components/Home.js";
-import ForgetPasswordPage from "./components/ForgetPassword.js";
-import RegisterPage from "./components/RegisterPage.js";
+import LoginComponent from "./Sites/LoginComponent.js";
+import Home from "./Sites/Home.js";
+import ForgetPasswordPage from "./Sites/ForgetPassword.js";
+import RegisterPage from "./Sites/RegisterPage.js";
 
 import { useEffect } from "react"
-import ProfilePage from "./components/ProfilePage";
+import ProfilePage from "./Sites/ProfilePage";
 
 function App() {
 /*    useEffect(() => {

@@ -1,10 +1,10 @@
-import Footer from "./Footer.js";
+import Footer from "../components/Footer.js";
 import {Box, Typography, Stack, Button, TextField, Alert, Snackbar } from "@mui/material";
 import * as React from "react";
 import {centeredDivStyle, FrameStyle, InputFieldStyle} from "./RegisterPage.js";
 import {useNavigate} from "react-router-dom";
 import FetchBackend, {ReturnHomeWhenLoggedIn} from "../helper/BackendHelper.js";
-import Appbar from "./Appbar.js";
+import Appbar from "../components/Appbar.js";
 import {useState} from "react";
 function ForgetPasswordPage(){
     ReturnHomeWhenLoggedIn();
