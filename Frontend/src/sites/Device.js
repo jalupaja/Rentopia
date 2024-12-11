@@ -17,6 +17,16 @@ import Footer from "../components/Footer.js";
 import FetchBackend, {JWTTokenExists} from "../helper/BackendHelper.js";
 import {useEffect, useState} from "react";
 import Appbar from "../components/Appbar.js";
+// TODO maybe import ReactImageMagnify from 'react-image-magnify';
+// TODO: npm i @types/react-image-magnify
+
+const boxStyle = {
+    mt: 4,
+    border: '1px solid #e0e0e0',
+    borderRadius: '8px',
+    padding: '16px',
+    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+};
 
 const DeviceGrid = styled(Grid2)(({theme}) => ({
     margin: '2% 10%'
@@ -81,7 +91,7 @@ function DeviceSite() {
 	      <Grid container spacing={3} sx={{ mt: 4 }}>
 		{/* Left Column: Device Images */}
 		<Grid item xs={12} md={6}>
-		  <Box sx={{ textAlign: "center" }}>
+		  <Box sx={{...boxStyle, textAlign: "center" }}>
 		    {/* Main Device Image */}
 		    <img src={"/images/devices/" + device.images[deviceImageIndex % 2 /* TODO */] } alt={device.title} width="100%" style={{ borderRadius: 8 }} />
 		  </Box>
@@ -138,7 +148,7 @@ function DeviceSite() {
 		    <Box display="flex" alignItems="center" mb={2}>
 		      <Rating value={"rating"} readOnly />
 		      <Typography variant="body2" sx={{ ml: 1 }}>
-			({"reviews"} reviews)
+			(4.5) { /* TODO or remove? */ }
 		      </Typography>
 		    </Box>
 
@@ -150,16 +160,32 @@ function DeviceSite() {
 
 		    {/* Add to Cart & Buy Now Buttons */}
 		    <Box display="flex" mb={2}>
-		      <Button variant="contained" color="primary" fullWidth sx={{ mr: 2 }}>
+		    { /* TODO */ }
+		      <Button
+			    variant="contained" color="primary" fullWidth sx={{ mr: 2 }}
+			    onClick={()=>navigate(`/user/${device.owner}`)}
+			    >
 			Add to Cart
 		      </Button>
-		      <Button variant="contained" color="secondary" fullWidth>
+		      <Button
+			    variant="contained" color="secondary" fullWidth
+			    onClick={()=>navigate(`/user/${device.owner}`)}
+			    >
 			Buy Now
 		      </Button>
 		    </Box>
 
 		    {/* Seller Information */}
-		    <Box display="flex" alignItems="center" mb={2}>
+		    <Box
+			display="flex"
+			alignItems="center"
+			sx={{
+			    cursor: 'pointer',
+			}}
+			mb={2}
+			mx={boxStyle}
+			onClick={()=>navigate(`/user/${device.owner}`)}
+			>
 		      <Avatar alt={"seller_name"} src={""} sx={{ mr: 1 }} />
 		      <Typography variant="body2" color="textSecondary">
 			{device.owner}
@@ -171,15 +197,16 @@ function DeviceSite() {
 	      </Grid>
 
 	      {/* device Description */}
-	      <Box sx={{ mt: 4 }}>
+	      <Box sx={boxStyle}>
 		<Typography variant="h5" gutterBottom>
-		  device Description
+		    {device.title}
 		</Typography>
 		<Typography variant="body1" paragraph>
 		  {device.description}
 		</Typography>
 	      </Box>
 	    </Container>
+	{ /* TODO use DeviceContainer?. Footer is cutting in description!!! */}
             <Footer/>
         </Box>
   );
