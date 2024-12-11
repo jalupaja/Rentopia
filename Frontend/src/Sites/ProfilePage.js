@@ -15,6 +15,7 @@ import DeviceListItem from "../components/DeviceListItem";
 import {FrameStyle} from "./RegisterPage";
 import AddIcon from '@mui/icons-material/Add';
 import AddDeviceDialog from "../components/AddDeviceDialog";
+import EditProfileDialog from "../components/EditProfileDialog";
 
 const Item = styled(Paper)(({ theme }) => ({
     padding: theme.spacing(1),
@@ -29,16 +30,25 @@ const fabStyle = {
 function ProfilePage() {
 
     const [authUser, setAuthUser] = useState(null);
-    const [open, setOpen] = React.useState(false);
+    const [openAddItem, setOpenAddItem] = React.useState(false);
+    const [openEditProfile, setOpenEditProfile] = React.useState(false);
     const [oName, setOName] = React.useState("");
 
     const handleAddDialogOpen = (name) => {
         setOName(name);
-        setOpen(true);
+        setOpenAddItem(true);
     }
 
     const handleAddDialogClose = () => {
-        setOpen(false);
+        setOpenAddItem(false);
+    }
+
+    const handleEditDialogOpen = () => {
+        setOpenEditProfile(true);
+    }
+
+    const handleEditDialogClose = () => {
+        setOpenEditProfile(false);
     }
 
     return (
@@ -48,7 +58,7 @@ function ProfilePage() {
                 <Box sx={{width: '100%'}}>
                     <Grid container direction='row' columnSpacing={3} margin={'2% 10%'} sx={{justifyContent: 'center'}}>
                         <Grid container columns={2} rowSpacing={2} direction='column' width={"49%"}>
-                            <Item>
+                            <Item sx={{boxShadow: 3}}>
                                 <Grid container spacing={2} alignItems="center">
                                     <Avatar
                                             sx={{ width: 100, height: 100 }}
@@ -56,25 +66,38 @@ function ProfilePage() {
                                     />
                                     <Grid item display={'grid'}>
                                         <TextField
+                                            disabled
                                             label="Company"
                                             variant="outlined"
                                         />
                                         <TextField
+                                            disabled
                                             label="Name"
                                             variant="outlined"
                                         />
-                                        <Button sx={{ justifySelf: 'flex-end'}} variant={"outlined"}> Change Profile</Button>
+                                        <Button
+                                            sx={{ justifySelf: 'flex-end'}}
+                                            variant={"contained"}
+                                            onClick={handleEditDialogOpen}>Edit Profile</Button>
                                     </Grid>
                                 </Grid>
                             </Item>
-                            <Item>
+                            <Item sx={{boxShadow: 3}}>
                                 <Grid>
                                 2
                                 </Grid>
                             </Item>
                         </Grid>
                         <Grid width={"49%"}>
-                            <Item sx={{ height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+                            <Item
+                                sx={{
+                                    height: '100%',
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'center',
+                                    boxShadow: 3
+                                }}
+                            >
                                 <Typography variant={'h5'}>Your Tools</Typography>
                                 <List sx={{overflow: 'auto', height: '50vh', width: '90%'}}>
                                     {Array.from({ length: 10 }).map((_, index) => (
@@ -96,10 +119,11 @@ function ProfilePage() {
                 <Box flex={"auto"}/>
                 <Footer/>
                 <div>
-                    {open ? (
-                        <AddDeviceDialog open={open} handleAddDialogClose={handleAddDialogClose} iName={oName}/> //TODO: pass device datatype
+                    {openAddItem ? (
+                        <AddDeviceDialog open={openAddItem} handleAddDialogClose={handleAddDialogClose} iName={oName}/> //TODO: pass device datatype
                     ) : ('')}
                 </div>
+                <EditProfileDialog open={openEditProfile} handleEditDialogClose={handleEditDialogClose}/>
             </Box>
         </React.Fragment>
     )

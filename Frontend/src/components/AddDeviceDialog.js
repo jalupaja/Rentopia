@@ -51,18 +51,6 @@ function AddDeviceDialog({open, handleAddDialogClose, iName="", iPrice=0, iCateg
         setCategory(event.target.value);
     }
 
-    const handleNameChange = (event) => {
-        setName(event.target.value);
-    }
-
-    const handlePriceChange = (event) => {
-        setPrice(event.target.value);
-    }
-
-    const handleDescriptionChange = (event) => {
-        setDescription(event.target.value);
-    }
-
     const [errors, setErrors] = useState({
         name: false,
         price: false
@@ -114,7 +102,7 @@ function AddDeviceDialog({open, handleAddDialogClose, iName="", iPrice=0, iCateg
                                 variant="outlined"
                                 label={"Name"}
                                 value={name}
-                                onChange={handleNameChange}
+                                onChange={(e) => setName(e.target.value)}
                                 required
                                 error={errors.name}
                                 helperText={errors.name ? 'Name is required' : ''}/>
@@ -122,7 +110,7 @@ function AddDeviceDialog({open, handleAddDialogClose, iName="", iPrice=0, iCateg
                                 variant="outlined"
                                 label={"Price"}
                                 value={price}
-                                onChange={handlePriceChange}
+                                onChange={(e) => setPrice(e.target.value)}
                                 required
                                 error={errors.price}
                                 helperText={errors.price ? 'Price is required' : ''}
@@ -144,7 +132,7 @@ function AddDeviceDialog({open, handleAddDialogClose, iName="", iPrice=0, iCateg
                                 multiline rows={5}
                                 label={"Description"}
                                 value={description}
-                                onChange={handleDescriptionChange}/>
+                                onChange={(e) => setDescription(e.target.value)}/>
                         </Grid>
                     </Box>
                     <Box
