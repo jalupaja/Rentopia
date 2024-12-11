@@ -7,7 +7,7 @@ import {
     Button,
     Paper,
     TextField,
-    styled, List, Typography, Fab
+    styled, List, Typography, Fab, Input
 } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import * as React from "react";
@@ -58,29 +58,44 @@ function ProfilePage() {
                 <Box sx={{width: '100%'}}>
                     <Grid container direction='row' columnSpacing={3} margin={'2% 10%'} sx={{justifyContent: 'center'}}>
                         <Grid container columns={2} rowSpacing={2} direction='column' width={"49%"}>
-                            <Item sx={{boxShadow: 3}}>
-                                <Grid container spacing={2} alignItems="center">
-                                    <Avatar
-                                            sx={{ width: 100, height: 100 }}
-                                            alt="User"
+                            <Item sx={{boxShadow: 3, display: 'flex', height: 'min-content', maxHeight: 'min-content'}}>
+                                <Avatar
+                                    sx={{ width: 100, height: 100, margin: '24px'}}
+                                    alt="User"
+                                />
+                                <Box>
+                                    <Input
+                                        fullWidth
+                                        disabled
+                                        defaultValue="Name"
+                                        sx={{ alignSelf: 'center', margin: '24px 0 12px 0'}}
                                     />
-                                    <Grid item display={'grid'}>
-                                        <TextField
-                                            disabled
-                                            label="Company"
-                                            variant="outlined"
-                                        />
-                                        <TextField
-                                            disabled
-                                            label="Name"
-                                            variant="outlined"
-                                        />
-                                        <Button
-                                            sx={{ justifySelf: 'flex-end'}}
-                                            variant={"contained"}
-                                            onClick={handleEditDialogOpen}>Edit Profile</Button>
-                                    </Grid>
-                                </Grid>
+                                    <Input
+                                        fullWidth
+                                        disabled
+                                        defaultValue="Prename"
+                                        sx={{ alignSelf: 'center', margin: '12px 0 12px 0'}}
+                                    />
+                                </Box>
+                                <Box sx={{margin: ' 0 24px 24px 24px'}}>
+                                    <Input
+                                        fullWidth
+                                        disabled
+                                        defaultValue="Company"
+                                        sx={{ alignSelf: 'center', margin: '24px 0 12px 0'}}
+                                    />
+                                    <Input
+                                        fullWidth
+                                        disabled
+                                        defaultValue="Email"
+                                        sx={{ alignSelf: 'center', margin: '12px 0 12px 0'}}
+                                    />
+                                    <Button
+                                        variant={"contained"}
+                                        onClick={handleEditDialogOpen}
+                                        sx={{float: "right"}}>Edit Profile
+                                    </Button>
+                                </Box>
                             </Item>
                             <Item sx={{boxShadow: 3}}>
                                 <Grid>

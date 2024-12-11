@@ -10,7 +10,6 @@ import * as React from 'react';
 import {useState} from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import UploadIcon from '@mui/icons-material/Upload';
-import Logo from "../image/RentopiaLogo64.jpg";
 
 function EditProfileDialog({open, handleEditDialogClose}) {
 
@@ -63,7 +62,6 @@ function EditProfileDialog({open, handleEditDialogClose}) {
             >
                 <DialogTitle>Edit Profile</DialogTitle>
                 <DialogContent>
-
                     <Box display="flex" mb={2}>
                         <Avatar
                             src={avatar}
