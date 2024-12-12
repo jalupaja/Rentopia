@@ -11,10 +11,10 @@ public interface DeviceService {
     List<Device> getDevicesByOwner(Long ownerId);
     List<Device> getDevicesByCategory(Long categoryId);
     List<Device> getAllDevices();
-    void removeDevice(Long deviceId);
+    boolean removeDevice(Long deviceId);
     List<Device> getBookmarkedDevices(Long ownerId);
     void saveBookmark(Bookmark bookmark);
-    void removeBookmark(Long ownerId, Long deviceId);
+    boolean removeBookmark(Long ownerId, Long deviceId);
     boolean checkBookmark(Long ownerId, Long deviceId);
 
 }

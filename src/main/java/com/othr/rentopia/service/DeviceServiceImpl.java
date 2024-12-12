@@ -76,7 +76,8 @@ public class DeviceServiceImpl implements DeviceService {
     }
 
     @Override
-    public void removeDevice(Long deviceId) {
+    @Transactional
+    public boolean removeDevice(Long deviceId) {
 	String query = "DELETE FROM Device WHERE id = :deviceId";
 	try {
 	    entityManager.createQuery(query)
@@ -84,7 +85,9 @@ public class DeviceServiceImpl implements DeviceService {
 		.executeUpdate();
 	} catch (PersistenceException e) {
 	    System.err.println("ERROR removing Device with ID " + deviceId + ": " + e.getMessage());
+	    return false;
 	}
+	return true;
     }
 
     @Override
@@ -123,20 +126,12 @@ public class DeviceServiceImpl implements DeviceService {
     @Override
     @Transactional
     public void saveBookmark(Bookmark bookmark) {
-	// TODO check if ownerId is current user/ maybe just use current ownerId
-	String query = "INSERT INTO Bookmark (ownerId, deviceId) VALUES (:ownerId, :deviceId)";
-	try {
-	    entityManager.createQuery(query)
-		.setParameter("ownerId", bookmark.getOwnerId())
-		.setParameter("deviceId", bookmark.getDeviceId())
-		.executeUpdate();
-	} catch (PersistenceException e) {
-	    System.err.println("ERROR inserting Bookmark for user " + bookmark.getOwnerId() + "and Device " + bookmark.getDeviceId() + ": " + e.getMessage());
-	}
+	entityManager.persist(bookmark);
     }
 
     @Override
-    public void removeBookmark(Long ownerId, Long deviceId) {
+    @Transactional
+    public boolean removeBookmark(Long ownerId, Long deviceId) {
 	// TODO check if ownerId is current user/ maybe just use current ownerId
 	String query = "DELETE FROM Bookmark WHERE ownerId = :ownerId AND deviceId = :deviceId";
 	try {
@@ -145,11 +140,14 @@ public class DeviceServiceImpl implements DeviceService {
 		.setParameter("deviceId", deviceId)
 		.executeUpdate();
 	} catch (PersistenceException e) {
-	    System.err.println("ERROR deleting Bookmark for user " + ownerId + "and Device " + deviceId + ": " + e.getMessage());
+	    System.err.println("ERROR deleting Bookmark for user " + ownerId + " and Device " + deviceId + ": " + e.getMessage());
+	    return false;
 	}
+	return true;
     }
 
     @Override
+    @Transactional
     public boolean checkBookmark(Long ownerId, Long deviceId) {
 	String query = "SELECT b FROM Bookmark b WHERE ownerId = :ownerId AND deviceId = :deviceId";
 	try {
