@@ -6,16 +6,19 @@ import {
     Box,
     Button,
     Paper,
-    TextField,
-    styled, List, Typography, Fab, Input
+    styled, List, Fab, Input, Tabs, Tab
 } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import * as React from "react";
 import DeviceListItem from "../components/DeviceListItem";
 import {FrameStyle} from "./RegisterPage";
 import AddIcon from '@mui/icons-material/Add';
+import HistoryIcon from '@mui/icons-material/History';
+import BookmarksIcon from '@mui/icons-material/Bookmarks';
+import HandymanIcon from '@mui/icons-material/Handyman';
 import AddDeviceDialog from "../components/AddDeviceDialog";
 import EditProfileDialog from "../components/EditProfileDialog";
+import PropTypes from "prop-types";
 
 const Item = styled(Paper)(({ theme }) => ({
     padding: theme.spacing(1),
@@ -27,12 +30,47 @@ const fabStyle = {
     margin: "2% 0 0 5%",
 };
 
+function CustomTabPanel(props) {
+    const { children, value, index, ...other } = props;
+
+    return (
+        <div
+            role="tabpanel"
+            hidden={value !== index}
+            id={`simple-tabpanel-${index}`}
+            aria-labelledby={`simple-tab-${index}`}
+            style={{width:'100%'}}
+            {...other}
+
+        >
+            {value === index && <Box sx={{ p: 3}}>{children}</Box>}
+        </div>
+    );
+}
+
+CustomTabPanel.propTypes = {
+    children: PropTypes.node,
+    index: PropTypes.number.isRequired,
+    value: PropTypes.number.isRequired,
+};
+
+function a11yProps(index) {
+    return {
+        id: `simple-tab-${index}`,
+        'aria-controls': `simple-tabpanel-${index}`,
+    };
+}
+
 function ProfilePage() {
 
     const [authUser, setAuthUser] = useState(null);
     const [openAddItem, setOpenAddItem] = React.useState(false);
     const [openEditProfile, setOpenEditProfile] = React.useState(false);
     const [oName, setOName] = React.useState("");
+    const [tabValue, setTabValue] = React.useState(0);
+    const [deviceList, setDeviceList] = React.useState([]);
+    const [bookmarkList, setBookmarkList] = React.useState([]);
+    const [historyList, setHistoryList] = React.useState([]);
 
     const handleAddDialogOpen = (name) => {
         setOName(name);
@@ -49,6 +87,20 @@ function ProfilePage() {
 
     const handleEditDialogClose = () => {
         setOpenEditProfile(false);
+    }
+
+    const handleTabChange = (event, newValue) => {
+        setTabValue(newValue);
+    }
+
+    const handleRemoveBookmark = (id) => {
+        setBookmarkList(bookmarkList.filter(bookmark => bookmark.id !== id));
+        //TODO: DB Remove Bookmark
+    }
+
+    const handleDeleteTool = (id) => {
+        setDeviceList(deviceList.filter(device => device.id !== id));
+        //TODO: DB Remove Tool
     }
 
     return (
@@ -97,11 +149,6 @@ function ProfilePage() {
                                     </Button>
                                 </Box>
                             </Item>
-                            <Item sx={{boxShadow: 3}}>
-                                <Grid>
-                                2
-                                </Grid>
-                            </Item>
                         </Grid>
                         <Grid width={"49%"}>
                             <Item
@@ -113,20 +160,69 @@ function ProfilePage() {
                                     boxShadow: 3
                                 }}
                             >
-                                <Typography variant={'h5'}>Your Tools</Typography>
-                                <List sx={{overflow: 'auto', height: '50vh', width: '90%'}}>
-                                    {Array.from({ length: 10 }).map((_, index) => (
-                                        <div>
-                                            <DeviceListItem
-                                                DeviceName={"Insert Device Name here"}
-                                                DeviceId={index}
-                                                handleOpenDeviceEdit={() => handleAddDialogOpen("Tool Nr " + index)} />
-                                        </div>))
-                                    }
-                                </List>
-                                <Fab color="primary" aria-label="add" style={fabStyle} onClick={() => handleAddDialogOpen(oName)}>
-                                    <AddIcon />
-                                </Fab>
+                                <Tabs value={tabValue}
+                                      onChange={handleTabChange}
+                                      aria-label="Profile Tabs"
+                                      sx={{width: '100%'}}
+                                >
+                                    <Tab icon={<HandymanIcon/>} label="Your Tools" {...a11yProps(0)} />
+                                    <Tab icon={<BookmarksIcon/>} label="Bookmarks"  {...a11yProps(1)} />
+                                    <Tab icon={<HistoryIcon/>} label="Rent Histroy" {...a11yProps(1)}/>
+                                </Tabs>
+                                <CustomTabPanel value={tabValue} index={0}>
+                                    <List sx={{overflow: 'auto', height: '50vh', width: '90%'}}>
+                                        {Array.from({ length: 10 }).map((_, index) => (
+                                            //*Your Tools*//
+                                            <div>
+                                                <DeviceListItem
+                                                    DeviceName={"Insert Device Name here"}
+                                                    DeviceId={index}
+                                                    handleOpenDeviceEdit={() => handleAddDialogOpen("Tool Nr " + index)}
+                                                    handleAddDialogClose={() => handleAddDialogClose(index)}
+                                                    tabValue={tabValue}
+                                                />
+                                            </div>))
+                                        }
+                                    </List>
+                                    <Fab color="primary" aria-label="add" style={fabStyle} onClick={() => handleAddDialogOpen(oName)}>
+                                        <AddIcon />
+                                    </Fab>
+                                </CustomTabPanel>
+                                <CustomTabPanel value={tabValue} index={1}>
+                                    <List sx={{overflow: 'auto', height: '50vh', width: '90%'}}>
+                                        {Array.from({ length: 5 }).map((_, index) => (
+                                            //*Bookmarks*//
+                                            <div>
+                                                <DeviceListItem
+                                                    DeviceName={"Insert Device Name here"}
+                                                    DeviceId={index}
+                                                    handleRemoveBookmark={() => handleDeleteTool(index)}
+                                                    tabValue={tabValue}
+                                                />
+                                            </div>))
+                                        }
+                                    </List>
+                                    <Fab style={fabStyle} sx={{visibility: "hidden"}}>
+                                        <AddIcon />
+                                    </Fab>
+                                </CustomTabPanel>
+                                <CustomTabPanel value={tabValue} index={2}>
+                                    <List sx={{overflow: 'auto', height: '50vh', width: '90%'}}>
+                                        {Array.from({ length: 10 }).map((_, index) => (
+                                            //*Rent Tools*//
+                                            <div>
+                                                <DeviceListItem
+                                                    DeviceName={"Insert Device Name here"}
+                                                    DeviceId={index}
+                                                    tabValue={tabValue}
+                                                />
+                                            </div>))
+                                        }
+                                    </List>
+                                    <Fab  style={fabStyle} sx={{visibility: "hidden"}}>
+                                        <AddIcon />
+                                    </Fab>
+                                </CustomTabPanel>
                             </Item>
                         </Grid>
                     </Grid>
