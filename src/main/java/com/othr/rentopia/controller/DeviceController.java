@@ -3,6 +3,7 @@ package com.othr.rentopia.controller;
 // import com.othr.rentopia.model.Account;
 import com.othr.rentopia.model.Device;
 import com.othr.rentopia.model.DeviceImage;
+import com.othr.rentopia.model.Bookmark;
 // import com.othr.rentopia.service.AccountService;
 import com.othr.rentopia.service.DeviceService;
 import com.othr.rentopia.service.AccountService;
@@ -108,7 +109,7 @@ public class DeviceController {
         }
     }
 
-    @GetMapping("short/all")
+    @GetMapping("/short/all")
     public ResponseEntity<List<Map<String, Object>>> getDevice() {
         List<Map<String, Object>> deviceData = new ArrayList<>();
 
@@ -122,7 +123,24 @@ public class DeviceController {
         return new ResponseEntity<>(deviceData, HttpStatus.OK);
     }
 
-    @GetMapping("/bookmarks/{ownerId}")
+    @PostMapping("/add")
+    public ResponseEntity<String> addDevice() {
+	return new ResponseEntity<>(null, HttpStatus.NOT_IMPLEMENTED);
+    }
+
+    @PostMapping("/remove/{id}")
+    public ResponseEntity<String> removeDevice(@PathVariable("id") Long id) {
+        Device device = deviceService.getDevice(id);
+
+	if (checkAllowed(device)) {
+	    deviceService.removeDevice(id);
+	} else {
+	    return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
+	}
+	return new ResponseEntity<>(null, HttpStatus.NOT_IMPLEMENTED);
+    }
+
+    @GetMapping("/bookmarks/all/{ownerId}")
     public ResponseEntity<List<Map<String, Object>>> getBookmarks(@PathVariable("ownerId") Long ownerId) {
 	// TODO maybe move to AccountService. but need parseDeviceShort...
         List<Map<String, Object>> deviceData = new ArrayList<>();
@@ -135,6 +153,34 @@ public class DeviceController {
         }
 
         return new ResponseEntity<>(deviceData, HttpStatus.OK);
+    }
+
+    @PostMapping("/bookmarks/remove/{deviceId}")
+    public ResponseEntity<String> removeBookmark(@PathVariable("deviceId") Long deviceId) {
+	// TODO ownerId from current user: return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+	Long ownerId = 1L;
+
+	System.out.println("removing");
+	if (deviceService.removeBookmark(ownerId, deviceId)) {
+	    return new ResponseEntity<>(null, HttpStatus.OK);
+	} else {
+	    System.out.println("Failed removing Bookmark from " + ownerId + " for " + deviceId);
+	    return new ResponseEntity<>(null, HttpStatus.OK);
+	}
+    }
+
+    @PostMapping("/bookmarks/add/{deviceId}")
+    public ResponseEntity<String> addBookmark(@PathVariable("deviceId") Long deviceId) {
+	// TODO ownerId from current user: return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+	Long ownerId = 1L;
+	System.out.println("adding");
+
+	Bookmark bookmark = new Bookmark();
+	bookmark.setOwnerId(ownerId);
+	bookmark.setDeviceId(deviceId);
+
+	deviceService.saveBookmark(bookmark);
+	return new ResponseEntity<>(null, HttpStatus.OK);
     }
 
     @PostMapping("{id}/image")
