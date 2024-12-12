@@ -51,7 +51,8 @@ function DeviceSite() {
 	},
 	"id": 0,
 	"categories": [],
-	"title": ""
+	"title": "",
+	"isBookmarked": false,
     });
     const [deviceImageIndex, setDeviceImageIndex] = useState(0);
 
@@ -83,6 +84,22 @@ function DeviceSite() {
     const handleThumbnailClick = (index) => {
 	setDeviceImageIndex(index);
     };
+
+    const btnBookmark = () => {
+	// TODO
+	if (false && authUser === null) {
+	    navigate(`/login`);
+	} else {
+	    if (device.isBookmarked) {
+		FetchBackend('POST', 'device/bookmarks/remove/' + device.id, null)
+		    .catch(error => console.log(error));
+	    } else {
+		FetchBackend('POST', 'device/bookmarks/add/' + device.id, null)
+		    .catch(error => console.log(error));
+	    }
+	    setDevice({ ...device, isBookmarked: !device.isBookmarked });
+	}
+    }
 
     return (
 	<Box>
@@ -162,7 +179,7 @@ function DeviceSite() {
 		    { /* TODO */ }
 		      <Button
 			    variant="contained" color="primary" fullWidth sx={{ mr: 2 }}
-			    onClick={()=>navigate(`/user/${device.owner}`)}
+			    onClick={btnBookmark}
 			    >
 		    { device.isBookmarked ? ("Bookmarked") : ("Add to Bookmarks") }
 		      </Button>
