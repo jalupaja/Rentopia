@@ -158,20 +158,19 @@ function DeviceSite() {
 		      {device.price} €
 		    </Typography>
 
-		    {/* Add to Cart & Buy Now Buttons */}
 		    <Box display="flex" mb={2}>
 		    { /* TODO */ }
 		      <Button
 			    variant="contained" color="primary" fullWidth sx={{ mr: 2 }}
 			    onClick={()=>navigate(`/user/${device.owner}`)}
 			    >
-			Add to Cart
+		    { device.isBookmarked ? ("Bookmarked") : ("Add to Bookmarks") }
 		      </Button>
 		      <Button
 			    variant="contained" color="secondary" fullWidth
 			    onClick={()=>navigate(`/user/${device.owner}`)}
 			    >
-			Buy Now
+			Rent Now
 		      </Button>
 		    </Box>
 

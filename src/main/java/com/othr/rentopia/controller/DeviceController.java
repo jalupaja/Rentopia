@@ -64,6 +64,7 @@ public class DeviceController {
         deviceData.put("price", device.getPrice());
         deviceData.put("location", device.getLocation());
         deviceData.put("image", deviceImageService.getFirstDeviceImage(device.getId()));
+        deviceData.put("isBookmarked", deviceService.checkBookmark(device.getOwnerId(), device.getId()));
 
         return deviceData;
     }
@@ -80,6 +81,7 @@ public class DeviceController {
         deviceData.put("location", device.getLocation());
         deviceData.put("isPublic", device.getIsPublic());
         deviceData.put("images", deviceImageService.getAllDeviceImages(device.getId()));
+        deviceData.put("isBookmarked", deviceService.checkBookmark(device.getOwnerId(), device.getId()));
 
         return deviceData;
     }

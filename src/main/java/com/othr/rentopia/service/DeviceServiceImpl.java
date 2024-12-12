@@ -9,6 +9,7 @@ import jakarta.persistence.PersistenceException;
 import org.springframework.stereotype.Service;
 
 import com.othr.rentopia.model.Device;
+import com.othr.rentopia.model.Bookmark;
 
 @Service
 public class DeviceServiceImpl implements DeviceService {
@@ -84,19 +85,63 @@ public class DeviceServiceImpl implements DeviceService {
 		}
     }
 
-	@Override
-	public List<Device> getAllDevices() {
-		List<Device> devices = null;
+    @Override
+    public List<Device> getAllDevices() {
+	List<Device> devices = null;
 
-		String query = "SELECT d FROM Device d";
-		try {
-			devices = entityManager
-					.createQuery(query, Device.class)
-					.getResultList();
-		} catch (NoResultException e) {
-			System.err.println("No device found");
-		}
-
-		return devices;
+	String query = "SELECT d FROM Device d";
+	try {
+	    devices = entityManager
+		.createQuery(query, Device.class)
+		.getResultList();
+	} catch (NoResultException e) {
+	    System.err.println("No device found");
 	}
+
+	return devices;
+    }
+
+    @Override
+    @Transactional
+    public void saveBookmark(Bookmark bookmark) {
+	// TODO check if ownerId is current user/ maybe just use current ownerId
+	String query = "INSERT INTO Bookmark (ownerId, deviceId) VALUES (:ownerId, :deviceId)";
+	try {
+	    entityManager.createQuery(query)
+		.setParameter("ownerId", bookmark.getOwnerId())
+		.setParameter("deviceId", bookmark.getDeviceId())
+		.executeUpdate();
+	} catch (PersistenceException e) {
+	    System.err.println("ERROR inserting Bookmark for user " + bookmark.getOwnerId() + "and Device " + bookmark.getDeviceId() + ": " + e.getMessage());
+	}
+    }
+
+    @Override
+    public void removeBookmark(Long ownerId, Long deviceId) {
+	// TODO check if ownerId is current user/ maybe just use current ownerId
+	String query = "DELETE FROM Bookmark WHERE ownerId = :ownerId AND deviceId = :deviceId";
+	try {
+	    entityManager.createQuery(query)
+		.setParameter("ownerId", ownerId)
+		.setParameter("deviceId", deviceId)
+		.executeUpdate();
+	} catch (PersistenceException e) {
+	    System.err.println("ERROR deleting Bookmark for user " + ownerId + "and Device " + deviceId + ": " + e.getMessage());
+	}
+    }
+
+    @Override
+    public boolean checkBookmark(Long ownerId, Long deviceId) {
+	String query = "SELECT b FROM Bookmark b WHERE ownerId = :ownerId AND deviceId = :deviceId";
+	try {
+	    entityManager
+		.createQuery(query, Bookmark.class)
+		.setParameter("ownerId", ownerId)
+		.setParameter("deviceId", deviceId)
+		.getSingleResult();
+	    return true;
+	} catch (NoResultException e) {
+	    return false;
+	}
+    }
 }

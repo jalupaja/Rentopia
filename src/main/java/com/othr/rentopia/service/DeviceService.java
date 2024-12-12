@@ -3,6 +3,7 @@ package com.othr.rentopia.service;
 import java.util.List;
 
 import com.othr.rentopia.model.Device;
+import com.othr.rentopia.model.Bookmark;
 
 public interface DeviceService {
     void saveDevice(Device device);
@@ -11,5 +12,8 @@ public interface DeviceService {
     List<Device> getDevicesByCategory(Long categoryId);
     List<Device> getAllDevices();
     void removeDevice(Long deviceId);
+    void saveBookmark(Bookmark bookmark);
+    void removeBookmark(Long ownerId, Long deviceId);
+    boolean checkBookmark(Long ownerId, Long deviceId);
 
 }

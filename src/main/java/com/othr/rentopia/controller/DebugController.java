@@ -2,6 +2,7 @@ package com.othr.rentopia.controller;
 
 import com.othr.rentopia.model.Account;
 import com.othr.rentopia.model.Device;
+import com.othr.rentopia.model.Bookmark;
 import com.othr.rentopia.model.Location;
 import com.othr.rentopia.model.DeviceImage;
 import com.othr.rentopia.service.AccountService;
@@ -133,6 +134,7 @@ public class DebugController {
         d8.setPrice(75.00);
         deviceService.saveDevice(d8);
 
+	// Device Images
         for (long i = 1; i <= 9; i++) {
                 DeviceImage deviceImage = new DeviceImage();
                 deviceImage.setDeviceId(i);
@@ -147,5 +149,15 @@ public class DebugController {
                 deviceImageService.saveDeviceImage(deviceImage);
         }
 
+	// Bookmarks
+	Bookmark bookmark = new Bookmark();
+	bookmark.setOwnerId(account.getId());
+	bookmark.setDeviceId(1L);
+	deviceService.saveBookmark(bookmark);
+
+	Bookmark bookmark2 = new Bookmark();
+	bookmark.setOwnerId(account.getId());
+	bookmark.setDeviceId(3L);
+	deviceService.saveBookmark(bookmark);
     }
 }
