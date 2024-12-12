@@ -25,64 +25,66 @@ public class DeviceServiceImpl implements DeviceService {
 
     @Override
     public Device getDevice(Long deviceId) {
-		Device device = null;
+	Device device = null;
 
-		String query = "SELECT DISTINCT d FROM Device d WHERE id = :deviceId";
-		try {
-			device = entityManager
-			.createQuery(query, Device.class)
-			.setParameter("deviceId", deviceId)
-			.getSingleResult();
-		} catch (NoResultException e) {
-			System.err.println("No device found with id " + deviceId);
-		}
+	String query = "SELECT DISTINCT d FROM Device d WHERE id = :deviceId";
+	try {
+	    device = entityManager
+		.createQuery(query, Device.class)
+		.setParameter("deviceId", deviceId)
+		.getSingleResult();
+	} catch (NoResultException e) {
+	    System.err.println("No device found with id " + deviceId);
+	}
 
-		return device ;
+	return device ;
     }
 
     @Override
-		public List<Device> getDevicesByOwner(Long ownerId) {
-		List<Device> devices = null;
+    public List<Device> getDevicesByOwner(Long ownerId) {
+	List<Device> devices = null;
 
-		String query = "SELECT d FROM Device d WHERE d.ownerId = :ownerId";
-		try {
-			devices = entityManager
-				.createQuery(query, Device.class)
-				.setParameter("ownerId", ownerId)
-				.getResultList();
-		} catch (NoResultException e) {
-			System.err.println("No device found with owner id " + ownerId);
-		}
+	String query = "SELECT d FROM Device d WHERE d.ownerId = :ownerId";
+	try {
+	    devices = entityManager
+		.createQuery(query, Device.class)
+		.setParameter("ownerId", ownerId)
+		.getResultList();
+	} catch (NoResultException e) {
+	    System.err.println("No device found with owner id " + ownerId);
+	}
 
-		return devices;
+	return devices;
     }
 
+    @Override
     public List<Device> getDevicesByCategory(Long categoryId) {
-		List<Device> devices = null;
+	List<Device> devices = null;
 
-		String query = "SELECT d FROM Device d JOIN d.categories c WHERE c.id = :categoryId";
-		try {
-			devices = entityManager
-				.createQuery(query, Device.class)
-				.setParameter("categoryId", categoryId)
-				.getResultList();
-		} catch (NoResultException e) {
-			System.err.println("No device found with category id " + categoryId);
-		}
+	// TODO check
+	String query = "SELECT d FROM Device d JOIN d.categories c WHERE c.id = :categoryId";
+	try {
+	    devices = entityManager
+		.createQuery(query, Device.class)
+		.setParameter("categoryId", categoryId)
+		.getResultList();
+	} catch (NoResultException e) {
+	    System.err.println("No device found with category id " + categoryId);
+	}
 
-		return devices;
+	return devices;
     }
 
     @Override
     public void removeDevice(Long deviceId) {
-		String query = "DELETE FROM Device WHERE id = :deviceId";
-		try {
-			entityManager.createQuery(query)
-			.setParameter("deviceId", deviceId)
-			.executeUpdate();
-		} catch (PersistenceException e) {
-			System.err.println("ERROR removing Device with ID " + deviceId + ": " + e.getMessage());
-		}
+	String query = "DELETE FROM Device WHERE id = :deviceId";
+	try {
+	    entityManager.createQuery(query)
+		.setParameter("deviceId", deviceId)
+		.executeUpdate();
+	} catch (PersistenceException e) {
+	    System.err.println("ERROR removing Device with ID " + deviceId + ": " + e.getMessage());
+	}
     }
 
     @Override
