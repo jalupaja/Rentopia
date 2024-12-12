@@ -2,11 +2,13 @@ package com.othr.rentopia.controller;
 
 import com.othr.rentopia.model.Account;
 import com.othr.rentopia.model.Device;
+import com.othr.rentopia.model.Rating;
 import com.othr.rentopia.model.Bookmark;
 import com.othr.rentopia.model.Location;
 import com.othr.rentopia.model.DeviceImage;
 import com.othr.rentopia.service.AccountService;
 import com.othr.rentopia.service.DeviceService;
+import com.othr.rentopia.service.RatingService;
 import com.othr.rentopia.service.DeviceImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -26,6 +28,9 @@ public class DebugController {
 
     @Autowired
     private DeviceService deviceService;
+
+    @Autowired
+    private RatingService ratingService;
 
     @Autowired
     private DeviceImageService deviceImageService;
@@ -159,5 +164,23 @@ public class DebugController {
 	bookmark2.setOwnerId(account.getId());
 	bookmark2.setDeviceId(3L);
 	deviceService.saveBookmark(bookmark2);
+
+	Rating r1 = new Rating();
+	r1.setAccountId(1L);
+	r1.setDeviceId(1L);
+	r1.setRating(5);
+	ratingService.saveRating(r1);
+
+	Rating r2 = new Rating();
+	r2.setAccountId(1L);
+	r2.setDeviceId(2L);
+	r2.setRating(5);
+	ratingService.saveRating(r2);
+
+	Rating r3 = new Rating();
+	r3.setAccountId(2L);
+	r3.setDeviceId(2L);
+	r3.setRating(4);
+	ratingService.saveRating(r3);
     }
 }

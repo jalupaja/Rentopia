@@ -6,6 +6,7 @@ import com.othr.rentopia.model.DeviceImage;
 import com.othr.rentopia.model.Bookmark;
 // import com.othr.rentopia.service.AccountService;
 import com.othr.rentopia.service.DeviceService;
+import com.othr.rentopia.service.RatingService;
 import com.othr.rentopia.service.AccountService;
 import com.othr.rentopia.service.DeviceImageService;
 import org.springframework.http.HttpStatus;
@@ -38,6 +39,9 @@ public class DeviceController {
 
     @Autowired
     private DeviceService deviceService;
+
+    @Autowired
+    private RatingService ratingService;
 
     @Autowired
     private AccountService accountService;
@@ -73,16 +77,30 @@ public class DeviceController {
     private Map<String, Object> parseDevice(Device device) {
         Map<String, Object> deviceData = new HashMap<>();
 
-        deviceData.put("id", device.getId());
-        deviceData.put("title", device.getTitle());
-        deviceData.put("description", device.getDescription());
-        deviceData.put("price", device.getPrice());
-        deviceData.put("categories", device.getCategories());
-        deviceData.put("owner", accountService.getAccountName(device.getOwnerId()));
-        deviceData.put("location", device.getLocation());
-        deviceData.put("isPublic", device.getIsPublic());
-        deviceData.put("images", deviceImageService.getAllDeviceImages(device.getId()));
-        deviceData.put("isBookmarked", deviceService.checkBookmark(device.getOwnerId(), device.getId()));
+	List<Integer> ratings = ratingService.getRatings(device.getId());
+	int amountRatings = ratings.size();
+	double rating = 0;
+
+	// calculate mean(ratings)
+	if (amountRatings > 0) {
+	    for (int num : ratings) {
+		rating += num;
+	    }
+	    rating = rating / amountRatings;
+	}
+
+	deviceData.put("id", device.getId());
+	deviceData.put("title", device.getTitle());
+	deviceData.put("description", device.getDescription());
+	deviceData.put("price", device.getPrice());
+	deviceData.put("categories", device.getCategories());
+	deviceData.put("owner", accountService.getAccountName(device.getOwnerId()));
+	deviceData.put("location", device.getLocation());
+	deviceData.put("isPublic", device.getIsPublic());
+	deviceData.put("images", deviceImageService.getAllDeviceImages(device.getId()));
+	deviceData.put("isBookmarked", deviceService.checkBookmark(device.getOwnerId(), device.getId()));
+	deviceData.put("rating", rating);
+	deviceData.put("amountRatings", amountRatings);
 
         return deviceData;
     }
@@ -160,7 +178,6 @@ public class DeviceController {
 	// TODO ownerId from current user: return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 	Long ownerId = 1L;
 
-	System.out.println("removing");
 	if (deviceService.removeBookmark(ownerId, deviceId)) {
 	    return new ResponseEntity<>(null, HttpStatus.OK);
 	} else {
@@ -173,7 +190,6 @@ public class DeviceController {
     public ResponseEntity<String> addBookmark(@PathVariable("deviceId") Long deviceId) {
 	// TODO ownerId from current user: return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 	Long ownerId = 1L;
-	System.out.println("adding");
 
 	Bookmark bookmark = new Bookmark();
 	bookmark.setOwnerId(ownerId);

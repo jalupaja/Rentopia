@@ -105,6 +105,7 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
     }
 
     @Override
+    @Transactional
     public void removeAccount(Long accountId) {
 		String query = "DELETE FROM Account WHERE id = :accountId";
 		try {
