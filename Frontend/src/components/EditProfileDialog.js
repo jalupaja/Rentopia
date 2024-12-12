@@ -4,7 +4,7 @@ import {
     Dialog,
     DialogActions,
     DialogContent,
-    DialogTitle, IconButton, stepClasses, TextField
+    DialogTitle, IconButton, TextField
 } from "@mui/material";
 import * as React from 'react';
 import {useState} from "react";
@@ -22,6 +22,8 @@ function EditProfileDialog({open, handleEditDialogClose}) {
     const [city, setCity] = useState('');
     const [street, setStreet] = useState('');
     const [houseNo, setHouseNo] = useState('');
+    const [prename, setprename] = useState('');
+    const [country, setCountry] = useState('');
     const [company, setCompany] = useState('');
 
     const handleDeleteAvatar = () => {
@@ -85,13 +87,39 @@ function EditProfileDialog({open, handleEditDialogClose}) {
                     </Box>
                     <Box display="flex" justifyContent={"space-between"}>
                         <TextField
+                            label="Prename"
+                            margin="normal"
+                            value={prename}
+                            onChange={(e) => setprename(e.target.value)}
+                            sx={{width: "49%"}}
+                        />
+                        <TextField
                             label="Name"
                             margin="normal"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                             sx={{width: "49%"}}
                         />
+                    </Box>
+                    <TextField
+                        label="Email"
+                        type="email"
+                        fullWidth
+                        margin="normal"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                    />
 
+                    <TextField
+                        label="Description"
+                        multiline
+                        rows={4}
+                        fullWidth
+                        margin="normal"
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
+                    />
+                    <Box  display="flex" justifyContent={"space-between"}>
                         <TextField
                             label="Company"
                             margin="normal"
@@ -99,26 +127,14 @@ function EditProfileDialog({open, handleEditDialogClose}) {
                             onChange={(e) => setCompany(e.target.value)}
                             sx={{width: "49%"}}
                         />
+                        <TextField
+                            label="Country"
+                            margin="normal"
+                            value={country}
+                            onChange={(e) => setCountry(e.target.value)}
+                            sx={{width: "49%"}}
+                        />
                     </Box>
-                        <TextField
-                            label="Email"
-                            type="email"
-                            fullWidth
-                            margin="normal"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                        />
-
-                        <TextField
-                            label="Description"
-                            multiline
-                            rows={4}
-                            fullWidth
-                            margin="normal"
-                            value={description}
-                            onChange={(e) => setDescription(e.target.value)}
-                        />
-
                     <Box display={"flex"} justifyContent={"space-between"} flexWrap={"wrap"}>
                         <TextField
                             label="Post Code"
