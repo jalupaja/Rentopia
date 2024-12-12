@@ -10,7 +10,8 @@ import {
     Paper,
     Rating,
     Avatar,
-    ImageListItem
+    ImageListItem,
+    Tooltip,
 } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
 import Footer from "../components/Footer.js";
@@ -53,6 +54,8 @@ function DeviceSite() {
 	"categories": [],
 	"title": "",
 	"isBookmarked": false,
+	"rating": 0,
+	"amountRatings": 0,
     });
     const [deviceImageIndex, setDeviceImageIndex] = useState(0);
 
@@ -163,9 +166,19 @@ function DeviceSite() {
 
 		    {/* Device Rating */}
 		    <Box display="flex" alignItems="center" mb={2}>
-		      <Rating value={"rating"} readOnly />
+			<Tooltip title={device.rating} arrow>
+			    <div>
+			      <Rating
+				    value={device.rating}
+				    precision={0.5}
+				    readOnly
+				    on
+				/>
+			    </div>
+			</Tooltip>
+
 		      <Typography variant="body2" sx={{ ml: 1 }}>
-			(4.5) { /* TODO or remove? */ }
+			({device.amountRatings})
 		      </Typography>
 		    </Box>
 
