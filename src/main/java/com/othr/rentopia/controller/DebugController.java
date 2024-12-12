@@ -36,7 +36,6 @@ public class DebugController {
         Location location = new Location();
         location.setStreet("123 Elm Street");
         location.setCity("Springfield");
-        location.setState("Illinois");
         location.setCountry("USA");
         location.setPostalCode("62704");
 
