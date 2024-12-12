@@ -122,6 +122,21 @@ public class DeviceController {
         return new ResponseEntity<>(deviceData, HttpStatus.OK);
     }
 
+    @GetMapping("/bookmarks/{ownerId}")
+    public ResponseEntity<List<Map<String, Object>>> getBookmarks(@PathVariable("ownerId") Long ownerId) {
+	// TODO maybe move to AccountService. but need parseDeviceShort...
+        List<Map<String, Object>> deviceData = new ArrayList<>();
+
+        List<Device> devices = deviceService.getBookmarkedDevices(ownerId);
+	for (Device device : devices) {
+            if (checkAllowed(device)) {
+                deviceData.add(parseDeviceShort(device));
+            }
+        }
+
+        return new ResponseEntity<>(deviceData, HttpStatus.OK);
+    }
+
     @PostMapping("{id}/image")
     public ResponseEntity<String> uploadImage(
             @RequestParam("file") MultipartFile file,

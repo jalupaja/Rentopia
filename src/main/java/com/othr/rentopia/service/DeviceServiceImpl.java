@@ -104,6 +104,23 @@ public class DeviceServiceImpl implements DeviceService {
     }
 
     @Override
+    public List<Device> getBookmarkedDevices(Long ownerId) {
+	List<Device> devices = null;
+
+	String query = "SELECT d FROM Device d JOIN Bookmark b ON d.id = b.deviceId WHERE b.ownerId = :ownerId";
+	try {
+	    devices = entityManager
+		.createQuery(query, Device.class)
+		.setParameter("ownerId", ownerId)
+		.getResultList();
+	} catch (NoResultException e) {
+	    // no Bookmarks yet
+	}
+
+	return devices;
+    }
+
+    @Override
     @Transactional
     public void saveBookmark(Bookmark bookmark) {
 	// TODO check if ownerId is current user/ maybe just use current ownerId

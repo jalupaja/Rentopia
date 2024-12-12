@@ -12,6 +12,7 @@ public interface DeviceService {
     List<Device> getDevicesByCategory(Long categoryId);
     List<Device> getAllDevices();
     void removeDevice(Long deviceId);
+    List<Device> getBookmarkedDevices(Long ownerId);
     void saveBookmark(Bookmark bookmark);
     void removeBookmark(Long ownerId, Long deviceId);
     boolean checkBookmark(Long ownerId, Long deviceId);
