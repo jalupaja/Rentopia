@@ -156,8 +156,8 @@ public class DebugController {
 	deviceService.saveBookmark(bookmark);
 
 	Bookmark bookmark2 = new Bookmark();
-	bookmark.setOwnerId(account.getId());
-	bookmark.setDeviceId(3L);
-	deviceService.saveBookmark(bookmark);
+	bookmark2.setOwnerId(account.getId());
+	bookmark2.setDeviceId(3L);
+	deviceService.saveBookmark(bookmark2);
     }
 }
