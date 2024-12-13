@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.security.core.Authentication;
 
 import jakarta.persistence.PersistenceException;
 
@@ -178,10 +179,12 @@ public class DeviceController {
 	}
 
 	@PostMapping("/bookmarks/remove/{deviceId}")
-	public ResponseEntity<String> removeBookmark(@PathVariable("deviceId") Long deviceId) {
-		// TODO ownerId from current user: return new
+	public ResponseEntity<String> removeBookmark(Authentication authentication,
+			@PathVariable("deviceId") Long deviceId) {
 		// ResponseEntity<>(HttpStatus.FORBIDDEN);
 		Long ownerId = 1L;
+		// TODO Principal is currently user email
+		// ownerId = authentication.getPrincipal();
 
 		if (bookmarkService.removeBookmark(ownerId, deviceId)) {
 			return new ResponseEntity<>(null, HttpStatus.OK);
