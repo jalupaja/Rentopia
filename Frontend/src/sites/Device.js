@@ -16,8 +16,6 @@ import Footer from "../components/Footer.js";
 import FetchBackend, { JWTTokenExists } from "../helper/BackendHelper.js";
 import { useEffect, useState } from "react";
 import Appbar from "../components/Appbar.js";
-// TODO maybe import ReactImageMagnify from 'react-image-magnify';
-// TODO: npm i @types/react-image-magnify
 
 const boxStyle = {
     mt: 4,
@@ -82,8 +80,7 @@ function DeviceSite() {
     };
 
     const btnBookmark = () => {
-        // TODO
-        if (false && authUser === null) {
+        if (authUser === null) {
             navigate(`/login`);
         } else {
             if (device.isBookmarked) {
@@ -183,13 +180,11 @@ function DeviceSite() {
                                         </Box>
 
                                         {/* Price */}
-                                        { /* TODO localize */}
                                         <Typography variant="h5" color="primary" mb={2}>
                                             {device.price} €
                                         </Typography>
 
                                         <Box display="flex" mb={2}>
-                                            { /* TODO */}
                                             <Button
                                                 variant="contained" color="primary" fullWidth sx={{ mr: 2 }}
                                                 onClick={btnBookmark}
@@ -198,8 +193,8 @@ function DeviceSite() {
                                             </Button>
                                             <Button
                                                 variant="contained" color="secondary" fullWidth
-                                                onClick={() => navigate(`/user/${device.owner}`)}
                                             >
+                                                { /* TODO onClick={() => RENT} */}
                                                 Rent Now
                                             </Button>
                                         </Box>
@@ -213,7 +208,6 @@ function DeviceSite() {
                                             }}
                                             mb={2}
                                             mx={boxStyle}
-                                            onClick={() => navigate(`/user/${device.owner}`)}
                                         >
                                             <Avatar alt={"seller_name"} src={""} sx={{ mr: 1 }} />
                                             <Typography variant="body2" color="textSecondary">
