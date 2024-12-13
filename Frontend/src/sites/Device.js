@@ -2,12 +2,10 @@ import {
     AppBar,
     Box,
     Button,
-    Card,
     styled,
     Typography, Grid, Grid2,
     Container,
     ImageList,
-    Paper,
     Rating,
     Avatar,
     ImageListItem,
@@ -15,8 +13,8 @@ import {
 } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
 import Footer from "../components/Footer.js";
-import FetchBackend, {JWTTokenExists} from "../helper/BackendHelper.js";
-import {useEffect, useState} from "react";
+import FetchBackend, { JWTTokenExists } from "../helper/BackendHelper.js";
+import { useEffect, useState } from "react";
 import Appbar from "../components/Appbar.js";
 // TODO maybe import ReactImageMagnify from 'react-image-magnify';
 // TODO: npm i @types/react-image-magnify
@@ -29,45 +27,40 @@ const boxStyle = {
     boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
 };
 
-const DeviceGrid = styled(Grid2)(({theme}) => ({
-    margin: '2% 10%'
-}))
-
 function DeviceSite() {
     const navigate = useNavigate();
     const { deviceId } = useParams();
     const [authUser, setAuthUser] = useState(null);
     const [device, setDevice] = useState({
-	"owner": "",
-	"images": [],
-	"price": 0,
-	"description": "",
-	"isPublic": true,
-	"location": {
-	    "street": "",
-	    "city": "",
-	    "state": "",
-	    "country": "",
-	    "postalCode": ""
-	},
-	"id": 0,
-	"categories": [],
-	"title": "",
-	"isBookmarked": false,
-	"rating": 0,
-	"amountRatings": 0,
+        "owner": "",
+        "images": [],
+        "price": 0,
+        "description": "", "isPublic": true,
+        "location": {
+            "street": "",
+            "city": "",
+            "state": "",
+            "country": "",
+            "postalCode": ""
+        },
+        "id": 0,
+        "categories": [],
+        "title": "",
+        "isBookmarked": false,
+        "rating": 0,
+        "amountRatings": 0,
     });
     const [deviceImageIndex, setDeviceImageIndex] = useState(0);
 
     useEffect(() => {
-	if(JWTTokenExists()){
-	    FetchBackend('GET', 'user/me',null)
-		.then(response => response.json())
-		.then(data => {
-		    setAuthUser(data);
-		})
-		.catch(error => console.log(error))
-	}
+        if (JWTTokenExists()) {
+            FetchBackend('GET', 'user/me', null)
+                .then(response => response.json())
+                .then(data => {
+                    setAuthUser(data);
+                })
+                .catch(error => console.log(error))
+        }
 
     }, []);
 
@@ -81,164 +74,185 @@ function DeviceSite() {
 
     // navigate back to Home if the device is hidden or invalid
     if (device === null) {
-	navigate('/');
+        navigate('/');
     }
 
     const handleThumbnailClick = (index) => {
-	setDeviceImageIndex(index);
+        setDeviceImageIndex(index);
     };
 
     const btnBookmark = () => {
-	// TODO
-	if (false && authUser === null) {
-	    navigate(`/login`);
-	} else {
-	    if (device.isBookmarked) {
-		FetchBackend('POST', 'device/bookmarks/remove/' + device.id, null)
-		    .catch(error => console.log(error));
-	    } else {
-		FetchBackend('POST', 'device/bookmarks/add/' + device.id, null)
-		    .catch(error => console.log(error));
-	    }
-	    setDevice({ ...device, isBookmarked: !device.isBookmarked });
-	}
+        // TODO
+        if (false && authUser === null) {
+            navigate(`/login`);
+        } else {
+            if (device.isBookmarked) {
+                FetchBackend('POST', 'device/bookmarks/remove/' + device.id, null)
+                    .catch(error => console.log(error));
+            } else {
+                FetchBackend('POST', 'device/bookmarks/add/' + device.id, null)
+                    .catch(error => console.log(error));
+            }
+            setDevice({ ...device, isBookmarked: !device.isBookmarked });
+        }
     }
 
     return (
-	<Box>
-	    <Appbar authUser={authUser}/>
-	    <Container>
-	      <Grid container spacing={3} sx={{ mt: 4 }}>
-		{/* Left Column: Device Images */}
-		<Grid item xs={12} md={6}>
-		  <Box sx={{...boxStyle, textAlign: "center" }}>
-		    {/* Main Device Image */}
-		    <img src={"/images/devices/" + device.images[deviceImageIndex % 2 /* TODO */] } alt={device.title} width="100%" style={{ borderRadius: 8 }} />
-		  </Box>
+        <Box>
+            <Appbar authUser={authUser} />
+            {/* TODO registerPage framestyle */}
+            <Box sx={{
+                width: "100%",
+                height: "100%",
+                flexDirection: "column",
+                alignItems: "center",
+                display: "flex",
+            }}>
+                <Container>
+                    <Grid container spacing={6} >
+                        <Grid item xs={12} >
+                            <Grid container spacing={2} >
+                                {/* Left Column: Device Images */}
+                                <Grid item xs={12} sm={6}>
+                                    <Box sx={{ ...boxStyle, height: "100%" }}>
+                                        {/*TODO remove boxStyle. only slight?*/}
+                                        <Box sx={{ textAlign: "center" }}>
+                                            {/* Main Device Image */}
+                                            <img src={"/images/devices/" + device.images[deviceImageIndex % 2 /* TODO */]} alt={device.title} width="100%" style={{ borderRadius: 8 }} />
+                                        </Box>
 
-		 {/* Image Thumbnails */}
-	         <ImageList
-		    sx={{
-		      display: 'flex',
-		      justifyContent: 'flex-start',
-		      overflowX: 'auto',
-		      mt: 2,
-		      pb: 1,
-		    }}
-		    cols={device.images.length}
-		    rowHeight={80}
-		  >
-		    {[...device.images, ...device.images, ...device.images, ...device.images, ...device.images, ...device.images].map((image, index) => (  /* TODO */
-		    // {device.images.map((image, index) => (
-		      <ImageListItem
-			key={index}
-			sx={{
-			  cursor: 'pointer',
-			  minWidth: 80,
-			  maxWidth: 100,
-			  flexShrink: 0,
-			}}
-		      >
-			<img
-			  src={"/images/devices/" + image}
-			  alt={`${device.title} thumbnail ${index + 1}`}
-			  style={{
-			    borderRadius: 8,
-			    border: index === deviceImageIndex ? '2px solid #1976d2' : '2px solid transparent',
-			    width: '100%',
-			    height: '100%',
-			    objectFit: 'cover',
-			  }}
-			  onClick={() => handleThumbnailClick(index)}
-			/>
-		      </ImageListItem>
-		    ))}
-		  </ImageList>
-		</Grid>
+                                        {/* Image Thumbnails */}
+                                        <ImageList
+                                            sx={{
+                                                display: 'flex',
+                                                justifyContent: 'flex-start',
+                                                overflowX: 'auto',
+                                                mt: 2,
+                                                pb: 1,
+                                            }}
+                                            cols={device.images.length}
+                                            rowHeight={80}
+                                        >
+                                            {[...device.images, ...device.images, ...device.images, ...device.images, ...device.images, ...device.images].map((image, index) => (  /* TODO */
+                                                // {device.images.map((image, index) => (
+                                                <ImageListItem
+                                                    key={index}
+                                                    sx={{
+                                                        cursor: 'pointer',
+                                                        minWidth: 80,
+                                                        maxWidth: 100,
+                                                        flexShrink: 0,
+                                                    }}
+                                                >
+                                                    <img
+                                                        src={"/images/devices/" + image}
+                                                        alt={`${device.title} thumbnail ${index + 1}`}
+                                                        style={{
+                                                            borderRadius: 8,
+                                                            border: index === deviceImageIndex ? '2px solid #1976d2' : '2px solid transparent',
+                                                            width: '100%',
+                                                            height: '100%',
+                                                            objectFit: 'cover',
+                                                        }}
+                                                        onClick={() => handleThumbnailClick(index)}
+                                                    />
+                                                </ImageListItem>
+                                            ))}
+                                        </ImageList>
+                                    </Box>
+                                </Grid>
 
-		{/* Right Column: Device Details */}
-		<Grid item xs={12} md={6}>
-		  <Paper sx={{ padding: 3, height: "100%" }}>
-		    {/* Device Title */}
-		    <Typography variant="h4" gutterBottom>
-		      {device.title}
-		    </Typography>
+                                {/* Right Column: Device Details */}
+                                <Grid item xs={12} sm={6} >
+                                    <Box sx={{ ...boxStyle, height: "100%" }}>
+                                        {/* Device Title */}
+                                        <Typography variant="h4" gutterBottom>
+                                            {device.title}
+                                        </Typography>
 
-		    {/* Device Rating */}
-		    <Box display="flex" alignItems="center" mb={2}>
-			<Tooltip title={device.rating} arrow>
-			    <div>
-			      <Rating
-				    value={device.rating}
-				    precision={0.5}
-				    readOnly
-				    on
-				/>
-			    </div>
-			</Tooltip>
+                                        {/* Device Rating */}
+                                        <Box display="flex" alignItems="center" mb={2}>
+                                            <Tooltip title={device.rating} arrow>
+                                                <div>
+                                                    <Rating
+                                                        value={device.rating}
+                                                        precision={0.5}
+                                                        readOnly
+                                                        on
+                                                    />
+                                                </div>
+                                            </Tooltip>
 
-		      <Typography variant="body2" sx={{ ml: 1 }}>
-			({device.amountRatings})
-		      </Typography>
-		    </Box>
+                                            <Typography variant="body2" sx={{ ml: 1 }}>
+                                                ({device.amountRatings})
+                                            </Typography>
+                                        </Box>
 
-		    {/* Price */}
-		{ /* TODO localize */ }
-		    <Typography variant="h5" color="primary" mb={2}>
-		      {device.price} €
-		    </Typography>
+                                        {/* Price */}
+                                        { /* TODO localize */}
+                                        <Typography variant="h5" color="primary" mb={2}>
+                                            {device.price} €
+                                        </Typography>
 
-		    <Box display="flex" mb={2}>
-		    { /* TODO */ }
-		      <Button
-			    variant="contained" color="primary" fullWidth sx={{ mr: 2 }}
-			    onClick={btnBookmark}
-			    >
-		    { device.isBookmarked ? ("Bookmarked") : ("Add to Bookmarks") }
-		      </Button>
-		      <Button
-			    variant="contained" color="secondary" fullWidth
-			    onClick={()=>navigate(`/user/${device.owner}`)}
-			    >
-			Rent Now
-		      </Button>
-		    </Box>
+                                        <Box display="flex" mb={2}>
+                                            { /* TODO */}
+                                            <Button
+                                                variant="contained" color="primary" fullWidth sx={{ mr: 2 }}
+                                                onClick={btnBookmark}
+                                            >
+                                                {device.isBookmarked ? ("Bookmarked") : ("Add to Bookmarks")}
+                                            </Button>
+                                            <Button
+                                                variant="contained" color="secondary" fullWidth
+                                                onClick={() => navigate(`/user/${device.owner}`)}
+                                            >
+                                                Rent Now
+                                            </Button>
+                                        </Box>
 
-		    {/* Seller Information */}
-		    <Box
-			display="flex"
-			alignItems="center"
-			sx={{
-			    cursor: 'pointer',
-			}}
-			mb={2}
-			mx={boxStyle}
-			onClick={()=>navigate(`/user/${device.owner}`)}
-			>
-		      <Avatar alt={"seller_name"} src={""} sx={{ mr: 1 }} />
-		      <Typography variant="body2" color="textSecondary">
-			{device.owner}
-		      </Typography>
-		    </Box>
+                                        {/* Seller Information */}
+                                        <Box
+                                            display="flex"
+                                            alignItems="center"
+                                            sx={{
+                                                cursor: 'pointer',
+                                            }}
+                                            mb={2}
+                                            mx={boxStyle}
+                                            onClick={() => navigate(`/user/${device.owner}`)}
+                                        >
+                                            <Avatar alt={"seller_name"} src={""} sx={{ mr: 1 }} />
+                                            <Typography variant="body2" color="textSecondary">
+                                                {device.owner}
+                                            </Typography>
+                                        </Box>
 
-		  </Paper>
-		</Grid>
-	      </Grid>
+                                    </Box>
+                                </Grid>
+                            </Grid>
+                        </Grid>
 
-	      {/* device Description */}
-	      <Box sx={boxStyle}>
-		<Typography variant="h5" gutterBottom>
-		    {device.title}
-		</Typography>
-		<Typography variant="body1" paragraph>
-		  {device.description}
-		</Typography>
-	      </Box>
-	    </Container>
-	{ /* TODO use DeviceContainer?. Footer is cutting in description!!! */}
-            <Footer/>
+                        <Grid item xs={12}>
+                            {/* device Description */}
+                            <Box sx={boxStyle} >
+                                <Typography variant="h5" gutterBottom>
+                                    {device.title}
+                                </Typography>
+                                <Typography variant="body1" paragraph>
+                                    {device.description}
+                                </Typography>
+
+                            </Box>
+                        </Grid>
+                    </Grid>
+
+                </Container>
+            </Box>
+            <Box flex={"auto"} />
+            <Footer />
         </Box>
-  );
+    );
 }
 
 export default DeviceSite;
+
