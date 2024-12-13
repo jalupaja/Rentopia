@@ -24,7 +24,7 @@ const boxStyle = {
     border: '1px solid #e0e0e0',
     borderRadius: '8px',
     padding: '16px',
-    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+    boxShadow: '3',
 };
 
 function DeviceSite() {
@@ -98,16 +98,10 @@ function DeviceSite() {
     }
 
     return (
-        <Box>
+        <Box display="flex" flexDirection="column" height="100vh">
             <Appbar authUser={authUser} />
             {/* TODO registerPage framestyle */}
-            <Box sx={{
-                width: "100%",
-                height: "100%",
-                flexDirection: "column",
-                alignItems: "center",
-                display: "flex",
-            }}>
+            <Box >
                 <Container>
                     <Grid container spacing={6} >
                         <Grid item xs={12} >
