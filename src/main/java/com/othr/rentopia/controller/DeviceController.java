@@ -6,6 +6,7 @@ import com.othr.rentopia.model.DeviceImage;
 import com.othr.rentopia.model.Bookmark;
 // import com.othr.rentopia.service.AccountService;
 import com.othr.rentopia.service.DeviceService;
+import com.othr.rentopia.service.BookmarkService;
 import com.othr.rentopia.service.RatingService;
 import com.othr.rentopia.service.AccountService;
 import com.othr.rentopia.service.DeviceImageService;
@@ -37,229 +38,236 @@ import java.io.IOException;
 @CrossOrigin
 public class DeviceController {
 
-    @Autowired
-    private DeviceService deviceService;
+	@Autowired
+	private DeviceService deviceService;
 
-    @Autowired
-    private RatingService ratingService;
+	@Autowired
+	private BookmarkService bookmarkService;
 
-    @Autowired
-    private AccountService accountService;
+	@Autowired
+	private RatingService ratingService;
 
-    @Autowired
-    private DeviceImageService deviceImageService;
+	@Autowired
+	private AccountService accountService;
 
-    // save to Frontend...
-    private static final String UPLOAD_DIR = System.getProperty("user.dir") + "/Frontend/public/images/";
-    private static final String DEVICE_IMAGE_UPLOAD_DIR = UPLOAD_DIR + "devices/";
+	@Autowired
+	private DeviceImageService deviceImageService;
 
-    private Boolean checkAllowed(Device device) {
-        // TODO check NULL, if (! device.getHidden || device.owner == logged_in_acc)
-        return device != null;
-    }
+	// save to Frontend...
+	private static final String UPLOAD_DIR = System.getProperty("user.dir") + "/Frontend/public/images/";
+	private static final String DEVICE_IMAGE_UPLOAD_DIR = UPLOAD_DIR + "devices/";
 
-    private Map<String, Object> parseDeviceShort(Device device) {
-        Map<String, Object> deviceData = new HashMap<>();
-
-        deviceData.put("id", device.getId());
-        deviceData.put("title", device.getTitle());
-        deviceData.put("price", device.getPrice());
-        deviceData.put("categories", device.getCategories());
-        deviceData.put("owner", accountService.getAccountName(device.getOwnerId()));
-        deviceData.put("price", device.getPrice());
-        deviceData.put("location", device.getLocation());
-        deviceData.put("image", deviceImageService.getFirstDeviceImage(device.getId()));
-        deviceData.put("isBookmarked", deviceService.checkBookmark(device.getOwnerId(), device.getId()));
-
-        return deviceData;
-    }
-
-    private Map<String, Object> parseDevice(Device device) {
-        Map<String, Object> deviceData = new HashMap<>();
-
-	List<Integer> ratings = ratingService.getRatings(device.getId());
-	int amountRatings = ratings.size();
-	double rating = 0;
-
-	// calculate mean(ratings)
-	if (amountRatings > 0) {
-	    for (int num : ratings) {
-		rating += num;
-	    }
-	    rating = rating / amountRatings;
+	private Boolean checkAllowed(Device device) {
+		// TODO check NULL, if (! device.getHidden || device.owner == logged_in_acc)
+		return device != null;
 	}
 
-	deviceData.put("id", device.getId());
-	deviceData.put("title", device.getTitle());
-	deviceData.put("description", device.getDescription());
-	deviceData.put("price", device.getPrice());
-	deviceData.put("categories", device.getCategories());
-	deviceData.put("owner", accountService.getAccountName(device.getOwnerId()));
-	deviceData.put("location", device.getLocation());
-	deviceData.put("isPublic", device.getIsPublic());
-	deviceData.put("images", deviceImageService.getAllDeviceImages(device.getId()));
-	deviceData.put("isBookmarked", deviceService.checkBookmark(device.getOwnerId(), device.getId()));
-	deviceData.put("rating", rating);
-	deviceData.put("amountRatings", amountRatings);
+	private Map<String, Object> parseDeviceShort(Device device) {
+		Map<String, Object> deviceData = new HashMap<>();
 
-        return deviceData;
-    }
+		deviceData.put("id", device.getId());
+		deviceData.put("title", device.getTitle());
+		deviceData.put("price", device.getPrice());
+		deviceData.put("categories", device.getCategories());
+		deviceData.put("owner", accountService.getAccountName(device.getOwnerId()));
+		deviceData.put("price", device.getPrice());
+		deviceData.put("location", device.getLocation());
+		deviceData.put("image", deviceImageService.getFirstDeviceImage(device.getId()));
+		deviceData.put("isBookmarked", bookmarkService.checkBookmark(device.getOwnerId(), device.getId()));
 
-    @GetMapping("{id}")
-    public ResponseEntity<Map<String, Object>> getDevice(@PathVariable("id") Long id) {
-        Device device = deviceService.getDevice(id);
-
-        if (checkAllowed(device)) {
-            return new ResponseEntity<>(parseDevice(device), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
-        }
-    }
-
-    @GetMapping("/short/{id}")
-    public ResponseEntity<Map<String, Object>> getDeviceShort(@PathVariable("id") Long id) {
-        Device device = deviceService.getDevice(id);
-
-        if (checkAllowed(device)) {
-            return new ResponseEntity<>(parseDeviceShort(device), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
-        }
-    }
-
-    @GetMapping("/short/all")
-    public ResponseEntity<List<Map<String, Object>>> getDevice() {
-        List<Map<String, Object>> deviceData = new ArrayList<>();
-
-        List<Device> devices = deviceService.getAllDevices();
-        for (Device device : devices) {
-            if (checkAllowed(device)) {
-                deviceData.add(parseDeviceShort(device));
-            }
-        }
-
-        return new ResponseEntity<>(deviceData, HttpStatus.OK);
-    }
-
-    @PostMapping("/add")
-    public ResponseEntity<String> addDevice() {
-	return new ResponseEntity<>(null, HttpStatus.NOT_IMPLEMENTED);
-    }
-
-    @PostMapping("/remove/{id}")
-    public ResponseEntity<String> removeDevice(@PathVariable("id") Long id) {
-        Device device = deviceService.getDevice(id);
-
-	if (checkAllowed(device)) {
-	    deviceService.removeDevice(id);
-	} else {
-	    return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
+		return deviceData;
 	}
-	return new ResponseEntity<>(null, HttpStatus.NOT_IMPLEMENTED);
-    }
 
-    @GetMapping("/bookmarks/all/{ownerId}")
-    public ResponseEntity<List<Map<String, Object>>> getBookmarks(@PathVariable("ownerId") Long ownerId) {
-	// TODO maybe move to AccountService. but need parseDeviceShort...
-        List<Map<String, Object>> deviceData = new ArrayList<>();
+	private Map<String, Object> parseDevice(Device device) {
+		Map<String, Object> deviceData = new HashMap<>();
 
-        List<Device> devices = deviceService.getBookmarkedDevices(ownerId);
-	for (Device device : devices) {
-            if (checkAllowed(device)) {
-                deviceData.add(parseDeviceShort(device));
-            }
-        }
+		List<Integer> ratings = ratingService.getRatings(device.getId());
+		int amountRatings = ratings.size();
+		double rating = 0;
 
-        return new ResponseEntity<>(deviceData, HttpStatus.OK);
-    }
+		// calculate mean(ratings)
+		if (amountRatings > 0) {
+			for (int num : ratings) {
+				rating += num;
+			}
+			rating = rating / amountRatings;
+		}
 
-    @PostMapping("/bookmarks/remove/{deviceId}")
-    public ResponseEntity<String> removeBookmark(@PathVariable("deviceId") Long deviceId) {
-	// TODO ownerId from current user: return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-	Long ownerId = 1L;
+		deviceData.put("id", device.getId());
+		deviceData.put("title", device.getTitle());
+		deviceData.put("description", device.getDescription());
+		deviceData.put("price", device.getPrice());
+		deviceData.put("categories", device.getCategories());
+		deviceData.put("owner", accountService.getAccountName(device.getOwnerId()));
+		deviceData.put("location", device.getLocation());
+		deviceData.put("isPublic", device.getIsPublic());
+		deviceData.put("images", deviceImageService.getAllDeviceImages(device.getId()));
+		deviceData.put("isBookmarked", bookmarkService.checkBookmark(device.getOwnerId(), device.getId()));
+		deviceData.put("rating", rating);
+		deviceData.put("amountRatings", amountRatings);
 
-	if (deviceService.removeBookmark(ownerId, deviceId)) {
-	    return new ResponseEntity<>(null, HttpStatus.OK);
-	} else {
-	    System.out.println("Failed removing Bookmark from " + ownerId + " for " + deviceId);
-	    return new ResponseEntity<>(null, HttpStatus.OK);
+		return deviceData;
 	}
-    }
 
-    @PostMapping("/bookmarks/add/{deviceId}")
-    public ResponseEntity<String> addBookmark(@PathVariable("deviceId") Long deviceId) {
-	// TODO ownerId from current user: return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-	Long ownerId = 1L;
+	@GetMapping("{id}")
+	public ResponseEntity<Map<String, Object>> getDevice(@PathVariable("id") Long id) {
+		Device device = deviceService.getDevice(id);
 
-	Bookmark bookmark = new Bookmark();
-	bookmark.setOwnerId(ownerId);
-	bookmark.setDeviceId(deviceId);
+		if (checkAllowed(device)) {
+			return new ResponseEntity<>(parseDevice(device), HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
+		}
+	}
 
-	deviceService.saveBookmark(bookmark);
-	return new ResponseEntity<>(null, HttpStatus.OK);
-    }
+	@GetMapping("/short/{id}")
+	public ResponseEntity<Map<String, Object>> getDeviceShort(@PathVariable("id") Long id) {
+		Device device = deviceService.getDevice(id);
 
-    @PostMapping("{id}/image")
-    public ResponseEntity<String> uploadImage(
-            @RequestParam("file") MultipartFile file,
-            @PathVariable("id") Long deviceId) {
-        // TODO check if user is owner of device -> allowed to upload images, also if device exists...
+		if (checkAllowed(device)) {
+			return new ResponseEntity<>(parseDeviceShort(device), HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
+		}
+	}
 
-        if (file.isEmpty()) {
-            return ResponseEntity.badRequest().body("No file uploaded.");
-        }
+	@GetMapping("/short/all")
+	public ResponseEntity<List<Map<String, Object>>> getDevice() {
+		List<Map<String, Object>> deviceData = new ArrayList<>();
 
-        String fileName;
-        String originalFileName = file.getOriginalFilename();
-        String fileExtension = originalFileName != null ? originalFileName.substring(originalFileName.lastIndexOf(".")) : "";
+		List<Device> devices = deviceService.getAllDevices();
+		for (Device device : devices) {
+			if (checkAllowed(device)) {
+				deviceData.add(parseDeviceShort(device));
+			}
+		}
 
-        // check for allowed file extensions
-        String lowerExtension = fileExtension.toLowerCase();
-        if (!(lowerExtension.equals(".png") || lowerExtension.equals(".jpg") || lowerExtension.equals(".jpeg"))) {
-            return ResponseEntity.status(500).body("Error while uploading file!\nInvalid file extension");
-        }
+		return new ResponseEntity<>(deviceData, HttpStatus.OK);
+	}
 
-        // check if dir exists
-        File directory = new File(DEVICE_IMAGE_UPLOAD_DIR);
-        if (!directory.exists()) {
-            boolean created = directory.mkdirs();
-            if (created) {
-                System.out.println("device image directory created");
-            } else {
-                System.out.println("Failed to create device image directory");
-                return ResponseEntity.status(500).body("Error while uploading file!");
-            }
-        }
+	@PostMapping("/add")
+	public ResponseEntity<String> addDevice() {
+		return new ResponseEntity<>(null, HttpStatus.NOT_IMPLEMENTED);
+	}
 
-        try {
-            while (true) {
+	@PostMapping("/remove/{id}")
+	public ResponseEntity<String> removeDevice(@PathVariable("id") Long id) {
+		Device device = deviceService.getDevice(id);
 
-                // Generate a random file name using UUID and keep the original file extension
-                fileName = UUID.randomUUID().toString() + fileExtension;
+		if (checkAllowed(device)) {
+			deviceService.removeDevice(id);
+		} else {
+			return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
+		}
+		return new ResponseEntity<>(null, HttpStatus.NOT_IMPLEMENTED);
+	}
 
-                try {
-                    DeviceImage deviceImage = new DeviceImage();
-                    deviceImage.setName(fileName);
-                    deviceImage.setDeviceId(deviceId);
+	@GetMapping("/bookmarks/all/{ownerId}")
+	public ResponseEntity<List<Map<String, Object>>> getBookmarks(@PathVariable("ownerId") Long ownerId) {
+		// TODO maybe move to AccountService. but need parseDeviceShort...
+		List<Map<String, Object>> deviceData = new ArrayList<>();
 
-                    deviceImageService.saveDeviceImage(deviceImage);
-                } catch (PersistenceException e) {
-                    // "random" UUID already exists
-                    continue;
-                }
+		List<Device> devices = bookmarkService.getBookmarkedDevices(ownerId);
+		for (Device device : devices) {
+			if (checkAllowed(device)) {
+				deviceData.add(parseDeviceShort(device));
+			}
+		}
 
-                // file saved
-                break;
-            }
+		return new ResponseEntity<>(deviceData, HttpStatus.OK);
+	}
 
-            File destinationFile = new File(DEVICE_IMAGE_UPLOAD_DIR + fileName);
+	@PostMapping("/bookmarks/remove/{deviceId}")
+	public ResponseEntity<String> removeBookmark(@PathVariable("deviceId") Long deviceId) {
+		// TODO ownerId from current user: return new
+		// ResponseEntity<>(HttpStatus.FORBIDDEN);
+		Long ownerId = 1L;
 
-            file.transferTo(destinationFile);
+		if (bookmarkService.removeBookmark(ownerId, deviceId)) {
+			return new ResponseEntity<>(null, HttpStatus.OK);
+		} else {
+			System.out.println("Failed removing Bookmark from " + ownerId + " for " + deviceId);
+			return new ResponseEntity<>(null, HttpStatus.OK);
+		}
+	}
 
-            return ResponseEntity.ok("File uploaded successfully.");
-        } catch (IOException e) {
-            System.out.println("Error while uploading file!" + e.getMessage());
-            return ResponseEntity.status(500).body("Error while uploading file!");
-        }
-    }
+	@PostMapping("/bookmarks/add/{deviceId}")
+	public ResponseEntity<String> addBookmark(@PathVariable("deviceId") Long deviceId) {
+		// TODO ownerId from current user: return new
+		// ResponseEntity<>(HttpStatus.FORBIDDEN);
+		Long ownerId = 1L;
+
+		Bookmark bookmark = new Bookmark();
+		bookmark.setOwnerId(ownerId);
+		bookmark.setDeviceId(deviceId);
+
+		bookmarkService.saveBookmark(bookmark);
+		return new ResponseEntity<>(null, HttpStatus.OK);
+	}
+
+	@PostMapping("{id}/image")
+	public ResponseEntity<String> uploadImage(
+			@RequestParam("file") MultipartFile file,
+			@PathVariable("id") Long deviceId) {
+		// TODO check if user is owner of device -> allowed to upload images, also if
+		// device exists...
+
+		if (file.isEmpty()) {
+			return ResponseEntity.badRequest().body("No file uploaded.");
+		}
+
+		String fileName;
+		String originalFileName = file.getOriginalFilename();
+		String fileExtension = originalFileName != null ? originalFileName.substring(originalFileName.lastIndexOf("."))
+				: "";
+
+		// check for allowed file extensions
+		String lowerExtension = fileExtension.toLowerCase();
+		if (!(lowerExtension.equals(".png") || lowerExtension.equals(".jpg") || lowerExtension.equals(".jpeg"))) {
+			return ResponseEntity.status(500).body("Error while uploading file!\nInvalid file extension");
+		}
+
+		// check if dir exists
+		File directory = new File(DEVICE_IMAGE_UPLOAD_DIR);
+		if (!directory.exists()) {
+			boolean created = directory.mkdirs();
+			if (created) {
+				System.out.println("device image directory created");
+			} else {
+				System.out.println("Failed to create device image directory");
+				return ResponseEntity.status(500).body("Error while uploading file!");
+			}
+		}
+
+		try {
+			while (true) {
+
+				// Generate a random file name using UUID and keep the original file extension
+				fileName = UUID.randomUUID().toString() + fileExtension;
+
+				try {
+					DeviceImage deviceImage = new DeviceImage();
+					deviceImage.setName(fileName);
+					deviceImage.setDeviceId(deviceId);
+
+					deviceImageService.saveDeviceImage(deviceImage);
+				} catch (PersistenceException e) {
+					// "random" UUID already exists
+					continue;
+				}
+
+				// file saved
+				break;
+			}
+
+			File destinationFile = new File(DEVICE_IMAGE_UPLOAD_DIR + fileName);
+
+			file.transferTo(destinationFile);
+
+			return ResponseEntity.ok("File uploaded successfully.");
+		} catch (IOException e) {
+			System.out.println("Error while uploading file!" + e.getMessage());
+			return ResponseEntity.status(500).body("Error while uploading file!");
+		}
+	}
 }

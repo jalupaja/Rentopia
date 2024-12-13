@@ -101,7 +101,7 @@ function DeviceSite() {
         <Box display="flex" flexDirection="column" height="100vh">
             <Appbar authUser={authUser} />
             {/* TODO registerPage framestyle */}
-            <Box >
+            <Box mb={"20px"}>
                 <Container>
                     <Grid container spacing={6} >
                         <Grid item xs={12} >
