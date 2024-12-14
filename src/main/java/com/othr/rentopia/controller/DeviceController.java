@@ -99,7 +99,8 @@ public class DeviceController {
 	}
 
 	private Map<String, Object> parseDevice(Device device) {
-		Map<String, Object> deviceData = new HashMap<>();
+		Map<String, Object> deviceData = parseDeviceShort(device);
+		deviceData.remove("image");
 
 		List<Integer> ratings = ratingService.getRatings(device.getId());
 		int amountRatings = ratings.size();
@@ -113,16 +114,9 @@ public class DeviceController {
 			rating = rating / amountRatings;
 		}
 
-		deviceData.put("id", device.getId());
-		deviceData.put("title", device.getTitle());
 		deviceData.put("description", device.getDescription());
-		deviceData.put("price", device.getPrice());
-		deviceData.put("categories", device.getCategories());
-		deviceData.put("owner", accountService.getAccountName(device.getOwnerId()));
-		deviceData.put("location", device.getLocation());
 		deviceData.put("isPublic", device.getIsPublic());
 		deviceData.put("images", deviceImageService.getAllDeviceImages(device.getId()));
-		deviceData.put("isBookmarked", bookmarkService.checkBookmark(device.getOwnerId(), device.getId()));
 		deviceData.put("rating", rating);
 		deviceData.put("amountRatings", amountRatings);
 
