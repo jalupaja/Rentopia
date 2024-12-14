@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import Footer from "../components/Footer.js";
-import FetchBackend, {JWTTokenExists} from "../helper/BackendHelper.js";
+import FetchBackend, {GetAuthUser, JWTTokenExists} from "../helper/BackendHelper.js";
 import {useEffect, useState} from "react";
 import Appbar from "../components/Appbar.js";
 
@@ -24,19 +24,9 @@ const DeviceGrid = styled(Grid2)(({theme}) => ({
 function HomeSite(){
     const navigate = useNavigate();
 
-    const [authUser, setAuthUser] = useState(null);
     const [devices, setDevices] = useState([]);
 
-    useEffect(() =>{
-        if(JWTTokenExists()){
-            FetchBackend('GET', 'user/me',null)
-                .then(response => response.json())
-                .then(data => {
-                    setAuthUser(data);
-                })
-                .catch(error => console.log(error))
-        }
-    }, []);
+    let authUser = GetAuthUser();
 
     useEffect(() => {
         FetchBackend('GET', 'device/short/all',null)

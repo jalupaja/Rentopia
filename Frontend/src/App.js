@@ -5,12 +5,9 @@ import ForgetPasswordSite from "./sites/ForgetPassword.js";
 import RegisterSite from "./sites/Register.js";
 
 import { useEffect } from "react"
+import HelpCenterSite from "./sites/HelpCenterSite.js";
 
 function App() {
-/*    useEffect(() => {
-        document.title = "Rentopia"
-    }, [])
-*/
   return (
       <BrowserRouter sx = {{    width : "100%", Height : "100%"}}>
           <Routes>
@@ -19,6 +16,7 @@ function App() {
                   <Route path="login" element={<LoginSite />} />
                   <Route path="resetPassword" element={<ForgetPasswordSite/>}/>
                   <Route path="register" element={<RegisterSite/>}/>
+                  <Route path="helpCenter" element={<HelpCenterSite/>}/>
               </Route>
           </Routes>
       </BrowserRouter>

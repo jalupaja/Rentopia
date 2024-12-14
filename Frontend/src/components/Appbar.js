@@ -7,6 +7,7 @@ import Logo from "../image/RentopiaLogo64.jpg";
 import {useNavigate} from "react-router-dom";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import {Logout} from "../helper/BackendHelper.js"
+import MenuComponent from "./MenuComponent.js";
 
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
     color: 'inherit',
@@ -71,12 +72,13 @@ const logo = {
 };
 
 function Appbar({showLogin = true, authUser = null}) {
-    console.log(authUser);
     const [category, setCategory] = React.useState("%");
 
     const handleCategoryChange = (event) => {
         setCategory(event.target.value);
     }
+
+
 
     const navigate = useNavigate();
     let loginButton = <Button/>;
@@ -85,7 +87,7 @@ function Appbar({showLogin = true, authUser = null}) {
             loginButton = <Button onClick={()=>navigate("/login")} variant="outlined" color="inherit">Sign in</Button>;
         }
         else{
-            loginButton = <Button onClick={()=> {Logout();  window.location.reload();}} variant="outlined" color="inherit">Log out</Button>;
+            loginButton = <MenuComponent authUser={authUser}/>;
         }
     }
 
@@ -124,9 +126,6 @@ return (
                     />
                 </Search>
                 <Box sx={{flexGrow: 1}}></Box>
-                <Box sx={{marginRight: 2}}>
-                    <AccountCircleIcon onClick={() => {}}/>
-                </Box>
                 {loginButton}
             </Toolbar>
         </AppBar>
