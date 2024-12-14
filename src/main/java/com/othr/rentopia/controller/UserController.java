@@ -24,33 +24,28 @@ public class UserController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-
     @Autowired
-    private AccountServiceImpl customUserDetails;
+    private AccountService customUserDetails;
 
     @Autowired
     private AccountService userService;
 
-    @PostMapping(value="login", produces="application/json")
+    @PostMapping(value = "login", produces = "application/json")
     public @ResponseBody ResponseEntity<AuthResponse> processLoginRequest(@RequestBody String loginRequest) {
         JSONObject request = new JSONObject(loginRequest);
 
         String email = (String) request.get("useremail");
         String password = (String) request.get("userpassword");
 
-        Account userDetails = customUserDetails.getAccount(email);
+        UserDetails userDetails = customUserDetails.getAccountWithPassword(email);
 
         AuthResponse authResponse = new AuthResponse();
-        if(userDetails == null) {
+        if (userDetails == null || !passwordEncoder.matches(password, userDetails.getPassword())) {
             authResponse.setStatus(false);
-            authResponse.setMessage("Invalid username and password");
-        }
-        else if(!passwordEncoder.matches(password,userDetails.getPassword())) {
-            authResponse.setStatus(false);
-            authResponse.setMessage("Invalid password");
-        }
-        else{
-            Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails,null,userDetails.getAuthorities());
+            authResponse.setMessage("Invalid username or password");
+        } else {
+            Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null,
+                    userDetails.getAuthorities());
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
