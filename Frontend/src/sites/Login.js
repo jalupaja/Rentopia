@@ -74,10 +74,10 @@ function LoginSite() {
                     Welcome to Rentopia
                 </Typography>
                 <TextField sx={{ ...InputFieldStyle }} id="emailTextfield" label="Email" variant="outlined"
-                    value={userEmail} onChange={(event) => setUserEmail(event.target.value)}
+                    required value={userEmail} onChange={(event) => setUserEmail(event.target.value)}
                 />
                 <FormControl sx={{ ...InputFieldStyle }} variant="outlined">
-                    <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
+                    <InputLabel required htmlFor="outlined-adornment-password">Password</InputLabel>
                     <OutlinedInput
                         value={userPassword} onChange={(event) => setUserPassword(event.target.value)}
                         id="outlined-adornment-password"
