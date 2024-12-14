@@ -38,6 +38,16 @@ export function ReturnHomeWhenLoggedIn(){
     }, [])
 }
 
+//todo remove
+export function ReturnHomeWhenLoggedOut(){
+    const navigation = useNavigate();
+    useEffect(() => {
+        if(!JWTTokenExists()){
+            navigation("/");
+        }
+    }, [])
+}
+
 function FetchBackend(httpMethod, uri, json){
     const requestOptions = {
         method: httpMethod,
