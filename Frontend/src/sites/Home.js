@@ -7,7 +7,7 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import Footer from "../components/Footer.js";
-import FetchBackend, { JWTTokenExists } from "../helper/BackendHelper.js";
+import FetchBackend, {GetAuthUser, JWTTokenExists} from "../helper/BackendHelper.js";
 import { useEffect, useState } from "react";
 import * as React from 'react';
 import Appbar from "../components/Appbar.js";
