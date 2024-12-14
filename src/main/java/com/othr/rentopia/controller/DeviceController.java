@@ -58,9 +58,27 @@ public class DeviceController {
 	private static final String UPLOAD_DIR = System.getProperty("user.dir") + "/Frontend/public/images/";
 	private static final String DEVICE_IMAGE_UPLOAD_DIR = UPLOAD_DIR + "devices/";
 
-	private Boolean checkAllowed(Device device) {
-		// TODO check NULL, if (! device.getHidden || device.owner == logged_in_acc)
-		return device != null;
+	private Boolean checkDeviceAccess_R(Authentication authentication, Device device) {
+		if (device == null)
+			return false;
+
+		// if device is hidden and if current logged in person is not its owner
+		if (!device.getIsPublic() && (authentication == null || authentication.getPrincipal() != device.getOwnerId()))
+			return false;
+
+		return true;
+	}
+
+	private Boolean checkDeviceAccess_W(Authentication authentication, Long deviceId) {
+		if (authentication == null)
+			return false;
+
+		Long device_ownerId = deviceService.getDeviceOwnerId(deviceId);
+		// if device does not exist or if current logged in person is not its owner
+		if (device_ownerId == null || authentication.getPrincipal() != device_ownerId)
+			return false;
+
+		return true;
 	}
 
 	private Map<String, Object> parseDeviceShort(Device device) {
@@ -111,10 +129,10 @@ public class DeviceController {
 	}
 
 	@GetMapping("{id}")
-	public ResponseEntity<Map<String, Object>> getDevice(@PathVariable("id") Long id) {
+	public ResponseEntity<Map<String, Object>> getDevice(Authentication authentication, @PathVariable("id") Long id) {
 		Device device = deviceService.getDevice(id);
 
-		if (checkAllowed(device)) {
+		if (checkDeviceAccess_R(authentication, device)) {
 			return new ResponseEntity<>(parseDevice(device), HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
@@ -122,10 +140,11 @@ public class DeviceController {
 	}
 
 	@GetMapping("/short/{id}")
-	public ResponseEntity<Map<String, Object>> getDeviceShort(@PathVariable("id") Long id) {
+	public ResponseEntity<Map<String, Object>> getDeviceShort(Authentication authentication,
+			@PathVariable("id") Long id) {
 		Device device = deviceService.getDevice(id);
 
-		if (checkAllowed(device)) {
+		if (checkDeviceAccess_R(authentication, device)) {
 			return new ResponseEntity<>(parseDeviceShort(device), HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
@@ -133,12 +152,12 @@ public class DeviceController {
 	}
 
 	@GetMapping("/short/all")
-	public ResponseEntity<List<Map<String, Object>>> getDevice() {
+	public ResponseEntity<List<Map<String, Object>>> getDevice(Authentication authentication) {
 		List<Map<String, Object>> deviceData = new ArrayList<>();
 
 		List<Device> devices = deviceService.getAllDevices();
 		for (Device device : devices) {
-			if (checkAllowed(device)) {
+			if (checkDeviceAccess_R(authentication, device)) {
 				deviceData.add(parseDeviceShort(device));
 			}
 		}
@@ -181,24 +200,25 @@ public class DeviceController {
 	@PostMapping("/bookmarks/remove/{deviceId}")
 	public ResponseEntity<String> removeBookmark(Authentication authentication,
 			@PathVariable("deviceId") Long deviceId) {
-		// ResponseEntity<>(HttpStatus.FORBIDDEN);
-		Long ownerId = 1L;
-		// TODO Principal is currently user email
-		// ownerId = authentication.getPrincipal();
+		if (authentication == null)
+			return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
+
+		Long ownerId = (Long) authentication.getPrincipal();
 
 		if (bookmarkService.removeBookmark(ownerId, deviceId)) {
 			return new ResponseEntity<>(null, HttpStatus.OK);
 		} else {
 			System.out.println("Failed removing Bookmark from " + ownerId + " for " + deviceId);
-			return new ResponseEntity<>(null, HttpStatus.OK);
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		}
 	}
 
 	@PostMapping("/bookmarks/add/{deviceId}")
-	public ResponseEntity<String> addBookmark(@PathVariable("deviceId") Long deviceId) {
-		// TODO ownerId from current user: return new
-		// ResponseEntity<>(HttpStatus.FORBIDDEN);
-		Long ownerId = 1L;
+	public ResponseEntity<String> addBookmark(Authentication authentication, @PathVariable("deviceId") Long deviceId) {
+		if (authentication == null)
+			return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
+
+		Long ownerId = (Long) authentication.getPrincipal();
 
 		Bookmark bookmark = new Bookmark();
 		bookmark.setOwnerId(ownerId);
@@ -210,14 +230,15 @@ public class DeviceController {
 
 	@PostMapping("{id}/image")
 	public ResponseEntity<String> uploadImage(
+			Authentication authentication,
 			@RequestParam("file") MultipartFile file,
 			@PathVariable("id") Long deviceId) {
-		// TODO check if user is owner of device -> allowed to upload images, also if
-		// device exists...
 
-		if (file.isEmpty()) {
-			return ResponseEntity.badRequest().body("No file uploaded.");
-		}
+		if (!checkDeviceAccess_W(authentication, deviceId))
+			return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
+
+		if (file.isEmpty())
+			return new ResponseEntity<>("No file uploaded.", HttpStatus.BAD_REQUEST);
 
 		String fileName;
 		String originalFileName = file.getOriginalFilename();
