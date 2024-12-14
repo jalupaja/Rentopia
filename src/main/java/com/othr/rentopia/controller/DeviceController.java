@@ -1,10 +1,10 @@
 package com.othr.rentopia.controller;
 
-// import com.othr.rentopia.model.Account;
 import com.othr.rentopia.model.Device;
 import com.othr.rentopia.model.DeviceImage;
 import com.othr.rentopia.model.Bookmark;
-// import com.othr.rentopia.service.AccountService;
+import com.othr.rentopia.model.Account;
+import com.othr.rentopia.service.AccountService;
 import com.othr.rentopia.service.DeviceService;
 import com.othr.rentopia.service.BookmarkService;
 import com.othr.rentopia.service.RatingService;
@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.security.core.Authentication;
 
 import jakarta.persistence.PersistenceException;
@@ -166,32 +167,61 @@ public class DeviceController {
 	}
 
 	@PostMapping("/add")
-	public ResponseEntity<String> addDevice() {
-		return new ResponseEntity<>(null, HttpStatus.NOT_IMPLEMENTED);
+	public ResponseEntity<String> addDevice(Authentication authentication, @RequestBody Map<String, Object> data) {
+		// TODO untested
+		if (authentication == null)
+			return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
+
+		try {
+			String title = (String) data.get("title");
+			String description = (String) data.get("description");
+			Double price = (Double) data.get("price");
+			boolean isPublic = (boolean) data.get("isPublic");
+			// TODO add categories
+
+			Long ownerId = (Long) authentication.getPrincipal();
+
+			Device device = new Device();
+			device.setTitle(title);
+			device.setDescription(description);
+			device.setPrice(price);
+			device.setOwnerId(ownerId);
+			device.setLocation(accountService.getLocation(ownerId));
+			device.setIsPublic(isPublic);
+			deviceService.saveDevice(device);
+
+			return new ResponseEntity<>(null, HttpStatus.OK);
+		} catch (Exception e) {
+			System.out.println("Error parsing values for device creation: " + e.getMessage());
+			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+		}
 	}
 
 	@PostMapping("/remove/{id}")
-	public ResponseEntity<String> removeDevice(@PathVariable("id") Long id) {
-		Device device = deviceService.getDevice(id);
-
-		if (checkAllowed(device)) {
-			deviceService.removeDevice(id);
-		} else {
+	public ResponseEntity<String> removeDevice(Authentication authentication, @PathVariable("id") Long id) {
+		if (!checkDeviceAccess_W(authentication, id))
 			return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
+
+		if (deviceService.removeDevice(id)) {
+			return new ResponseEntity<>(null, HttpStatus.OK);
+		} else {
+			System.out.println("Failed removing Device " + id);
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		return new ResponseEntity<>(null, HttpStatus.NOT_IMPLEMENTED);
 	}
 
-	@GetMapping("/bookmarks/all/{ownerId}")
-	public ResponseEntity<List<Map<String, Object>>> getBookmarks(@PathVariable("ownerId") Long ownerId) {
-		// TODO maybe move to AccountService. but need parseDeviceShort...
+	@GetMapping("/bookmarks/all")
+	public ResponseEntity<List<Map<String, Object>>> getBookmarks(Authentication authentication) {
+
+		if (authentication == null)
+			return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
+
 		List<Map<String, Object>> deviceData = new ArrayList<>();
+		Long ownerId = (Long) authentication.getPrincipal();
 
 		List<Device> devices = bookmarkService.getBookmarkedDevices(ownerId);
 		for (Device device : devices) {
-			if (checkAllowed(device)) {
-				deviceData.add(parseDeviceShort(device));
-			}
+			deviceData.add(parseDeviceShort(device));
 		}
 
 		return new ResponseEntity<>(deviceData, HttpStatus.OK);
