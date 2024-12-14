@@ -27,9 +27,6 @@ public class UserController {
     @Autowired
     private AccountService customUserDetails;
 
-    @Autowired
-    private AccountService userService;
-
     @PostMapping(value = "login", produces = "application/json")
     public @ResponseBody ResponseEntity<AuthResponse> processLoginRequest(@RequestBody String loginRequest) {
         JSONObject request = new JSONObject(loginRequest);
@@ -59,13 +56,12 @@ public class UserController {
         return new ResponseEntity<AuthResponse>(authResponse, HttpStatus.OK);
     }
 
-    @GetMapping(path="user/me", produces="application/json")
-    public @ResponseBody ResponseEntity<Account> GetAuthUser(Authentication authentication){
-        String username = (String) authentication.getPrincipal();
+    @GetMapping(path = "user/me", produces = "application/json")
+    public @ResponseBody ResponseEntity<Account> GetAuthUser(Authentication authentication) {
+        Long userId = (Long) authentication.getPrincipal();
 
-        Account account = customUserDetails.loadUserByUsername(username);
-        account.removeNonPublicProperties();
-        return new ResponseEntity<>( account, HttpStatus.OK);
+        Account account = customUserDetails.getAccount(userId);
+        return new ResponseEntity<>(account, HttpStatus.OK);
     }
 
     @PostMapping(path="resetPasswordMail",  produces="application/json")
