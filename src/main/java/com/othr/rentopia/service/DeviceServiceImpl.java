@@ -40,6 +40,23 @@ public class DeviceServiceImpl implements DeviceService {
 	}
 
 	@Override
+	public Long getDeviceOwnerId(Long deviceId) {
+		Long ownerId = null;
+
+		String query = "SELECT DISTINCT d.ownerId FROM Device d WHERE id = :deviceId";
+		try {
+			ownerId = entityManager
+					.createQuery(query, Long.class)
+					.setParameter("deviceId", deviceId)
+					.getSingleResult();
+		} catch (NoResultException e) {
+			System.err.println("No device found with id " + deviceId);
+		}
+
+		return ownerId;
+	}
+
+	@Override
 	public List<Device> getDevicesByOwner(Long ownerId) {
 		List<Device> devices = null;
 
