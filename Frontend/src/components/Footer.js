@@ -1,4 +1,5 @@
-import {Box, Container, Grid, Typography} from "@mui/material";
+import {Box, Container, Typography} from "@mui/material";
+import Grid from "@mui/material/Grid2";
 
 const FooterStyle = {
     position : "fixed",
@@ -14,9 +15,7 @@ function Footer(){
                 height: "auto",
                 paddingTop: "1rem",
                 paddingBottom: "0",
-                backgroundColor : "lightblue",
-                bottom: "0",
-                position : "relative"
+                backgroundColor : "lightblue"
             }}
         >
             <Container maxWidth="lg">

@@ -1,4 +1,4 @@
-import {AppBar, Box, FormControl, InputBase, Select, Toolbar, Button, MenuItem } from "@mui/material";
+import {AppBar, Box, FormControl, InputBase, Select, Toolbar, Button, MenuItem, IconButton} from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import {alpha, styled} from "@mui/material";
@@ -70,7 +70,7 @@ const logo = {
     imageUrl: '/pictures/RentopiaLogo64.jpg',
 };
 
-function Appbar({showLogin = true, authUser = null}) {
+function Appbar({showLogin = true, authUser = null, searchVisibility = 'hidden'}) {
     console.log(authUser);
     const [category, setCategory] = React.useState("%");
 
@@ -79,13 +79,16 @@ function Appbar({showLogin = true, authUser = null}) {
     }
 
     const navigate = useNavigate();
-    let loginButton = <Button/>;
+    let loginButton = <Button sx={{visibility: 'hidden'}}/>;
+    let profileButton = <IconButton sx={{visibility: 'hidden'}}></IconButton>;
     if(showLogin){
         if(authUser === null){
             loginButton = <Button onClick={()=>navigate("/login")} variant="outlined" color="inherit">Sign in</Button>;
+            profileButton = <IconButton onClick={() => navigate("/profilePage")} size="large"><AccountCircleIcon fontSize="inherit"/></IconButton>
         }
         else{
             loginButton = <Button onClick={()=> {Logout();  window.location.reload();}} variant="outlined" color="inherit">Log out</Button>;
+            profileButton = <IconButton onClick={() => navigate("/profilePage")} size="large"><AccountCircleIcon fontSize="inherit"/></IconButton>
         }
     }
 
@@ -97,7 +100,7 @@ return (
 
                     <img src={Logo} onClick={()=>navigate("/")} alt={"Rentopia Logo"}/>
                 </Box>
-                <FormControl sx={{marginRight: 0, marginLeft: '7%', width: '150px' }} size="small">
+                <FormControl sx={{marginRight: 0, marginLeft: '7%', width: '150px', visibility: searchVisibility }} size="small">
                     <StyledSelect
                         value={category}
                         onChange={handleCategoryChange}
@@ -108,7 +111,7 @@ return (
                         <MenuItem value={"home"}>Home</MenuItem>
                     </StyledSelect>
                 </FormControl>
-                <Search sx={{ marginLeft: 0, marginRight: 0 }}>
+                <Search sx={{ marginLeft: 0, marginRight: 0, visibility: searchVisibility }}>
                     <SearchIconWrapper>
                         <SearchIcon/>
                     </SearchIconWrapper>
@@ -116,7 +119,7 @@ return (
                         placeholder="Search…"
                     />
                 </Search>
-                <Search sx={{ marginLeft: 0 }} >
+                <Search sx={{ marginLeft: 0, visibility: searchVisibility }} >
                     <SearchIconWrapper>
                         <LocationOnIcon/>
                     </SearchIconWrapper>
@@ -125,9 +128,7 @@ return (
                     />
                 </Search>
                 <Box sx={{flexGrow: 1}}></Box>
-                <Box sx={{marginRight: 2, cursor: 'pointer'}}>
-                    <AccountCircleIcon onClick={() => {}}/>
-                </Box>
+                {profileButton}
                 {loginButton}
             </Toolbar>
         </AppBar>
