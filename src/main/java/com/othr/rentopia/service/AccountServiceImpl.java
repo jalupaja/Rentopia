@@ -6,13 +6,16 @@ import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.PersistenceException;
 import jakarta.transaction.Transactional;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
 import com.othr.rentopia.model.Account;
 
 @Service
-public class AccountServiceImpl implements AccountService {
+public class AccountServiceImpl implements AccountService, UserDetailsService {
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -52,16 +55,27 @@ public class AccountServiceImpl implements AccountService {
 	return account;
     }
 
+    public String getAccountName(Long accountId) {
+        String query = "SELECT a.name FROM Account a WHERE a.id = :accountId";
+        try {
+            return entityManager
+                .createQuery(query, String.class)
+                .setParameter("accountId", accountId)
+                .getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
 
-	public Account getAccountByUsername(String username) {
-		// TODO private!!!. no password info for normal getAccount
+	@Override
+	public Account loadUserByUsername(String email) {
 		Account account = null;
 
-		String query = "SELECT a FROM Account a WHERE a.name = :name";
+		String query = "SELECT a FROM Account a WHERE a.email = :email";
 		try {
 			account = entityManager
 					.createQuery(query, Account.class)
-					.setParameter("name", username)
+					.setParameter("email", email)
 					.getSingleResult();
 		} catch (NoResultException e) {
 		}
@@ -71,34 +85,35 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public boolean checkPassword(String email, String password) {
-	String db_password = "";
+		String db_password = "";
 
-	String query = "SELECT a.password FROM Account a WHERE a.email = :email";
-	try {
-	    db_password = entityManager
-		.createQuery(query, String.class)
-		.setParameter("email", email)
-		.getSingleResult();
-	} catch (NoResultException e) {
-	    return false;
-	}
+		String query = "SELECT a.password FROM Account a WHERE a.email = :email";
+		try {
+			db_password = entityManager
+			.createQuery(query, String.class)
+			.setParameter("email", email)
+			.getSingleResult();
+		} catch (NoResultException e) {
+			return false;
+		}
 
-	if (db_password.equals(password)) {
-	    return true;
-	} else {
-	    return false;
-	}
+		if (db_password.equals(password)) {
+			return true;
+		} else {
+			return false;
+		}
     }
 
     @Override
+    @Transactional
     public void removeAccount(Long accountId) {
-	String query = "DELETE FROM Account WHERE id = :accountId";
-	try {
-	    entityManager.createQuery(query)
-		.setParameter("accountId", accountId)
-		.executeUpdate();
-	} catch (PersistenceException e) {
-	    System.err.println("ERROR removing Account with ID " + accountId + ": " + e.getMessage());
-	}
+		String query = "DELETE FROM Account WHERE id = :accountId";
+		try {
+			entityManager.createQuery(query)
+			.setParameter("accountId", accountId)
+			.executeUpdate();
+		} catch (PersistenceException e) {
+			System.err.println("ERROR removing Account with ID " + accountId + ": " + e.getMessage());
+		}
     }
 }

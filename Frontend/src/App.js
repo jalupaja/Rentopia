@@ -1,30 +1,30 @@
-import {BrowserRouter, Routes, Route} from "react-router-dom";
-import LoginComponent from "./Sites/LoginComponent.js";
-import Home from "./Sites/Home.js";
-import ForgetPasswordPage from "./Sites/ForgetPassword.js";
-import RegisterPage from "./Sites/RegisterPage.js";
-
-import { useEffect } from "react"
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import LoginSite from "./sites/Login.js";
+import HomeSite from "./sites/Home.js";
+import ForgetPasswordSite from "./sites/ForgetPassword.js";
+import RegisterSite from "./sites/Register.js";
+import DeviceSite from "./sites/Device.js";
+import { useEffect } from "react";
 import ProfilePage from "./Sites/ProfilePage";
 
 function App() {
-/*    useEffect(() => {
-        document.title = "Rentopia"
-    }, [])
-*/
-  return (
-      <BrowserRouter sx = {{    width : "100%", Height : "100%"}}>
-          <Routes>
-              <Route path="/" >
-                  <Route index element={<Home />} />
-                  <Route path="login" element={<LoginComponent />} />
-                  <Route path="resetPassword" element={<ForgetPasswordPage/>}/>
-                  <Route path="register" element={<RegisterPage/>}/>
-                  <Route path="profilePage" element={<ProfilePage/>}/>
-              </Route>
-          </Routes>
-      </BrowserRouter>
-  );
+    return (
+        <BrowserRouter sx={{ width: "100%", Height: "100%" }}>
+            <Routes>
+                <Route path="/" >
+                    <Route index element={<HomeSite />} />
+                    <Route path="login" element={<LoginSite />} />
+                    <Route path="resetPassword" element={<ForgetPasswordSite />} />
+                    <Route path="register" element={<RegisterSite />} />
+                    <Route path="profilePage" element={<ProfilePage/>}/>
+                </Route>
+                <Route path="device" >
+                    <Route index element={<Navigate to="/" />} /> // return to the Home page
+                    <Route path=":deviceId" element={<DeviceSite />} />
+                </Route>
+            </Routes>
+        </BrowserRouter>
+    );
 }
 
 export default App;

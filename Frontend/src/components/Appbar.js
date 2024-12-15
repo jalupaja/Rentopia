@@ -66,7 +66,12 @@ const Search = styled('div')(({ theme }) => ({
     },
 }));
 
+const logo = {
+    imageUrl: '/pictures/RentopiaLogo64.jpg',
+};
+
 function Appbar({showLogin = true, authUser = null, searchVisibility = 'hidden'}) {
+    console.log(authUser);
     const [category, setCategory] = React.useState("%");
 
     const handleCategoryChange = (event) => {
@@ -91,7 +96,8 @@ return (
     <Box sx={{ height: 'auto', width:'100%', display:'block' }}>
         <AppBar position="static">
             <Toolbar>
-                <Box sx={{height :'63px', width:'63px', borderRadius: 25, overflow: 'hidden'}}>
+                <Box sx={{height :'63px', width:'63px', borderRadius: 25, overflow: 'hidden', cursor: 'pointer'}}>
+
                     <img src={Logo} onClick={()=>navigate("/")} alt={"Rentopia Logo"}/>
                 </Box>
                 <FormControl sx={{marginRight: 0, marginLeft: '7%', width: '150px', visibility: searchVisibility }} size="small">
