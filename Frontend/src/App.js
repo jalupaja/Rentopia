@@ -5,7 +5,7 @@ import ForgetPasswordSite from "./sites/ForgetPassword.js";
 import RegisterSite from "./sites/Register.js";
 import DeviceSite from "./sites/Device.js";
 import { useEffect } from "react";
-import ProfilePage from "./Sites/ProfilePage";
+import ProfilePage from "./sites/ProfilePage";
 
 function App() {
     return (
