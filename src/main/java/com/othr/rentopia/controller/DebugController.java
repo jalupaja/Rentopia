@@ -81,14 +81,13 @@ public class DebugController {
                 20.00, 0.0, 85.99, 75.50, 0.0, 65.00, 0.0
         };
 
-        int amount_devices = 25;
         boolean free_price = true;
-        for (int i = 0; i <= amount_devices; i++) {
-            String title = titles[i % titles.length];
+        for (int i = 1; i <= 25; i++) {
+            String title = titles[i - 1];
             String description = descriptions[i % descriptions.length];
             Double price = prices[i % prices.length];
             Long ownerId = 1L;
-            boolean isPublic = (i < (amount_devices / 5)) ? false : true;
+            boolean isPublic = (i < 5) ? false : true;
 
             Device device = new Device();
             device.setTitle(title);
