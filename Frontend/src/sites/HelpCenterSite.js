@@ -13,12 +13,12 @@ function HelpCenterSite(){
 
     let authUser = GetAuthUser();
 
-    //const [selectedIndex, setSelectedIndex] = React.useState(-1);
     const [tickets, setTickets] = React.useState([]);
     const [ticketDetailComponent, setTicketDetailComponent] = React.useState(null);
 
     const handleTicketSelection = (index) => {
         if(tickets != null && index >= 0 && index < tickets.length){
+            console.log("index",tickets[index]);
             setTicketDetailComponent(<TicketDetail ticket={tickets[index]}/>);
         }
     }
@@ -26,9 +26,12 @@ function HelpCenterSite(){
         setTickets([
             ...tickets,
             {
-                id : "-1",
+                id : null,
+                ownerId : authUser.id,
                 title : "new ticket",
-                status : "new"
+                status : "new",
+                category : "General",
+                details : ""
             }
         ]);
 
