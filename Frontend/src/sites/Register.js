@@ -8,7 +8,7 @@ import {
     IconButton,
     InputAdornment,
     Stack,
-    TextField, Typography, RadioGroup, Radio, FormControlLabel, AppBar, Grid2
+    TextField, Typography, RadioGroup, Radio, FormControlLabel, Grid2
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import Appbar from "../components/Appbar.js";
@@ -50,6 +50,7 @@ function RegisterSite() {
 
     //hide password logic
     const [showPassword, setShowPassword] = React.useState(false);
+
     const handleClickShowPassword = () => setShowPassword((show) => !show);
     const handleMouseDownPassword = (event) => {
         event.preventDefault();
@@ -224,7 +225,7 @@ function RegisterSite() {
                             <TextField sx={{ ...InputFieldStyle }} name="email" label="Email" variant="outlined" required
                                 onChange={handleChange} value={userInfo.email.value} error={userInfo.email.error}
                                 helperText={userInfo.email.errorMessage} />
-                            <TextField sx={{ ...InputFieldStyle }}
+                            <TextField sx={{ ...InputFieldStyle }} required
                                 type={showPassword ? 'text' : 'password'}
                                 InputProps={{
                                     endAdornment: (
@@ -246,7 +247,7 @@ function RegisterSite() {
                         </Grid2>
                         <Grid2 size={6} sx={{ ...GridCellStyle }}>
                             <TextField sx={{ ...InputFieldStyle }}
-                                type={showPassword ? 'text' : 'password'}
+                                type={showPassword ? 'text' : 'password'} required
                                 InputProps={{
                                     endAdornment: (
                                         <InputAdornment position="end">
@@ -296,7 +297,7 @@ function RegisterSite() {
                     Create Account
                 </Button>
             </Stack>
-
+            <Box flex={"auto"} />
             <Footer />
         </Box>
     )

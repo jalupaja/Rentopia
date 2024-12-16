@@ -1,5 +1,5 @@
 import Appbar from "../components/Appbar";
-import {useState} from "react";
+import { useState } from "react";
 import Footer from "../components/Footer";
 import {
     Avatar,
@@ -11,7 +11,7 @@ import {
 import Grid from "@mui/material/Grid2";
 import * as React from "react";
 import DeviceListItem from "../components/DeviceListItem";
-import {FrameStyle} from "./RegisterPage";
+import { FrameStyle } from "./Register";
 import AddIcon from '@mui/icons-material/Add';
 import HistoryIcon from '@mui/icons-material/History';
 import BookmarksIcon from '@mui/icons-material/Bookmarks';
@@ -39,11 +39,11 @@ function CustomTabPanel(props) {
             hidden={value !== index}
             id={`simple-tabpanel-${index}`}
             aria-labelledby={`simple-tab-${index}`}
-            style={{width:'100%'}}
+            style={{ width: '100%' }}
             {...other}
 
         >
-            {value === index && <Box sx={{ p: 3}}>{children}</Box>}
+            {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
         </div>
     );
 }
@@ -61,7 +61,7 @@ function a11yProps(index) {
     };
 }
 
-function ProfilePage() {
+function ProfileSite() {
 
     const [authUser, setAuthUser] = useState(null);
     const [openAddItem, setOpenAddItem] = React.useState(false);
@@ -105,14 +105,14 @@ function ProfilePage() {
 
     return (
         <React.Fragment>
-            <Box sx = {{ ...FrameStyle}}>
-                <Appbar authUser={authUser}/>
-                <Box sx={{width: '100%'}}>
-                    <Grid container direction='row' columnSpacing={3} margin={'2% 10%'} sx={{justifyContent: 'center'}}>
+            <Box sx={{ ...FrameStyle }}>
+                <Appbar authUser={authUser} />
+                <Box sx={{ width: '100%' }}>
+                    <Grid container direction='row' columnSpacing={3} margin={'2% 10%'} sx={{ justifyContent: 'center' }}>
                         <Grid container columns={2} rowSpacing={2} direction='column' width={"49%"}>
-                            <Item sx={{boxShadow: 3, display: 'flex', height: 'min-content', maxHeight: 'min-content'}}>
+                            <Item sx={{ boxShadow: 3, display: 'flex', height: 'min-content', maxHeight: 'min-content' }}>
                                 <Avatar
-                                    sx={{ width: 100, height: 100, margin: '24px'}}
+                                    sx={{ width: 100, height: 100, margin: '24px' }}
                                     alt="User"
                                 />
                                 <Box>
@@ -120,32 +120,32 @@ function ProfilePage() {
                                         fullWidth
                                         disabled
                                         defaultValue="Name"
-                                        sx={{ alignSelf: 'center', margin: '24px 0 12px 0'}}
+                                        sx={{ alignSelf: 'center', margin: '24px 0 12px 0' }}
                                     />
                                     <Input
                                         fullWidth
                                         disabled
                                         defaultValue="Prename"
-                                        sx={{ alignSelf: 'center', margin: '12px 0 12px 0'}}
+                                        sx={{ alignSelf: 'center', margin: '12px 0 12px 0' }}
                                     />
                                 </Box>
-                                <Box sx={{margin: ' 0 24px 24px 24px'}}>
+                                <Box sx={{ margin: ' 0 24px 24px 24px' }}>
                                     <Input
                                         fullWidth
                                         disabled
                                         defaultValue="Company"
-                                        sx={{ alignSelf: 'center', margin: '24px 0 12px 0'}}
+                                        sx={{ alignSelf: 'center', margin: '24px 0 12px 0' }}
                                     />
                                     <Input
                                         fullWidth
                                         disabled
                                         defaultValue="Email"
-                                        sx={{ alignSelf: 'center', margin: '12px 0 12px 0'}}
+                                        sx={{ alignSelf: 'center', margin: '12px 0 12px 0' }}
                                     />
                                     <Button
                                         variant={"contained"}
                                         onClick={handleEditDialogOpen}
-                                        sx={{float: "right"}}>Edit Profile
+                                        sx={{ float: "right" }}>Edit Profile
                                     </Button>
                                 </Box>
                             </Item>
@@ -161,16 +161,16 @@ function ProfilePage() {
                                 }}
                             >
                                 <Tabs value={tabValue}
-                                      onChange={handleTabChange}
-                                      aria-label="Profile Tabs"
-                                      sx={{width: '100%'}}
+                                    onChange={handleTabChange}
+                                    aria-label="Profile Tabs"
+                                    sx={{ width: '100%' }}
                                 >
-                                    <Tab icon={<HandymanIcon/>} label="Your Tools" {...a11yProps(0)} />
-                                    <Tab icon={<BookmarksIcon/>} label="Bookmarks"  {...a11yProps(1)} />
-                                    <Tab icon={<HistoryIcon/>} label="Rent Histroy" {...a11yProps(1)}/>
+                                    <Tab icon={<HandymanIcon />} label="Your Tools" {...a11yProps(0)} />
+                                    <Tab icon={<BookmarksIcon />} label="Bookmarks"  {...a11yProps(1)} />
+                                    <Tab icon={<HistoryIcon />} label="Rent Histroy" {...a11yProps(1)} />
                                 </Tabs>
                                 <CustomTabPanel value={tabValue} index={0}>
-                                    <List sx={{overflow: 'auto', height: '50vh', width: '90%'}}>
+                                    <List sx={{ overflow: 'auto', height: '50vh', width: '90%' }}>
                                         {Array.from({ length: 10 }).map((_, index) => (
                                             //*Your Tools*//
                                             <div>
@@ -189,7 +189,7 @@ function ProfilePage() {
                                     </Fab>
                                 </CustomTabPanel>
                                 <CustomTabPanel value={tabValue} index={1}>
-                                    <List sx={{overflow: 'auto', height: '50vh', width: '90%'}}>
+                                    <List sx={{ overflow: 'auto', height: '50vh', width: '90%' }}>
                                         {Array.from({ length: 5 }).map((_, index) => (
                                             //*Bookmarks*//
                                             <div>
@@ -202,12 +202,12 @@ function ProfilePage() {
                                             </div>))
                                         }
                                     </List>
-                                    <Fab style={fabStyle} sx={{visibility: "hidden"}}>
+                                    <Fab style={fabStyle} sx={{ visibility: "hidden" }}>
                                         <AddIcon />
                                     </Fab>
                                 </CustomTabPanel>
                                 <CustomTabPanel value={tabValue} index={2}>
-                                    <List sx={{overflow: 'auto', height: '50vh', width: '90%'}}>
+                                    <List sx={{ overflow: 'auto', height: '50vh', width: '90%' }}>
                                         {Array.from({ length: 10 }).map((_, index) => (
                                             //*Rent Tools*//
                                             <div>
@@ -219,7 +219,7 @@ function ProfilePage() {
                                             </div>))
                                         }
                                     </List>
-                                    <Fab  style={fabStyle} sx={{visibility: "hidden"}}>
+                                    <Fab style={fabStyle} sx={{ visibility: "hidden" }}>
                                         <AddIcon />
                                     </Fab>
                                 </CustomTabPanel>
@@ -227,17 +227,17 @@ function ProfilePage() {
                         </Grid>
                     </Grid>
                 </Box>
-                <Box flex={"auto"}/>
-                <Footer/>
+                <Box flex={"auto"} />
+                <Footer />
                 <div>
                     {openAddItem ? (
-                        <AddDeviceDialog open={openAddItem} handleAddDialogClose={handleAddDialogClose} iName={oName}/> //TODO: pass device datatype
+                        <AddDeviceDialog open={openAddItem} handleAddDialogClose={handleAddDialogClose} iName={oName} /> //TODO: pass device datatype
                     ) : ('')}
                 </div>
-                <EditProfileDialog open={openEditProfile} handleEditDialogClose={handleEditDialogClose}/>
+                <EditProfileDialog open={openEditProfile} handleEditDialogClose={handleEditDialogClose} />
             </Box>
         </React.Fragment>
     )
 }
 
-export default ProfilePage;
+export default ProfileSite;

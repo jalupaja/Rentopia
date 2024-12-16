@@ -1,13 +1,12 @@
 import Footer from "../components/Footer.js";
-import {Box, Typography, Stack, Button, TextField, Alert, Snackbar } from "@mui/material";
+import { Box, Typography, Stack, Button, TextField, Alert, Snackbar } from "@mui/material";
 import * as React from "react";
-import {centeredDivStyle, InputFieldStyle} from "./Register.js";
-import {useNavigate} from "react-router-dom";
-import FetchBackend, {ReturnHomeWhenLoggedIn} from "../helper/BackendHelper.js";
+import { centeredDivStyle, FrameStyle, InputFieldStyle } from "./Register.js";
+import { useNavigate } from "react-router-dom";
+import FetchBackend, { ReturnHomeWhenLoggedIn } from "../helper/BackendHelper.js";
 import Appbar from "../components/Appbar.js";
-import {useState} from "react";
-
-function ForgetPasswordSite(){
+import { useState } from "react";
+function ForgetPasswordSite() {
     ReturnHomeWhenLoggedIn();
 
     const [openSuccess, setOpenSuccess] = useState(false);
@@ -15,12 +14,12 @@ function ForgetPasswordSite(){
 
     const [userEmail, setUserEmail] = React.useState("");
     const SendResetMail = () => {
-        if(userEmail !== null && userEmail.length !== 0){
+        if (userEmail !== null && userEmail.length !== 0) {
             console.log(userEmail);
-            FetchBackend('POST','resetPasswordMail', {mail : userEmail})
+            FetchBackend('POST', 'resetPasswordMail', { mail: userEmail })
                 .then(response => response.json())
                 .then(success => {
-                    if(success){
+                    if (success) {
                         setOpenSuccess(true);
                     }
                 })
@@ -28,15 +27,15 @@ function ForgetPasswordSite(){
         }
     }
     return (
-        <Box>
-            <Appbar/>
+        <Box sx={{ ...FrameStyle }}>
+            <Appbar />
             <Snackbar open={openError}>
                 <Alert severity="error">Sending Mail was not successful. Please try again.</Alert>
             </Snackbar>
             <Snackbar open={openSuccess}>
                 <Alert>Send mail succeeded. Please look at your mail.</Alert>
             </Snackbar>
-            <Stack sx = {{...centeredDivStyle}}>
+            <Stack sx={{ ...centeredDivStyle }}>
                 <Typography variant="button" gutterBottom variant="h6">
                     Forget your password?
                 </Typography>
@@ -44,14 +43,15 @@ function ForgetPasswordSite(){
                     Type in your email for resetting your password:
                 </Typography>
 
-                <TextField sx={{...InputFieldStyle}} onChange={(e) => setUserEmail(e.target.value)} id="emailTextfield" label="Email" variant="outlined" />
+                <TextField sx={{ ...InputFieldStyle }} onChange={(e) => setUserEmail(e.target.value)} id="emailTextfield" label="Email" variant="outlined" />
 
                 <Button variant="contained" onClick={() => SendResetMail()}
-                         sx={{...InputFieldStyle}}>
+                    sx={{ ...InputFieldStyle }}>
                     Send Email
                 </Button>
             </Stack>
-            <Footer/>
+            <Box flex={"auto"} />
+            <Footer />
         </Box>
     )
 }

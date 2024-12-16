@@ -3,27 +3,23 @@ import {
     Stack,
     TextField,
     Link,
-    styled,
     Box,
-    InputBase,
-    Toolbar,
     Typography,
     InputLabel,
-    OutlinedInput, InputAdornment, IconButton, FormControl, Alert, AppBar
+    OutlinedInput, InputAdornment, IconButton, FormControl, Alert
 } from "@mui/material";
 import Footer from "../components/Footer.js";
-import {centeredDivStyle, FrameStyle, InputFieldStyle} from "./Register.js"
-import {Visibility, VisibilityOff} from "@mui/icons-material";
+import { centeredDivStyle, FrameStyle, InputFieldStyle } from "./Register.js"
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 import * as React from "react";
-import {JWT_TOKEN, ReturnHomeWhenLoggedIn} from "../helper/BackendHelper.js";
-import {useNavigate} from "react-router-dom";
-import FetchBackend from "../helper/BackendHelper.js";
+import FetchBackend, { JWT_TOKEN, ReturnHomeWhenLoggedIn } from "../helper/BackendHelper.js";
+import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import Appbar from "../components/Appbar.js";
 import ResponsePopup from "../components/ResponsePopup.js";
 
 
-function LoginSite(){
+function LoginSite() {
     const navigation = useNavigate();
 
     ReturnHomeWhenLoggedIn();
@@ -41,49 +37,49 @@ function LoginSite(){
     //login
     const [userEmail, setUserEmail] = React.useState("");
     const [userPassword, setUserPassword] = React.useState("");
-    const SubmitLogin = () =>{
+    const SubmitLogin = () => {
         let loginData = {
-            useremail : userEmail,
-            userpassword : userPassword
+            useremail: userEmail,
+            userpassword: userPassword
         };
 
         FetchBackend('POST', 'login', loginData)
-        .then(response => response.json())
-        .then(data => {
-            if(data.status){
-                Cookies.set(JWT_TOKEN, data.jwt);
-                navigation("/");
-            }
-            else{
-                setRegisterStatusLabel(<ResponsePopup message={"Wrong email or password!"} reason={"error"}/>);
-            }
+            .then(response => response.json())
+            .then(data => {
+                if (data.status) {
+                    Cookies.set(JWT_TOKEN, data.jwt);
+                    navigation("/");
+                }
+                else {
+                    setRegisterStatusLabel(<ResponsePopup message={"Wrong email or password!"} reason={"error"} />);
+                }
 
-        })
-        .catch((error) => {
-            setRegisterStatusLabel(<ResponsePopup message={"An error occurred. Please try again."} reason={"error"}/>);
-        });
+            })
+            .catch((error) => {
+                setRegisterStatusLabel(<ResponsePopup message={"An error occurred. Please try again."} reason={"error"} />);
+            });
     };
 
     const [registerStatusLabel, setRegisterStatusLabel] = React.useState(null);
 
     return (
-        <Box sx = {{ ...FrameStyle}}>
-            <Appbar showLogin={false}/>
+        <Box sx={{ ...FrameStyle }}>
+            <Appbar showLogin={false} />
 
             {registerStatusLabel}
 
-            <Stack sx = {{...centeredDivStyle}}>
+            <Stack sx={{ ...centeredDivStyle }}>
 
                 <Typography variant="button" gutterBottom variant="h5">
                     Welcome to Rentopia
                 </Typography>
-                <TextField sx={{...InputFieldStyle}} id="emailTextfield" label="Email" variant="outlined"
-                           value={userEmail} onChange={(event) =>  setUserEmail(event.target.value)}
+                <TextField sx={{ ...InputFieldStyle }} id="emailTextfield" label="Email" variant="outlined"
+                    value={userEmail} onChange={(event) => setUserEmail(event.target.value)}
                 />
                 <FormControl sx={{ ...InputFieldStyle }} variant="outlined">
                     <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
                     <OutlinedInput
-                        value={userPassword} onChange={(event)=> setUserPassword(event.target.value)}
+                        value={userPassword} onChange={(event) => setUserPassword(event.target.value)}
                         id="outlined-adornment-password"
                         type={showPassword ? 'text' : 'password'}
                         endAdornment={
@@ -104,14 +100,14 @@ function LoginSite(){
                         label="Password"
                     />
                 </FormControl>
-                <Button variant="contained" onClick={() => SubmitLogin()} sx={{...InputFieldStyle}}>
+                <Button variant="contained" onClick={() => SubmitLogin()} sx={{ ...InputFieldStyle }}>
                     Login
                 </Button>
                 <Link href="./register" marginTop={2}>Create Account</Link>
                 <Link href="/resetPassword" >Forget your password?</Link>
             </Stack>
-
-            <Footer/>
+            <Box flex={"auto"} />
+            <Footer />
         </Box>
 
     )
