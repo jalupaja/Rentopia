@@ -109,7 +109,7 @@ function DeviceSite() {
                                         {/*TODO remove boxStyle. only slight?*/}
                                         <Box sx={{ textAlign: "center" }}>
                                             {/* Main Device Image */}
-                                            <img src={"/images/devices/" + device.images[deviceImageIndex % 2 /* TODO */]} alt={device.title} width="100%" style={{ borderRadius: 8 }} />
+                                            <img src={"/images/devices/" + device.images[deviceImageIndex]} alt={device.title} width="100%" style={{ borderRadius: 8 }} />
                                         </Box>
 
                                         {/* Image Thumbnails */}
@@ -124,8 +124,7 @@ function DeviceSite() {
                                             cols={device.images.length}
                                             rowHeight={80}
                                         >
-                                            {[...device.images, ...device.images, ...device.images, ...device.images, ...device.images, ...device.images].map((image, index) => (  /* TODO */
-                                                // {device.images.map((image, index) => (
+                                            {device.images.map((image, index) => (
                                                 <ImageListItem
                                                     key={index}
                                                     sx={{
