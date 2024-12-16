@@ -11,7 +11,6 @@ import FetchBackend, { JWTTokenExists } from "../helper/BackendHelper.js";
 import { useEffect, useState } from "react";
 import * as React from 'react';
 import Appbar from "../components/Appbar.js";
-import usePagination from "../components/Pagination";
 import { FrameStyle } from "./Register";
 
 const DeviceGrid = styled(Grid2)(({ theme }) => ({
@@ -22,11 +21,9 @@ function HomeSite() {
     const navigate = useNavigate();
     const [authUser, setAuthUser] = useState(null);
     const [devices, setDevices] = useState([]);
+    const [paginatedDevices, setPaginatedDevices] = useState([]);
     const [page, setPage] = useState(1);
-    const devicesPPage = 10;
-
-    const count = Math.ceil(devices.length / devicesPPage);
-    const _DEVICES = usePagination(devices, devicesPPage);
+    const devicesPPage = 8;
 
     useEffect(() => {
         if (JWTTokenExists()) {
@@ -46,17 +43,17 @@ function HomeSite() {
             .catch(error => console.log(error))
     }, []);
 
-    const handlePageChange = (event, value) => {
-        setPage(value);
-        _DEVICES.jump(value);
-    };
+    useEffect(() => {
+        let _paginatedDevices = devices.slice((page - 1) * devicesPPage, page * devicesPPage);
+        setPaginatedDevices(_paginatedDevices);
+    }, [devices, page]);
 
     return (
         <Box sx={{ ...FrameStyle }}>
             <Appbar authUser={authUser} searchVisibility={'visible'} />
             <Box sx={{ flexGrow: 1 }} >
                 <DeviceGrid container spacing={{ xs: 4 }} justifyContent={'center'} >
-                    {devices.map((device, index) => (
+                    {paginatedDevices.map((device, index) => (
                         <Grid2 key={index}>
                             <Card sx={{ width: 300, boxShadow: 3 }} >
                                 <CardActionArea onClick={() => navigate("/device/" + device.id)} >
@@ -80,7 +77,7 @@ function HomeSite() {
                 </DeviceGrid>
             </Box>
             <Box flex={"auto"} />
-            <Pagination count={count} page={page} onChange={handlePageChange} />
+            <Pagination count={Math.ceil(devices.length / devicesPPage)} page={page} onChange={(_, value) => setPage(value)} />
             <Footer />
         </Box>
     );
