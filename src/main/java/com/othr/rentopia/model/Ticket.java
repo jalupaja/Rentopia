@@ -35,7 +35,7 @@ public class Ticket {
     @Column(length = 1024)
     private String adminResponse;
     public enum Category {
-        General, OwnDevices, RentedDevices
+        general, owndevices, renteddevices
     }
 
     public enum Status {

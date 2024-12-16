@@ -6,6 +6,7 @@ import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.PersistenceException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,12 +40,25 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
-    public void saveTicket(Ticket ticket) {
+    public Ticket getTicketById(Long ticketId) {
+        Ticket ticket = null;
+        String query = "SELECT t FROM Ticket t WHERE t.id = :ticketId";
         try {
-            entityManager.persist(ticket);
-        } catch (Exception e) {
-            System.out.println("Persisting Ticket " + ticket + " threw exception: "+ e.getMessage());
+            ticket = entityManager
+                    .createQuery(query, Ticket.class)
+                    .setParameter("ticketId", ticketId)
+                    .getSingleResult();
+        } catch (NoResultException e) {
+            System.out.println(e.getMessage());
         }
+
+        return ticket;
+    }
+
+    @Override
+    @Transactional
+    public void saveTicket(Ticket ticket) {
+        entityManager.persist(ticket);
     }
 
     @Override
@@ -53,14 +67,11 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
+    @Transactional
     public void deleteTicket(Long ticketId) {
         String query = "DELETE FROM Ticket WHERE id = :ticketId";
-        try {
-            entityManager.createQuery(query)
-                    .setParameter("ticketId", ticketId)
-                    .executeUpdate();
-        } catch (PersistenceException e) {
-            System.err.println("ERROR removing Ticket with ID " + ticketId + ": " + e.getMessage());
-        }
+        entityManager.createQuery(query)
+                .setParameter("ticketId", ticketId)
+                .executeUpdate();
     }
 }
