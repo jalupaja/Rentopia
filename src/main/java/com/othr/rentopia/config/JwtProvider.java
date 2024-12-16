@@ -15,18 +15,18 @@ import java.util.Set;
 public class JwtProvider {
     static SecretKey key = Keys.hmacShaKeyFor(JwtConstants.SECRET_KEY.getBytes());
 
-    public static String generateToken(Authentication auth) {
+    public static String generateToken(Authentication auth, Long userId) {
         Collection<? extends GrantedAuthority> authorities = auth.getAuthorities();
         String roles = populateAuthorities(authorities);
         @SuppressWarnings("deprecation")
         String jwt = Jwts.builder()
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(new Date().getTime()+86400000))
+                .claim("userId", userId)
                 .claim("email", auth.getName())
                 .claim( "authorities",roles)
                 .signWith(key)
                 .compact();
-        System.out.println("Token for parsing in JwtProvider: " + jwt);
         return jwt;
 
     }
