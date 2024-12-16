@@ -38,7 +38,7 @@ public class UserController {
         String email = (String) request.get("useremail");
         String password = (String) request.get("userpassword");
 
-        UserDetails userDetails = customUserDetails.getAccount(email);
+        Account userDetails = customUserDetails.getAccount(email);
 
         AuthResponse authResponse = new AuthResponse();
         if(userDetails == null) {
@@ -54,7 +54,7 @@ public class UserController {
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
-            String token = JwtProvider.generateToken(authentication);
+            String token = JwtProvider.generateToken(authentication, userDetails.getId());
 
             authResponse.setMessage("Login success");
             authResponse.setJwt(token);
