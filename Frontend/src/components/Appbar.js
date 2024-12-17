@@ -84,7 +84,7 @@ function Appbar({showLogin = true, authUser = null, searchVisibility = 'hidden'}
     if(showLogin){
         if(authUser === null){
             loginButton = <Button onClick={()=>navigate("/login")} variant="outlined" color="inherit">Sign in</Button>;
-            profileButton = <IconButton onClick={() => navigate("/profilePage")} size="large"><AccountCircleIcon fontSize="inherit"/></IconButton>
+            profileButton = <div/>
         }
         else{
             loginButton = <Button onClick={()=> {Logout();  window.location.reload();}} variant="outlined" color="inherit">Log out</Button>;
