@@ -11,7 +11,7 @@ import {useState} from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import UploadIcon from '@mui/icons-material/Upload';
 
-function EditProfileDialog({open, handleEditDialogClose}) {
+function EditProfileDialog({open, userData, handleEditDialogClose}) {
 
     const [errors, setErrors] = useState({});
     const [avatar, setAvatar] = useState(null);
@@ -22,7 +22,6 @@ function EditProfileDialog({open, handleEditDialogClose}) {
     const [city, setCity] = useState('');
     const [street, setStreet] = useState('');
     const [houseNo, setHouseNo] = useState('');
-    const [prename, setprename] = useState('');
     const [country, setCountry] = useState('');
     const [company, setCompany] = useState('');
 
@@ -87,16 +86,9 @@ function EditProfileDialog({open, handleEditDialogClose}) {
                     </Box>
                     <Box display="flex" justifyContent={"space-between"}>
                         <TextField
-                            label="Prename"
-                            margin="normal"
-                            value={prename}
-                            onChange={(e) => setprename(e.target.value)}
-                            sx={{width: "49%"}}
-                        />
-                        <TextField
                             label="Name"
                             margin="normal"
-                            value={name}
+                            value={userData ? userData.name : undefined}
                             onChange={(e) => setName(e.target.value)}
                             sx={{width: "49%"}}
                         />
@@ -106,7 +98,7 @@ function EditProfileDialog({open, handleEditDialogClose}) {
                         type="email"
                         fullWidth
                         margin="normal"
-                        value={email}
+                        value={userData ? userData.email : undefined}
                         onChange={(e) => setEmail(e.target.value)}
                     />
 
@@ -116,21 +108,21 @@ function EditProfileDialog({open, handleEditDialogClose}) {
                         rows={4}
                         fullWidth
                         margin="normal"
-                        value={description}
+                        value={userData ? userData.description : undefined}
                         onChange={(e) => setDescription(e.target.value)}
                     />
                     <Box  display="flex" justifyContent={"space-between"}>
                         <TextField
                             label="Company"
                             margin="normal"
-                            value={company}
+                            value={userData ? userData.company : undefined}
                             onChange={(e) => setCompany(e.target.value)}
                             sx={{width: "49%"}}
                         />
                         <TextField
                             label="Country"
                             margin="normal"
-                            value={country}
+                            value={userData ? userData.location.country : undefined}
                             onChange={(e) => setCountry(e.target.value)}
                             sx={{width: "49%"}}
                         />
@@ -139,21 +131,21 @@ function EditProfileDialog({open, handleEditDialogClose}) {
                         <TextField
                             label="Post Code"
                             margin="normal"
-                            value={postCode}
+                            value={userData ? userData.location.postalCode : undefined}
                             onChange={(e) => setPostCode(e.target.value)}
                             sx={{width: "29%"}}
                         />
                         <TextField
                             label="City"
                             margin="normal"
-                            value={city}
+                            value={userData ? userData.location.city : undefined}
                             onChange={(e) => setCity(e.target.value)}
                             sx={{width: "69%"}}
                         />
                         <TextField
                             label="Street"
                             margin="normal"
-                            value={street}
+                            value={userData ? userData.street : undefined}
                             onChange={(e) => setStreet(e.target.value)}
                             sx={{width: "79%"}}
                         />

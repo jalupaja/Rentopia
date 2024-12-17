@@ -1,5 +1,5 @@
 import Appbar from "../components/Appbar";
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import Footer from "../components/Footer";
 import {
     Avatar,
@@ -19,6 +19,7 @@ import HandymanIcon from '@mui/icons-material/Handyman';
 import AddDeviceDialog from "../components/AddDeviceDialog";
 import EditProfileDialog from "../components/EditProfileDialog";
 import PropTypes from "prop-types";
+import FetchBackend, {JWTTokenExists} from "../helper/BackendHelper";
 
 const Item = styled(Paper)(({ theme }) => ({
     padding: theme.spacing(1),
@@ -63,7 +64,7 @@ function a11yProps(index) {
 
 function ProfileSite() {
 
-    const [authUser, setAuthUser] = useState(null);
+    const [authUser, setAuthUser] = useState('');
     const [openAddItem, setOpenAddItem] = React.useState(false);
     const [openEditProfile, setOpenEditProfile] = React.useState(false);
     const [oName, setOName] = React.useState("");
@@ -71,6 +72,17 @@ function ProfileSite() {
     const [deviceList, setDeviceList] = React.useState([]);
     const [bookmarkList, setBookmarkList] = React.useState([]);
     const [historyList, setHistoryList] = React.useState([]);
+
+    useEffect(() => {
+        if (JWTTokenExists()) {
+            FetchBackend('GET', 'user/me', null)
+                .then(response => response.json())
+                .then(data => { setAuthUser(data); console.log(authUser)})
+                .catch(error => console.log(error))
+        } else {
+            console.log("no JWT token");
+        }
+    }, []);
 
     const handleAddDialogOpen = (name) => {
         setOName(name);
@@ -121,12 +133,14 @@ function ProfileSite() {
                                         disabled
                                         defaultValue="Name"
                                         sx={{ alignSelf: 'center', margin: '24px 0 12px 0' }}
+                                        value={authUser ? authUser.name : undefined}
                                     />
                                     <Input
                                         fullWidth
                                         disabled
-                                        defaultValue="Prename"
+                                        defaultValue="Email"
                                         sx={{ alignSelf: 'center', margin: '12px 0 12px 0' }}
+                                        value={authUser ? authUser.email : undefined}
                                     />
                                 </Box>
                                 <Box sx={{ margin: ' 0 24px 24px 24px' }}>
@@ -135,12 +149,14 @@ function ProfileSite() {
                                         disabled
                                         defaultValue="Company"
                                         sx={{ alignSelf: 'center', margin: '24px 0 12px 0' }}
+                                        value={authUser ? authUser.company : undefined}
                                     />
                                     <Input
                                         fullWidth
                                         disabled
-                                        defaultValue="Email"
+                                        defaultValue="Country"
                                         sx={{ alignSelf: 'center', margin: '12px 0 12px 0' }}
+                                        value={authUser ? authUser.location.country : undefined}
                                     />
                                     <Button
                                         variant={"contained"}
@@ -234,7 +250,7 @@ function ProfileSite() {
                         <AddDeviceDialog open={openAddItem} handleAddDialogClose={handleAddDialogClose} iName={oName} /> //TODO: pass device datatype
                     ) : ('')}
                 </div>
-                <EditProfileDialog open={openEditProfile} handleEditDialogClose={handleEditDialogClose} />
+                <EditProfileDialog open={openEditProfile} userData={authUser} handleEditDialogClose={handleEditDialogClose} />
             </Box>
         </React.Fragment>
     )
