@@ -6,6 +6,7 @@ import com.othr.rentopia.model.Account;
 import com.othr.rentopia.model.Location;
 import com.othr.rentopia.service.AccountService;
 import com.othr.rentopia.service.AccountServiceImpl;
+import com.othr.rentopia.api.GoogleOAuthService;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,9 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private GoogleOAuthService googleOAuthService;
 
     @Autowired
     private AccountService accountService;
@@ -56,8 +60,43 @@ public class UserController {
         return new ResponseEntity<AuthResponse>(authResponse, HttpStatus.OK);
     }
 
-    @GetMapping(path = "user/me", produces = "application/json")
-    public @ResponseBody ResponseEntity<Account> GetAuthUser(Authentication authentication) {
+    @PostMapping(value="loginOAuth", produces="application/json")
+    public String loginSuccess(@RequestBody String loginRequest) {
+        // login via Google OAuth
+        JSONObject request = new JSONObject(loginRequest);
+
+        String token = (String) request.get("token");
+
+        AuthResponse authResponse = new AuthResponse();
+
+        try {
+            String email = googleOAuthService.getEmail(token);
+            System.out.println("GOOGLE LOGIN: " + email);
+
+            // TODO not gonna work
+            // Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails,null,userDetails.getAuthorities());
+
+            // SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            // String token = JwtProvider.generateToken(authentication);
+
+            authResponse.setMessage("Login success");
+            // authResponse.setJwt(token);
+            authResponse.setStatus(true);
+
+        } catch (Exception e) {
+            authResponse.setStatus(false);
+            authResponse.setMessage("Invalid Login");
+            System.out.println("Invalid token: " + e.getMessage());
+        }
+
+
+        // model.addAttribute("user", principal.getAttributes());
+        return "login-success";  // Display user info on the view
+    }
+
+    @GetMapping(path="user/me", produces="application/json")
+    public @ResponseBody ResponseEntity<Account> GetAuthUser(Authentication authentication){
         String email = (String) authentication.getPrincipal();
 
         Account account = accountService.getAccount(email);

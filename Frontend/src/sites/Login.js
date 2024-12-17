@@ -17,7 +17,7 @@ import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import Appbar from "../components/Appbar.js";
 import ResponsePopup from "../components/ResponsePopup.js";
-
+import { GoogleLogin } from '@react-oauth/google';
 
 function LoginSite() {
     const navigation = useNavigate();
@@ -59,6 +59,31 @@ function LoginSite() {
                 setRegisterStatusLabel(<ResponsePopup message={"An error occurred. Please try again."} reason={"error"} />);
             });
     };
+
+
+    const OAuthSuccess = (response) => {
+        console.log("OAUTH SUC");
+        console.log(response);
+
+        const loginData = {
+            token: response.credential,
+        };
+
+        FetchBackend('POST', 'loginOAuth', loginData)
+            .then(response => {
+                console.log('Login successful:', response);
+
+                // window.location.href = '/login-success'; // TODO
+            })
+            .catch(error => {
+                console.error('Login failed:', error);
+            });
+    };
+    const OAuthError = (error) => {
+        console.log("OAUTH ERR");
+        console.log(error);
+    };
+
 
     const [registerStatusLabel, setRegisterStatusLabel] = React.useState(null);
 
@@ -103,6 +128,12 @@ function LoginSite() {
                 <Button variant="contained" onClick={() => SubmitLogin()} sx={{ ...InputFieldStyle }}>
                     Login
                 </Button>
+                <Typography variant="body2" align="center" sx={{...InputFieldStyle}}>
+                    OR
+                </Typography>
+                <div style={{...InputFieldStyle}}>
+                    <GoogleLogin onSuccess={OAuthSuccess} onError={OAuthError}  />
+                </div>
                 <Link href="./register" marginTop={2}>Create Account</Link>
                 <Link href="/resetPassword" >Forget your password?</Link>
             </Stack>
