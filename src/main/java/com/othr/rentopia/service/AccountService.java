@@ -10,11 +10,17 @@ public interface AccountService {
 
     public Account getAccount(Long accountId);
 
+    public Account getAccount(String email);
+
     public Account getAccountWithPassword(String email);
 
     public String getAccountName(Long accountId);
 
     public Location getLocation(Long accountId);
+
+    public String getEmail(Long accountId);
+
+    public Long getId(String email);
 
     public boolean emailExists(String email);
 

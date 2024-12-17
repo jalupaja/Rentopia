@@ -58,9 +58,9 @@ public class UserController {
 
     @GetMapping(path = "user/me", produces = "application/json")
     public @ResponseBody ResponseEntity<Account> GetAuthUser(Authentication authentication) {
-        Long userId = (Long) authentication.getPrincipal();
+        String email = (String) authentication.getPrincipal();
 
-        Account account = accountService.getAccount(userId);
+        Account account = accountService.getAccount(email);
         return new ResponseEntity<>(account, HttpStatus.OK);
     }
 

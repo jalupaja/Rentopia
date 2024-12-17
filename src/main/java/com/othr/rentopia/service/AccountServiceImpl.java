@@ -57,6 +57,23 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
     }
 
     @Override
+    public Account getAccount(String email) {
+        Account account = null;
+
+        String query = "SELECT a FROM Account a WHERE a.email = :email";
+        try {
+            account = entityManager
+                    .createQuery(query, Account.class)
+                    .setParameter("email", email)
+                    .getSingleResult();
+            account.setPassword(null);
+        } catch (NoResultException e) {
+        }
+
+        return account;
+    }
+
+    @Override
     public Account getAccountWithPassword(String email) {
         Account account = null;
 
@@ -86,6 +103,39 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
         }
 
         return location;
+    }
+
+    @Override
+    public String getEmail(Long accountId) {
+        String email = null;
+
+        String query = "SELECT a.email FROM Account a WHERE a.id = :accountId";
+        try {
+            email = entityManager
+                    .createQuery(query, String.class)
+                    .setParameter("accountId", accountId)
+                    .getSingleResult();
+        } catch (NoResultException e) {
+        }
+
+        return email;
+    }
+
+    @Override
+    public Long getId(String email) {
+        Long id = null;
+
+        String query = "SELECT a.id FROM Account a WHERE a.email = :email";
+        try {
+            id = entityManager
+                    .createQuery(query, Long.class)
+                    .setParameter("email", email)
+                    .getSingleResult();
+        } catch (NoResultException e) {
+        }
+
+        System.out.println("got id: " + id);
+        return id;
     }
 
     @Override
