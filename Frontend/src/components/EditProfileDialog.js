@@ -10,28 +10,38 @@ import * as React from 'react';
 import {useState} from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import UploadIcon from '@mui/icons-material/Upload';
+import FetchBackend from "../helper/BackendHelper";
 
-function EditProfileDialog({open, userData, handleEditDialogClose}) {
+function EditProfileDialog({open, userData, setUserData, handleEditDialogClose}) {
 
     const [errors, setErrors] = useState({});
     const [avatar, setAvatar] = useState(null);
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [description, setDescription] = useState('');
-    const [postCode, setPostCode] = useState('');
-    const [city, setCity] = useState('');
-    const [street, setStreet] = useState('');
-    const [houseNo, setHouseNo] = useState('');
-    const [country, setCountry] = useState('');
-    const [company, setCompany] = useState('');
+    const initialUserData = {
+        name: userData.name,
+        email: userData.email,
+        description: userData.description,
+        postCode: userData.location.postalCode,
+        city: userData.location.city,
+        street: userData.location.street,
+        houseNo: "",
+        country: userData.location.country,
+        company: userData.company
+    };
+
+    const [newUserData, setNewUserData] = useState(initialUserData);
+
+    const onChange = (e) => {
+        const {name, value} = e.target;
+        setNewUserData(prevState => ({...prevState, [name]: value}));
+    }
+
+    const clearFields = () => {
+        setNewUserData({...initialUserData});
+    }
 
     const handleDeleteAvatar = () => {
         setAvatar(null);
     };
-
-    const closeDialog = (event) => {
-        handleEditDialogClose();
-    }
 
     const handleAvatarChange = (e) => {
         const file = e.target.files[0];
@@ -40,16 +50,22 @@ function EditProfileDialog({open, userData, handleEditDialogClose}) {
         }
     };
 
+    const closeDialog = (event) => {
+        clearFields();
+        handleEditDialogClose();
+    }
+
     const handleSave = (event) => {
         event.preventDefault();
 
-        const newErrors = {};
+        FetchBackend('POST', 'user/update', newUserData)
+            .then(response => response.json())
+            .then(data => { console.log(data); setUserData(data) })
+            .catch((error) => {
+                console.log(error);
+            });
 
-        setErrors(newErrors);
-
-        if (!Object.values(newErrors).includes(true)) {
-            closeDialog();
-        }
+        closeDialog();
     }
 
     return (
@@ -86,20 +102,21 @@ function EditProfileDialog({open, userData, handleEditDialogClose}) {
                     </Box>
                     <Box display="flex" justifyContent={"space-between"}>
                         <TextField
-                            label="Name"
+                            label="name"
                             margin="normal"
-                            value={userData ? userData.name : undefined}
-                            onChange={(e) => setName(e.target.value)}
+                            name="name"
+                            value={newUserData.name}
+                            onChange={onChange}
                             sx={{width: "49%"}}
                         />
                     </Box>
                     <TextField
                         label="Email"
-                        type="email"
                         fullWidth
                         margin="normal"
-                        value={userData ? userData.email : undefined}
-                        onChange={(e) => setEmail(e.target.value)}
+                        name="email"
+                        value={newUserData.email}
+                        onChange={onChange}
                     />
 
                     <TextField
@@ -107,23 +124,26 @@ function EditProfileDialog({open, userData, handleEditDialogClose}) {
                         multiline
                         rows={4}
                         fullWidth
+                        name="description"
                         margin="normal"
-                        value={userData ? userData.description : undefined}
-                        onChange={(e) => setDescription(e.target.value)}
+                        value={newUserData.description}
+                        onChange={onChange}
                     />
                     <Box  display="flex" justifyContent={"space-between"}>
                         <TextField
-                            label="Company"
+                            disabled={userData.role === "USER"}
                             margin="normal"
-                            value={userData ? userData.company : undefined}
-                            onChange={(e) => setCompany(e.target.value)}
+                            name="company"
+                            value={newUserData.company}
+                            onChange={onChange}
                             sx={{width: "49%"}}
                         />
                         <TextField
                             label="Country"
                             margin="normal"
-                            value={userData ? userData.location.country : undefined}
-                            onChange={(e) => setCountry(e.target.value)}
+                            name="country"
+                            value={newUserData.country}
+                            onChange={onChange}
                             sx={{width: "49%"}}
                         />
                     </Box>
@@ -131,29 +151,33 @@ function EditProfileDialog({open, userData, handleEditDialogClose}) {
                         <TextField
                             label="Post Code"
                             margin="normal"
-                            value={userData ? userData.location.postalCode : undefined}
-                            onChange={(e) => setPostCode(e.target.value)}
+                            name="postCode"
+                            value={newUserData.postCode}
+                            onChange={onChange}
                             sx={{width: "29%"}}
                         />
                         <TextField
                             label="City"
                             margin="normal"
-                            value={userData ? userData.location.city : undefined}
-                            onChange={(e) => setCity(e.target.value)}
+                            name="city"
+                            value={newUserData.city}
+                            onChange={onChange}
                             sx={{width: "69%"}}
                         />
                         <TextField
                             label="Street"
                             margin="normal"
-                            value={userData ? userData.street : undefined}
-                            onChange={(e) => setStreet(e.target.value)}
+                            name="street"
+                            value={newUserData.street}
+                            onChange={onChange}
                             sx={{width: "79%"}}
                         />
                         <TextField
                             label="House No."
                             margin="normal"
-                            value={houseNo}
-                            onChange={(e) => setHouseNo(e.target.value)}
+                            name="houseNo"
+                            value={newUserData.houseNo}
+                            onChange={onChange}
                             sx={{width: "19%"}}
                         />
                     </Box>

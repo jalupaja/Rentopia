@@ -116,4 +116,37 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
 			System.err.println("ERROR removing Account with ID " + accountId + ": " + e.getMessage());
 		}
     }
+
+	@Override
+	@Transactional
+	public Account updateAccount(Account account) {
+		String query = "UPDATE Account a SET " +
+				"a.name = :name, " +
+				"a.email = :email, " +
+				"a.description = :description, " +
+				"a.location.postalCode = :postalCode, " +
+				"a.location.city = :city, " +
+				"a.location.street = :street, " +
+				"a.location.country = :country, " +
+				"a.company = :company " +
+				"WHERE a.id = :accountId";
+
+		try {
+			entityManager.createQuery(query)
+					.setParameter("name", account.getName())
+					.setParameter("email", account.getEmail())
+					.setParameter("description", account.getDescription())
+					.setParameter("postalCode", account.getLocation().getPostalCode())
+					.setParameter("city", account.getLocation().getCity())
+					.setParameter("street", account.getLocation().getStreet())
+					.setParameter("country", account.getLocation().getCountry())
+					.setParameter("company", account.getCompany())
+					.executeUpdate();
+
+		} catch (PersistenceException e) {
+			System.err.println("ERROR Update Account with ID " + account.getId() + ": " + e.getMessage());
+		}
+
+		return getAccount(account.getEmail());
+	}
 }

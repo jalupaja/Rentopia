@@ -163,6 +163,20 @@ public class DeviceController {
 		return new ResponseEntity<>(null, HttpStatus.NOT_IMPLEMENTED);
 	}
 
+	@GetMapping("/all/{ownerId}")
+	public ResponseEntity<List<Map<String, Object>>> getYourDevices(@PathVariable("ownerId") Long ownerId) {
+		List<Map<String, Object>> deviceData = new ArrayList<>();
+		List<Device> devices = deviceService.getDevicesByOwner(ownerId);
+
+		for (Device device : devices) {
+			if (checkAllowed(device)) {
+				deviceData.add(parseDevice(device));
+			}
+		}
+
+		return new ResponseEntity<>(deviceData, HttpStatus.OK);
+	}
+
 	@GetMapping("/bookmarks/all/{ownerId}")
 	public ResponseEntity<List<Map<String, Object>>> getBookmarks(@PathVariable("ownerId") Long ownerId) {
 		// TODO maybe move to AccountService. but need parseDeviceShort...
