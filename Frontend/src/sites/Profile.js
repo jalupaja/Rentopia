@@ -88,7 +88,7 @@ function ProfileSite() {
 
             FetchBackend('GET', '/all/' + ownerId, null)
                 .then(response => response.json())
-                .then(data => setBookmarkList(data))
+                .then(data => setDeviceList(data))
                 .catch(error => console.log(error))
 
             //TODO: add Device rent history
@@ -123,8 +123,12 @@ function ProfileSite() {
     }
 
     const handleRemoveBookmark = (id) => {
-        setBookmarkList(bookmarkList.filter(bookmark => bookmark.id !== id));
-        //TODO: DB Remove Bookmark
+        FetchBackend('POST', '/bookmarks/remove/' + id, null)
+            .then(response => response.json())
+            .then(data => { console.log(data); setBookmarkList(data) })
+            .catch((error) => {
+                console.log(error);
+            });
     }
 
     const handleDeleteTool = (id) => {
@@ -230,7 +234,7 @@ function ProfileSite() {
                                                 <DeviceListItem
                                                     DeviceName={"Insert Device Name here"}
                                                     DeviceId={index}
-                                                    handleRemoveBookmark={() => handleDeleteTool(index)}
+                                                    handleRemoveBookmark={() => handleRemoveBookmark(device.id)}
                                                     tabValue={tabValue}
                                                 />
                                             </div>))

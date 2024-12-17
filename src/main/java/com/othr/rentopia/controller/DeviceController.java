@@ -193,15 +193,23 @@ public class DeviceController {
 	}
 
 	@PostMapping("/bookmarks/remove/{deviceId}")
-	public ResponseEntity<String> removeBookmark(Authentication authentication,
+	public ResponseEntity<List<Map<String, Object>>> removeBookmark(Authentication authentication,
 			@PathVariable("deviceId") Long deviceId) {
 		// ResponseEntity<>(HttpStatus.FORBIDDEN);
+		List<Map<String, Object>> deviceData = new ArrayList<>();
 		Long ownerId = 1L;
 		// TODO Principal is currently user email
 		// ownerId = authentication.getPrincipal();
 
 		if (bookmarkService.removeBookmark(ownerId, deviceId)) {
-			return new ResponseEntity<>(null, HttpStatus.OK);
+			List<Device> devices = bookmarkService.getBookmarkedDevices(ownerId);
+			for (Device device : devices) {
+				if (checkAllowed(device)) {
+					deviceData.add(parseDeviceShort(device));
+				}
+			}
+
+			return new ResponseEntity<>(deviceData, HttpStatus.OK);
 		} else {
 			System.out.println("Failed removing Bookmark from " + ownerId + " for " + deviceId);
 			return new ResponseEntity<>(null, HttpStatus.OK);
