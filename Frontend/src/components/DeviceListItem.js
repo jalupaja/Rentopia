@@ -3,6 +3,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import BookmarkIcon from '@mui/icons-material/Bookmark';
 import * as React from "react";
+import {useNavigate} from "react-router-dom";
 
 function DeviceListItem({DeviceName="Test Tool",
                             DeviceId=null,
@@ -11,6 +12,8 @@ function DeviceListItem({DeviceName="Test Tool",
                             handleDeleteTool,
                             tabValue})
 {
+    const navigate = useNavigate();
+
     return (
         <div>
             <ListItem onClick={() => navigate("/device/" + DeviceId)}>
