@@ -24,33 +24,25 @@ public class UserController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-
     @Autowired
-    private AccountServiceImpl customUserDetails;
+    private AccountService accountService;
 
-    @Autowired
-    private AccountService userService;
-
-    @PostMapping(value="login", produces="application/json")
+    @PostMapping(value = "login", produces = "application/json")
     public @ResponseBody ResponseEntity<AuthResponse> processLoginRequest(@RequestBody String loginRequest) {
         JSONObject request = new JSONObject(loginRequest);
 
         String email = (String) request.get("useremail");
         String password = (String) request.get("userpassword");
 
-        Account userDetails = customUserDetails.getAccount(email);
+        Account userDetails = accountService.getAccountWithPassword(email);
 
         AuthResponse authResponse = new AuthResponse();
-        if(userDetails == null) {
+        if (userDetails == null || !passwordEncoder.matches(password, userDetails.getPassword())) {
             authResponse.setStatus(false);
-            authResponse.setMessage("Invalid username and password");
-        }
-        else if(!passwordEncoder.matches(password,userDetails.getPassword())) {
-            authResponse.setStatus(false);
-            authResponse.setMessage("Invalid password");
-        }
-        else{
-            Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails,null,userDetails.getAuthorities());
+            authResponse.setMessage("Invalid username or password");
+        } else {
+            Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null,
+                    userDetails.getAuthorities());
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
@@ -64,32 +56,30 @@ public class UserController {
         return new ResponseEntity<AuthResponse>(authResponse, HttpStatus.OK);
     }
 
-    @GetMapping(path="user/me", produces="application/json")
-    public @ResponseBody ResponseEntity<Account> GetAuthUser(Authentication authentication){
-        String username = (String) authentication.getPrincipal();
+    @GetMapping(path = "user/me", produces = "application/json")
+    public @ResponseBody ResponseEntity<Account> GetAuthUser(Authentication authentication) {
+        String email = (String) authentication.getPrincipal();
 
-        Account account = customUserDetails.loadUserByUsername(username);
-        account.removeNonPublicProperties();
-        return new ResponseEntity<>( account, HttpStatus.OK);
+        Account account = accountService.getAccount(email);
+        return new ResponseEntity<>(account, HttpStatus.OK);
     }
 
-    @PostMapping(path="resetPasswordMail",  produces="application/json")
-    public @ResponseBody boolean SendResetPasswordMail(@RequestBody String userMail){
-        //todo:
+    @PostMapping(path = "resetPasswordMail", produces = "application/json")
+    public @ResponseBody boolean SendResetPasswordMail(@RequestBody String userMail) {
+        // todo:
 
         return true;
     }
 
-    @PostMapping(path="register", produces="application/json")
-    public @ResponseBody String RegisterUser(@RequestBody String userInfo){
+    @PostMapping(path = "register", produces = "application/json")
+    public @ResponseBody String RegisterUser(@RequestBody String userInfo) {
         JSONObject request = new JSONObject(userInfo);
         JSONObject response = new JSONObject();
 
         String email = (String) request.get("email");
-        Account account = customUserDetails.getAccount(email);
-        if(account != null){
-            response.put("registrationSuccess",false);
-            response.put("reason","There is already an account for this email");
+        if (accountService.emailExists(email)) {
+            response.put("registrationSuccess", false);
+            response.put("reason", "There is already an account for this email");
             return response.toString();
         }
 
@@ -109,18 +99,17 @@ public class UserController {
         newAccount.setPassword(passwordEncoder.encode(password));
 
         String usageReason = (String) request.get("usage");
-        if(usageReason.equals("private")){
+        if (usageReason.equals("private")) {
             newAccount.setRole(Account.Role.USER);
-        }
-        else if(usageReason.equals("commercial")){
+        } else if (usageReason.equals("commercial")) {
             newAccount.setRole(Account.Role.COMPANY);
             String companyName = (String) request.get("company");
             newAccount.setCompany(companyName);
         }
 
-        customUserDetails.saveAccount(newAccount);
+        accountService.saveAccount(newAccount);
 
-        response.put("registrationSuccess",true);
+        response.put("registrationSuccess", true);
         return response.toString();
     }
 }

@@ -225,7 +225,8 @@ function RegisterSite() {
                             <TextField sx={{ ...InputFieldStyle }} name="email" label="Email" variant="outlined" required
                                 onChange={handleChange} value={userInfo.email.value} error={userInfo.email.error}
                                 helperText={userInfo.email.errorMessage} />
-                            <TextField sx={{ ...InputFieldStyle }} required
+                            <TextField sx={{ ...InputFieldStyle }}
+                                required
                                 type={showPassword ? 'text' : 'password'}
                                 InputProps={{
                                     endAdornment: (
@@ -247,7 +248,8 @@ function RegisterSite() {
                         </Grid2>
                         <Grid2 size={6} sx={{ ...GridCellStyle }}>
                             <TextField sx={{ ...InputFieldStyle }}
-                                type={showPassword ? 'text' : 'password'} required
+                                type={showPassword ? 'text' : 'password'}
+                                required
                                 InputProps={{
                                     endAdornment: (
                                         <InputAdornment position="end">

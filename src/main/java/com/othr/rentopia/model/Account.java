@@ -50,13 +50,10 @@ public class Account implements UserDetails {
 
     @Column
     private String company;
+
     public enum Role {
         USER,
         COMPANY,
         ADMIN
-    }
-
-    public void removeNonPublicProperties(){
-        this.password = null;
     }
 }

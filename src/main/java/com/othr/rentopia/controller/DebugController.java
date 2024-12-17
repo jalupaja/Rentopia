@@ -58,9 +58,6 @@ public class DebugController {
         account.setLocation(location);
         accountService.saveAccount(account);
 
-        // get id
-        account = accountService.getAccount("test@xample.com");
-
         String[] titles = { "Screw Drivers", "Laptop", "Portable Speaker", "3D Printer", "Projector",
                 "Drones with Camera",
                 "GoPro Camera", "Electric Guitar", "Laser Cutter", "Smartphone", "Tablet", "Smartwatch",
