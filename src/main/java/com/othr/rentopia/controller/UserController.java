@@ -25,7 +25,7 @@ public class UserController {
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    private AccountService customUserDetails;
+    private AccountService accountService;
 
     @PostMapping(value = "login", produces = "application/json")
     public @ResponseBody ResponseEntity<AuthResponse> processLoginRequest(@RequestBody String loginRequest) {
@@ -34,7 +34,7 @@ public class UserController {
         String email = (String) request.get("useremail");
         String password = (String) request.get("userpassword");
 
-        UserDetails userDetails = customUserDetails.getAccountWithPassword(email);
+        Account userDetails = accountService.getAccountWithPassword(email);
 
         AuthResponse authResponse = new AuthResponse();
         if (userDetails == null || !passwordEncoder.matches(password, userDetails.getPassword())) {
@@ -60,7 +60,7 @@ public class UserController {
     public @ResponseBody ResponseEntity<Account> GetAuthUser(Authentication authentication) {
         Long userId = (Long) authentication.getPrincipal();
 
-        Account account = customUserDetails.getAccount(userId);
+        Account account = accountService.getAccount(userId);
         return new ResponseEntity<>(account, HttpStatus.OK);
     }
 
@@ -77,10 +77,9 @@ public class UserController {
         JSONObject response = new JSONObject();
 
         String email = (String) request.get("email");
-        Account account = customUserDetails.getAccount(email);
-        if(account != null){
-            response.put("registrationSuccess",false);
-            response.put("reason","There is already an account for this email");
+        if (accountService.emailExists(email)) {
+            response.put("registrationSuccess", false);
+            response.put("reason", "There is already an account for this email");
             return response.toString();
         }
 
@@ -109,7 +108,7 @@ public class UserController {
             newAccount.setCompany(companyName);
         }
 
-        customUserDetails.saveAccount(newAccount);
+        accountService.saveAccount(newAccount);
 
         response.put("registrationSuccess",true);
         return response.toString();
