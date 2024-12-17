@@ -11,14 +11,9 @@ function DeviceListItem({DeviceName="Test Tool",
                             handleDeleteTool,
                             tabValue})
 {
-
-    const handleOpenDevice = () => {
-        //TODO: go to new Site
-    }
-
     return (
         <div>
-            <ListItem onClick={handleOpenDevice}>
+            <ListItem onClick={() => navigate("/device/" + DeviceId)}>
                 <ListItemAvatar></ListItemAvatar>
                 <ListItemText primary={DeviceName} />
                 {tabValue === 0 ? (

@@ -132,8 +132,12 @@ function ProfileSite() {
     }
 
     const handleDeleteTool = (id) => {
-        setDeviceList(deviceList.filter(device => device.id !== id));
-        //TODO: DB Remove Tool
+        FetchBackend('POST', '/remove/' + id, null)
+            .then(response => response.json())
+            .then(data => { console.log(data);})
+            .catch((error) => {
+                console.log(error);
+            });
     }
 
     return (
@@ -217,6 +221,7 @@ function ProfileSite() {
                                                     DeviceId={device.id}
                                                     handleOpenDeviceEdit={() => handleAddDialogOpen(device)}
                                                     handleAddDialogClose={() => handleAddDialogClose(index)}
+                                                    handleDeleteTool={() => handleDeleteTool(device.id)}
                                                     tabValue={tabValue}
                                                 />
                                             </div>))
