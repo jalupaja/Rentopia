@@ -64,15 +64,15 @@ public class UserController {
         return new ResponseEntity<>(account, HttpStatus.OK);
     }
 
-    @PostMapping(path="resetPasswordMail",  produces="application/json")
-    public @ResponseBody boolean SendResetPasswordMail(@RequestBody String userMail){
-        //todo:
+    @PostMapping(path = "resetPasswordMail", produces = "application/json")
+    public @ResponseBody boolean SendResetPasswordMail(@RequestBody String userMail) {
+        // todo:
 
         return true;
     }
 
-    @PostMapping(path="register", produces="application/json")
-    public @ResponseBody String RegisterUser(@RequestBody String userInfo){
+    @PostMapping(path = "register", produces = "application/json")
+    public @ResponseBody String RegisterUser(@RequestBody String userInfo) {
         JSONObject request = new JSONObject(userInfo);
         JSONObject response = new JSONObject();
 
@@ -99,10 +99,9 @@ public class UserController {
         newAccount.setPassword(passwordEncoder.encode(password));
 
         String usageReason = (String) request.get("usage");
-        if(usageReason.equals("private")){
+        if (usageReason.equals("private")) {
             newAccount.setRole(Account.Role.USER);
-        }
-        else if(usageReason.equals("commercial")){
+        } else if (usageReason.equals("commercial")) {
             newAccount.setRole(Account.Role.COMPANY);
             String companyName = (String) request.get("company");
             newAccount.setCompany(companyName);
@@ -110,7 +109,7 @@ public class UserController {
 
         accountService.saveAccount(newAccount);
 
-        response.put("registrationSuccess",true);
+        response.put("registrationSuccess", true);
         return response.toString();
     }
 }
