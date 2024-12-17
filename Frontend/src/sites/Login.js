@@ -19,6 +19,7 @@ import Appbar from "../components/Appbar.js";
 import ResponsePopup from "../components/ResponsePopup.js";
 import { GoogleLogin } from '@react-oauth/google';
 import { useTranslation } from "react-i18next";
+import { GoogleLogin } from '@react-oauth/google';
 
 function LoginSite() {
     const navigation = useNavigate();
@@ -84,8 +85,6 @@ function LoginSite() {
     };
     const OAuthError = (error) => {
         setRegisterStatusLabel(<ResponsePopup message={"An error occurred. Please try again."} reason={"error"} />);
-    };
-
 
     const [registerStatusLabel, setRegisterStatusLabel] = React.useState(null);
 
