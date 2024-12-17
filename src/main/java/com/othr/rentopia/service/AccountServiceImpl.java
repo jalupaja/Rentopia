@@ -134,7 +134,6 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
         } catch (NoResultException e) {
         }
 
-        System.out.println("got id: " + id);
         return id;
     }
 
