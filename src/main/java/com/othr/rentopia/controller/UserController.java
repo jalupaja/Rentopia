@@ -61,38 +61,66 @@ public class UserController {
     }
 
     @PostMapping(value="loginOAuth", produces="application/json")
-    public String loginSuccess(@RequestBody String loginRequest) {
+    public ResponseEntity<AuthResponse> loginSuccess(@RequestBody String loginRequest) {
         // login via Google OAuth
-        JSONObject request = new JSONObject(loginRequest);
+        // JSONObject request = new JSONObject(loginRequest);
 
-        String token = (String) request.get("token");
+        // String googleToken = (String) request.get("token");
 
         AuthResponse authResponse = new AuthResponse();
+        // String email;
+        // try {
+        //     // verify token with google
+        //     email = googleOAuthService.getEmail(googleToken);
+        //     System.out.println("Google Authenticated: " + email);
+        // } catch (Exception e) {
+        //     authResponse.setStatus(false);
+        //     authResponse.setMessage("Invalid Login");
+        //     System.out.println("Invalid token: " + e.getMessage());
+        //     return new ResponseEntity<AuthResponse>(authResponse, HttpStatus.BAD_REQUEST);
+        // }
+        String email = "no@mail.no";
 
-        try {
-            String email = googleOAuthService.getEmail(token);
-            System.out.println("GOOGLE LOGIN: " + email);
+        Account account = accountService.getAccountWithPassword(email);
+        if(account == null){
+            // Account doesn't exist -> create new account
 
-            // TODO not gonna work
-            // Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails,null,userDetails.getAuthorities());
+            account = new Account();
+            account.setEmail(email);
+            account.setName(email.substring(0, email.indexOf('@')));
+            account.setPassword("");
+            account.setRole(Account.Role.USER);
 
-            // SecurityContextHolder.getContext().setAuthentication(authentication);
+            Location location = new Location();
+            location.setCity("");
+            location.setPostalCode("");
+            location.setStreet("");
+            location.setCountry("");
+            account.setLocation(location);
 
-            // String token = JwtProvider.generateToken(authentication);
-
-            authResponse.setMessage("Login success");
-            // authResponse.setJwt(token);
-            authResponse.setStatus(true);
-
-        } catch (Exception e) {
-            authResponse.setStatus(false);
-            authResponse.setMessage("Invalid Login");
-            System.out.println("Invalid token: " + e.getMessage());
+            accountService.saveAccount(account);
         }
 
+        if ("".equals(account.getPassword())) {
+            // Account existed (or was just created) and was created using Google Login (Password == "") -> login
+            Authentication authentication = new UsernamePasswordAuthenticationToken(account, null,
+                    account.getAuthorities());
 
-        // model.addAttribute("user", principal.getAttributes());
-        return "login-success";  // Display user info on the view
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            String token = JwtProvider.generateToken(authentication, account.getId());
+
+            authResponse.setMessage("Login success");
+            authResponse.setJwt(token);
+            authResponse.setStatus(true);
+
+            return new ResponseEntity<AuthResponse>(authResponse, HttpStatus.OK);
+        } else {
+            // Account exists but wasn't created using Google Login -> ERROR
+            authResponse.setStatus(false);
+            authResponse.setMessage("Account wasn't created using Google");
+            return new ResponseEntity<AuthResponse>(authResponse, HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping(path="user/me", produces="application/json")

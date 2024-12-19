@@ -62,26 +62,26 @@ function LoginSite() {
 
 
     const OAuthSuccess = (response) => {
-        console.log("OAUTH SUC");
-        console.log(response);
-
         const loginData = {
             token: response.credential,
         };
 
         FetchBackend('POST', 'loginOAuth', loginData)
-            .then(response => {
-                console.log('Login successful:', response);
-
-                // window.location.href = '/login-success'; // TODO
+            .then(response => response.json())
+            .then(data => {
+                if (data.status) {
+                    Cookies.set(JWT_TOKEN, data.jwt);
+                    navigation("/");
+                } else {
+                    setRegisterStatusLabel(<ResponsePopup message={"Account wasn't created using Google"} reason={"error"} />);
+                }
             })
             .catch(error => {
-                console.error('Login failed:', error);
+                setRegisterStatusLabel(<ResponsePopup message={"An error occurred. Please try again."} reason={"error"} />);
             });
     };
     const OAuthError = (error) => {
-        console.log("OAUTH ERR");
-        console.log(error);
+        setRegisterStatusLabel(<ResponsePopup message={"An error occurred. Please try again."} reason={"error"} />);
     };
 
 
