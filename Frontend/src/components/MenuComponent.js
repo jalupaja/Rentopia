@@ -22,7 +22,7 @@ function MenuComponent({authUser}){
     let adminPanel = null;
     if(authUser.role==="ADMIN"){
         adminPanel =
-            <MenuItem onClick={handleClose}>
+            <MenuItem onClick={() => navigate("/helpCenter/ADM")}>
             <ListItemIcon>
                 <AdminPanelSettingsIcon fontSize="small" />
             </ListItemIcon>

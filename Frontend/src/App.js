@@ -19,6 +19,7 @@ function App() {
                     <Route path="register" element={<RegisterSite />} />
                     <Route path="profilePage" element={<ProfileSite />} />
                     <Route path="helpCenter" element={<HelpCenterSite/>}/>
+                    <Route path="helpCenter/ADM" element={<HelpCenterSite adm={true}/>}/>
                 </Route>
                 <Route path="device" >
                     <Route index element={<Navigate to="/" />} /> // return to the Home page

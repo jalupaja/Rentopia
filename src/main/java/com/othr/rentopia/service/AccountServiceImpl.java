@@ -51,6 +51,7 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
                     .getSingleResult();
             account.setPassword(null);
         } catch (NoResultException e) {
+			System.out.println("Selecting user threw exception: "+e.getMessage());
         }
 
         return account;
@@ -68,10 +69,27 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
                     .getSingleResult();
             account.setPassword(null);
         } catch (NoResultException e) {
+			System.out.println("Selecting user threw exception: " + e.getMessage());
         }
 
         return account;
     }
+
+	@Override
+	public Account getAccountById(Long userId) {
+		Account account = null;
+
+		String query = "SELECT a FROM Account a WHERE a.id = :userId";
+		try {
+			account = entityManager
+					.createQuery(query, Account.class)
+					.setParameter("userId", userId)
+					.getSingleResult();
+		} catch (NoResultException e) {
+		}
+
+		return account;
+	}
 
     @Override
     public Account getAccountWithPassword(String email) {

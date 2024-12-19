@@ -12,8 +12,10 @@ public class Ticket {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
-    private Long ownerID;
+    @ManyToOne
+    @JoinColumn(name="owner", referencedColumnName = "id")
+    private Account owner;
+
     @Column(nullable = false)
     private Status status;
 

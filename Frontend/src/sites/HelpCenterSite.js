@@ -3,20 +3,30 @@ import * as React from "react";
 import {Box, Typography, Grid2, Button, ListItem, List, ListItemButton, ListItemText} from "@mui/material";
 import Footer from "../components/Footer.js";
 import FetchBackend, {
-    GetAuthUser,
+    GetAuthUser, JWTTokenExists,
     ReturnHomeWhenLoggedOut
 } from "../helper/BackendHelper.js";
 import TicketDetail from "../components/TicketDetailComponent.js";
 import ResponsePopup from "../components/ResponsePopup.js";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
+import {FrameStyle} from "./Register.js";
 
-function HelpCenterSite(){
+function HelpCenterSite({adm = false}){
     ReturnHomeWhenLoggedOut();
 
-    let authUser = GetAuthUser();
+    const authUser = GetAuthUser();
 
     const [tickets, setTickets] = React.useState([]);
     const [ticketDetailComponent, setTicketDetailComponent] = React.useState(null);
+    const [statusLabel, setStatusLabel] = React.useState(null);
+    const [isAdminPage, setIsAdminPage] = React.useState(false);
+
+
+    //init
+    useEffect(()=>{
+        setIsAdminPage(adm);
+        fetchTickets();
+    }, [authUser, adm]);
 
     const fetchTickets = () => {
         if(authUser != null){
@@ -31,7 +41,20 @@ function HelpCenterSite(){
     };
     const handleTicketSelection = (index) => {
         if(tickets != null && index >= 0 && index < tickets.length){
-            setTicketDetailComponent(<TicketDetail ticket={tickets[index]}
+            const handleChange = (e) =>{
+                const {name, value} = e.target;
+                const newTickets = tickets;
+
+                newTickets[index][name] = value;
+                setTickets(newTickets);
+
+                setTicketDetailComponent(<TicketDetail ticketInfo={tickets[index]}
+                                                       handleChange={handleChange}
+                                                       handleTicketAction={handleTicketAction}/>);
+            };
+
+            setTicketDetailComponent(<TicketDetail ticketInfo={tickets[index]}
+                                                   handleChange={handleChange}
                                                    handleTicketAction={handleTicketAction}/>);
         }
         else{
@@ -76,16 +99,18 @@ function HelpCenterSite(){
         }
     };
 
-    const [statusLabel, setStatusLabel] = React.useState(null);
 
-    useEffect(()=>{
-        fetchTickets();
-    }, authUser);
-    return (<Box>
+
+    //adm
+    return (<Box sx = {{ ...FrameStyle}}>
         <Appbar authUser={authUser}/>
-            <Grid2 container>
-                <Grid2 size={3} sx={{padding : "1%"}}>
-                    <Button variant="contained" onClick={addNewTicket}>New Ticket</Button>
+            <Grid2 container sx={{width : "100%", height : "100%"}}>
+                <Grid2 size={3} sx={{padding : "1%"}}>{
+                    isAdminPage ?
+                        <Box/>
+                        :
+                        <Button variant="contained" onClick={addNewTicket}>New Ticket</Button>
+                }
                     <List>
                         {tickets.map((ticket, index) => (
                             <ListItemButton
@@ -106,6 +131,7 @@ function HelpCenterSite(){
                 </Grid2>
             </Grid2>
 
+            <Box sx={{flex : "auto"}}/>
         <Footer/>
     </Box>
     );

@@ -15,7 +15,6 @@ import java.util.List;
 public class TicketServiceImpl implements TicketService {
     @PersistenceContext
     private EntityManager entityManager;
-
     @Override
     public List<Ticket> getAllTicketsByStatus(Ticket.Status status) {
         return null;
@@ -25,7 +24,7 @@ public class TicketServiceImpl implements TicketService {
     public List<Ticket> getTicketByUserId(Long userId) {
         List<Ticket> userTickets = new ArrayList<>();
 
-        String query = "SELECT t FROM Ticket t WHERE t.ownerID = :userId";
+        String query = "SELECT t FROM Ticket t WHERE t.owner.id = :userId";
         try {
             userTickets = entityManager
                     .createQuery(query, Ticket.class)
