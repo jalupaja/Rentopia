@@ -49,8 +49,7 @@ function LoginSite() {
                 if (data.status) {
                     Cookies.set(JWT_TOKEN, data.jwt);
                     navigation("/");
-                }
-                else {
+                } else {
                     setRegisterStatusLabel(<ResponsePopup message={"Wrong email or password!"} reason={"error"} />);
                 }
 

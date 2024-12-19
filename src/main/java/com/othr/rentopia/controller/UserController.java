@@ -63,23 +63,22 @@ public class UserController {
     @PostMapping(value="loginOAuth", produces="application/json")
     public ResponseEntity<AuthResponse> loginSuccess(@RequestBody String loginRequest) {
         // login via Google OAuth
-        // JSONObject request = new JSONObject(loginRequest);
+        JSONObject request = new JSONObject(loginRequest);
 
-        // String googleToken = (String) request.get("token");
+        String googleToken = (String) request.get("token");
 
         AuthResponse authResponse = new AuthResponse();
-        // String email;
-        // try {
-        //     // verify token with google
-        //     email = googleOAuthService.getEmail(googleToken);
-        //     System.out.println("Google Authenticated: " + email);
-        // } catch (Exception e) {
-        //     authResponse.setStatus(false);
-        //     authResponse.setMessage("Invalid Login");
-        //     System.out.println("Invalid token: " + e.getMessage());
-        //     return new ResponseEntity<AuthResponse>(authResponse, HttpStatus.BAD_REQUEST);
-        // }
-        String email = "no@mail.no";
+        String email;
+        try {
+            // verify token with google
+            email = googleOAuthService.getEmail(googleToken);
+            System.out.println("Google Authenticated: " + email);
+        } catch (Exception e) {
+            authResponse.setStatus(false);
+            authResponse.setMessage("Invalid Login");
+            System.out.println("Invalid token: " + e.getMessage());
+            return new ResponseEntity<AuthResponse>(authResponse, HttpStatus.BAD_REQUEST);
+        }
 
         Account account = accountService.getAccountWithPassword(email);
         if(account == null){
@@ -151,7 +150,6 @@ public class UserController {
         }
 
         Account newAccount = new Account();
-        newAccount.setEmail((String) request.get("email"));
         newAccount.setName((String) request.get("name"));
         newAccount.setEmail((String) request.get("email"));
 
