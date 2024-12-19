@@ -55,6 +55,23 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
 	return account;
     }
 
+	@Override
+	public Account getAccountById(Long userId) {
+		// TODO private!!!. no password info for normal getAccount
+		Account account = null;
+
+		String query = "SELECT a FROM Account a WHERE a.id = :userId";
+		try {
+			account = entityManager
+					.createQuery(query, Account.class)
+					.setParameter("userId", userId)
+					.getSingleResult();
+		} catch (NoResultException e) {
+			System.out.println("Selecting user threw exception: "+e.getMessage());
+		}
+
+		return account;
+	}
     public String getAccountName(Long accountId) {
         String query = "SELECT a.name FROM Account a WHERE a.id = :accountId";
         try {

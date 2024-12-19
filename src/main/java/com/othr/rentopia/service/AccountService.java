@@ -10,4 +10,5 @@ public interface AccountService {
     public String getAccountName(Long accountId);
     public boolean checkPassword(String email, String password);
     public void removeAccount(Long accountId);
+    public Account getAccountById(Long userId);
 }

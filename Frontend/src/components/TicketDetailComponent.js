@@ -5,14 +5,14 @@ import FetchBackend from "../helper/BackendHelper.js";
 import ResponsePopup from "./ResponsePopup.js";
 import {useEffect} from "react";
 
-function TicketDetail({ticket, handleTicketAction}){
+function TicketDetail({ticketInfo, handleChange, handleTicketAction}){
     if(!handleTicketAction){
         handleTicketAction = (e) => {};
     }
 
-    const editable = ticket.status !== "new";
-
     const [titleError, setTitleError] = React.useState(false);
+    const editable = ticketInfo.status !== "new";
+
     const validate = () => {
         let error = !ticketInfo.title || ticketInfo.title.length === 0;
         setTitleError(error);
@@ -22,18 +22,6 @@ function TicketDetail({ticket, handleTicketAction}){
 
         return true;
     }
-    const [ticketInfo, setTicketInfo] = React.useState(ticket);
-    useEffect(() => {
-        setTicketInfo(ticket);
-    },[]);
-
-    const handleChange = (e) => {
-        const {name, value} = e.target;
-        setTicketInfo({
-            ...ticketInfo,
-            [name] : value
-        });
-    };
 
     const handleSubmitTicket = () => {
         if(validate()){
@@ -101,7 +89,7 @@ function TicketDetail({ticket, handleTicketAction}){
     return (
         <Box sx={{padding:"1%"}}>
             <Typography variant="button" gutterBottom variant="h4">
-                Ticket {ticketInfo.id ? "#"+ticket.id : ""}
+                Ticket {ticketInfo.id ? "#"+ticketInfo.id : ""}
             </Typography>
             <Typography variant="button" gutterBottom variant="h5">
                 Status: {ticketInfo.status}

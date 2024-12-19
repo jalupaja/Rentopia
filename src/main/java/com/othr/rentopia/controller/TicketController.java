@@ -1,7 +1,9 @@
 package com.othr.rentopia.controller;
 
+import com.othr.rentopia.model.Account;
 import com.othr.rentopia.model.Device;
 import com.othr.rentopia.model.Ticket;
+import com.othr.rentopia.service.AccountServiceImpl;
 import com.othr.rentopia.service.TicketServiceImpl;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,9 @@ public class TicketController {
 
     @Autowired
     private TicketServiceImpl ticketService;
+
+    @Autowired
+    private AccountServiceImpl accountService;
 
     @GetMapping(path="all/{userId}", produces="application/json")
     public ResponseEntity<List<Ticket>> getUserTickets(@PathVariable("userId") Long userId) {
@@ -53,7 +58,12 @@ public class TicketController {
         newTicket.setTitle((String)request.get("title"));
         newTicket.setDetails((String)request.get("details"));
         Integer ownerId = (Integer) request.get("ownerId");
-        newTicket.setOwnerID(ownerId.longValue());
+
+        Account user = accountService.getAccountById(ownerId.longValue());
+        if(user == null){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        newTicket.setOwner(user);
 
         String category = (String) request.get("category");
         newTicket.setCategory(Ticket.Category.valueOf(category.toLowerCase()));
