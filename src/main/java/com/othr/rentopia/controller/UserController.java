@@ -138,15 +138,15 @@ public class UserController {
     }
 
     @PostMapping(path = "register", produces = "application/json")
-    public @ResponseBody String RegisterUser(@RequestBody String userInfo) {
+    public @ResponseBody ResponseEntity<AuthResponse> RegisterUser(@RequestBody String userInfo) {
         JSONObject request = new JSONObject(userInfo);
-        JSONObject response = new JSONObject();
+        AuthResponse authResponse = new AuthResponse();
 
         String email = (String) request.get("email");
         if (accountService.emailExists(email)) {
-            response.put("registrationSuccess", false);
-            response.put("reason", "There is already an account for this email");
-            return response.toString();
+            authResponse.setStatus(false);
+            authResponse.setMessage("There is already an account for this email");
+            return new ResponseEntity<AuthResponse>(authResponse, HttpStatus.UNAUTHORIZED);
         }
 
         Account newAccount = new Account();
@@ -174,7 +174,15 @@ public class UserController {
 
         accountService.saveAccount(newAccount);
 
-        response.put("registrationSuccess", true);
-        return response.toString();
+        authResponse.setStatus(true);
+
+        Authentication authentication = new UsernamePasswordAuthenticationToken(newAccount, null,
+                newAccount.getAuthorities());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String token = JwtProvider.generateToken(authentication, newAccount.getId());
+
+        authResponse.setMessage("Registration successful");
+        authResponse.setJwt(token);
+        return new ResponseEntity<AuthResponse>(authResponse, HttpStatus.OK);
     }
 }
