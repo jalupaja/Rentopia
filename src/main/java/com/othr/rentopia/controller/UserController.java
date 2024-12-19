@@ -44,6 +44,7 @@ public class UserController {
         if (userDetails == null || !passwordEncoder.matches(password, userDetails.getPassword())) {
             authResponse.setStatus(false);
             authResponse.setMessage("Invalid username or password");
+            return new ResponseEntity<AuthResponse>(authResponse, HttpStatus.UNAUTHORIZED);
         } else {
             Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null,
                     userDetails.getAuthorities());
@@ -55,9 +56,8 @@ public class UserController {
             authResponse.setMessage("Login success");
             authResponse.setJwt(token);
             authResponse.setStatus(true);
+            return new ResponseEntity<AuthResponse>(authResponse, HttpStatus.OK);
         }
-
-        return new ResponseEntity<AuthResponse>(authResponse, HttpStatus.OK);
     }
 
     @PostMapping(value="loginOAuth", produces="application/json")
@@ -77,7 +77,7 @@ public class UserController {
             authResponse.setStatus(false);
             authResponse.setMessage("Invalid Login");
             System.out.println("Invalid token: " + e.getMessage());
-            return new ResponseEntity<AuthResponse>(authResponse, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<AuthResponse>(authResponse, HttpStatus.UNAUTHORIZED);
         }
 
         Account account = accountService.getAccountWithPassword(email);
@@ -118,7 +118,7 @@ public class UserController {
             // Account exists but wasn't created using Google Login -> ERROR
             authResponse.setStatus(false);
             authResponse.setMessage("Account wasn't created using Google");
-            return new ResponseEntity<AuthResponse>(authResponse, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<AuthResponse>(authResponse, HttpStatus.UNAUTHORIZED);
         }
     }
 
