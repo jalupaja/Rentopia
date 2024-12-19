@@ -162,7 +162,6 @@ function RegisterSite() {
                 .then(response => response.json())
                 .then(data => {
                     if (data.status) {
-                        setRegisterStatusLabel(<ResponsePopup reason={"success"} message={"Registration successful"} />);
                         setRegisterStatusLabel(<ResponsePopup reason={"success"} message={t("succ_register")} />);
                         Cookies.set(JWT_TOKEN, data.jwt);
                         navigation("/");
