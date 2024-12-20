@@ -12,6 +12,9 @@ import com.othr.rentopia.service.BookmarkService;
 import com.othr.rentopia.service.RatingService;
 import com.othr.rentopia.service.DeviceImageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,7 +25,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/debug")
 @CrossOrigin
-public class DebugController {
+public class DebugController implements ApplicationRunner {
 
     @Autowired
     private AccountService accountService;
@@ -38,6 +41,9 @@ public class DebugController {
 
     @Autowired
     private DeviceImageService deviceImageService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @GetMapping(value = "db")
     public void dbFiller() {
@@ -140,5 +146,59 @@ public class DebugController {
         r3.setDeviceId(2L);
         r3.setRating(4);
         ratingService.saveRating(r3);
+    }
+
+    @Override
+    public void run(ApplicationArguments args) throws Exception {
+        if(accountService.emailExists("lisa.becker@gmail.com")){
+            return;
+        }
+
+        //normal user
+        Account normalUser = new Account();
+        normalUser.setEmail("lisa.becker@gmail.com");
+        normalUser.setName("Lisa Becker");
+
+        Location location = new Location();
+        location.setCity("Regensburg");
+        location.setPostalCode("93057");
+        location.setStreet("Ludwigstraße 11");
+        location.setCountry("Germany");
+        normalUser.setLocation(location);
+        normalUser.setPassword(passwordEncoder.encode("lisaPassword"));
+        normalUser.setRole(Account.Role.USER);
+
+        //companyUser
+        Account companyUser = new Account();
+        companyUser.setEmail("jonas.fischer@gmail.com");
+        companyUser.setName("Jonas Fischer");
+
+        Location companyLocation = new Location();
+        companyLocation.setCity("Regensburg");
+        companyLocation.setPostalCode("93059");
+        companyLocation.setStreet("Bahnhofsstraße 3");
+        companyLocation.setCountry("Germany");
+        companyUser.setLocation(companyLocation);
+        companyUser.setPassword(passwordEncoder.encode("jonasPassword"));
+        companyUser.setCompany("Life Bag Gbr");
+        companyUser.setRole(Account.Role.COMPANY);
+
+        //admin user
+        Account admin = new Account();
+        admin.setEmail("emilia.weber@gmail.com");
+        admin.setName("Emilia Weber");
+
+        Location adminLocation = new Location();
+        adminLocation.setCity("Regensburg");
+        adminLocation.setPostalCode("93055");
+        adminLocation.setStreet("Kirchplatz 19");
+        adminLocation.setCountry("Germany");
+        admin.setLocation(adminLocation);
+        admin.setPassword(passwordEncoder.encode("emiliaPassword"));
+        admin.setRole(Account.Role.ADMIN);
+
+        accountService.saveAccount(admin);
+        accountService.saveAccount(companyUser);
+        accountService.saveAccount(normalUser);
     }
 }

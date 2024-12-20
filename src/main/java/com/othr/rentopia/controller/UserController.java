@@ -86,7 +86,6 @@ public class UserController {
         Account newAccount = new Account();
         newAccount.setEmail((String) request.get("email"));
         newAccount.setName((String) request.get("name"));
-        newAccount.setEmail((String) request.get("email"));
 
         Location location = new Location();
         location.setCity((String) request.get("city"));
