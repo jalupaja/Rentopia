@@ -16,6 +16,9 @@ public class Finance {
     private Long accountId;
 
     @Column(nullable = false)
+    private Long deviceId;
+
+    @Column(nullable = false)
     private Double amount;
 
     @Column(nullable = false)
