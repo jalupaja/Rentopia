@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.othr.rentopia.api.EmailService;
+
 import java.util.List;
 
 @RestController
@@ -38,6 +40,9 @@ public class DebugController {
 
     @Autowired
     private DeviceImageService deviceImageService;
+
+    @Autowired
+    private EmailService emailService;
 
     @GetMapping(value = "db")
     public void dbFiller() {
