@@ -53,6 +53,9 @@ public class DebugController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private EmailService emailService;
+
     @GetMapping(value = "db")
     public void dbFiller() {
         // This function will fill the database for testing and showcasing purposes
