@@ -73,8 +73,9 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
+    @Transactional
     public void updateTicket(Ticket ticket) {
-        //entityManager.merge(account);
+        entityManager.merge(ticket);
     }
 
     @Override
