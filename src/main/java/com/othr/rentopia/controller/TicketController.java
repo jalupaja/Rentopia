@@ -54,10 +54,11 @@ public class TicketController {
             //todo ?
         }
 
-        newTicket.setStatus(Ticket.Status.Open);
+        newTicket.setStatus(Ticket.Status.OPEN);
         newTicket.setTitle((String)request.get("title"));
         newTicket.setDetails((String)request.get("details"));
-        Integer ownerId = (Integer) request.get("ownerId");
+        JSONObject owner = (JSONObject) request.get("owner");
+        Integer ownerId = (Integer) owner.get("id");
 
         Account user = accountService.getAccountById(ownerId.longValue());
         if(user == null){
@@ -75,5 +76,28 @@ public class TicketController {
         }
 
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping(path="/status/{status}", produces="application/json")
+    public String getTicketsByStatus(@PathVariable("status") String status) {
+        Ticket.Status ticketStatus;
+        List<Ticket> tickets = new ArrayList<>();
+        JSONObject response = new JSONObject();
+        response.put("success", false);
+        response.put("tickets", tickets);
+
+        if(status != null && !status.isEmpty()){
+            try{
+                ticketStatus = Ticket.Status.valueOf(status.toUpperCase());
+            } catch(IllegalArgumentException e){
+                return response.toString();
+            }
+
+            tickets = ticketService.getAllTicketsByStatus(ticketStatus);
+        }
+
+        response.put("success", true);
+        response.put("tickets", tickets);
+        return response.toString();
     }
 }

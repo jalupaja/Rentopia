@@ -5,7 +5,7 @@ import FetchBackend from "../helper/BackendHelper.js";
 import ResponsePopup from "./ResponsePopup.js";
 import {useEffect} from "react";
 
-function TicketDetail({ticketInfo, handleChange, handleTicketAction}){
+function TicketDetail({ticketInfo, handleChange, handleTicketAction, adm = false}){
     if(!handleTicketAction){
         handleTicketAction = (e) => {};
     }
@@ -86,10 +86,16 @@ function TicketDetail({ticketInfo, handleChange, handleTicketAction}){
             });
     };
 
+    const handleCloseTicket = (e) => {
+        console.log(e);
+    }
     return (
         <Box sx={{padding:"1%"}}>
             <Typography variant="button" gutterBottom variant="h4">
                 Ticket {ticketInfo.id ? "#"+ticketInfo.id : ""}
+            </Typography>
+            <Typography variant="button" gutterBottom variant="h5">
+                Owner: {ticketInfo.owner.name}
             </Typography>
             <Typography variant="button" gutterBottom variant="h5">
                 Status: {ticketInfo.status}
@@ -120,8 +126,13 @@ function TicketDetail({ticketInfo, handleChange, handleTicketAction}){
                     onClick={handleSubmitTicket}>
                     Submit Ticket
                 </Button>
-                <Button variant="contained" onClick={handleDeleteTicket}>
+                <Button variant="contained" sx={{marginRight : "1%"}} onClick={handleDeleteTicket}>
                     Delete Ticket
+                </Button>
+                <Button variant="contained" sx={{marginRight : "1%", color: "secondary"}}
+                        style={{display: adm ? "inherit": "none"}}
+                        onClick={handleSubmitTicket}>
+                    Close Ticket
                 </Button>
             </Grid2>
         </Box>
