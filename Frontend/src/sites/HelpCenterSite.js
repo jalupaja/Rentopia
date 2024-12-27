@@ -129,7 +129,7 @@ function HelpCenterSite({adm = false}){
         }
 
         if(e.fetch){
-            fetchTickets();
+            fetchTickets(selectedStatus);
             setTicketDetailComponent(null);
         }
     };
@@ -146,6 +146,7 @@ function HelpCenterSite({adm = false}){
     useEffect(()=>{
         setIsAdminPage(adm);
         setTickets([]);
+        setStatusLabel(null);
         fetchTickets();
         setTicketDetailComponent(null);
     }, [authUser, adm]);

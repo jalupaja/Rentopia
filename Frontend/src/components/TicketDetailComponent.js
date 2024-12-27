@@ -1,4 +1,4 @@
-import {Typography, Box, MenuItem, FormControl, InputLabel, Select, TextField, Button,Grid2} from "@mui/material";
+import {Typography, Divider, Box, MenuItem, FormControl, InputLabel, Select, TextField, Button,Grid2} from "@mui/material";
 import * as React from "react";
 import {InputFieldStyle} from "../sites/Register.js";
 import FetchBackend from "../helper/BackendHelper.js";
@@ -76,6 +76,13 @@ function TicketDetail({ticketInfo, handleChange, handleTicketAction, adm = false
                         fetch : true
                     });
                 }
+                else{
+                    handleTicketAction({
+                        success : false,
+                        message : "An error occured, please try again",
+                        fetch : false
+                    });
+                }
             })
             .catch(e =>{
                 handleTicketAction({
@@ -87,7 +94,38 @@ function TicketDetail({ticketInfo, handleChange, handleTicketAction, adm = false
     };
 
     const handleCloseTicket = (e) => {
-        console.log(e);
+        handleTicketAction({
+            success : false,
+            message : null,
+            fetch : false
+        });
+
+        ticketInfo.status = "closed";
+        FetchBackend("POST", "ticket/"+ticketInfo.id, ticketInfo)
+            .then(response => response.json())
+            .then(data => {
+                if(data.success){
+                    handleTicketAction({
+                        success : true,
+                        message : "Closing ticket was successful",
+                        fetch : true
+                    });
+                }
+                else{
+                    handleTicketAction({
+                        success : false,
+                        message : "An error occured, please try again",
+                        fetch : false
+                    });
+                }
+            })
+            .catch(e => {
+                handleTicketAction({
+                    success : false,
+                    message : "An error occured, please try again",
+                    fetch : false
+                });
+            });
     }
     return (
         <Box sx={{padding:"1%"}}>
@@ -120,6 +158,21 @@ function TicketDetail({ticketInfo, handleChange, handleTicketAction, adm = false
                 multiline rows={6}
                 disabled={editable} margin="normal"
             />
+            {
+                adm ?
+                    <Box >
+                        <Divider/>
+                        <TextField
+                            fullWidth
+                            name="adminResponse" value={ticketInfo.adminResponse} onChange={handleChange}
+                            label="Response"
+                            multiline rows={6}
+                            disabled={ticketInfo.status === "CLOSED"} margin="normal"
+                        />
+                    </Box>
+                :
+                <Box/>
+            }
             <Grid2 container sx={{marginTop : "1%"}}>
                 <Button variant="contained" sx={{marginRight : "1%"}}
                     style={{display: ticketInfo.status==="new" ? "inherit": "none"}}
@@ -131,7 +184,7 @@ function TicketDetail({ticketInfo, handleChange, handleTicketAction, adm = false
                 </Button>
                 <Button variant="contained" sx={{marginRight : "1%", color: "secondary"}}
                         style={{display: adm ? "inherit": "none"}}
-                        onClick={handleSubmitTicket}>
+                        onClick={handleCloseTicket}>
                     Close Ticket
                 </Button>
             </Grid2>
