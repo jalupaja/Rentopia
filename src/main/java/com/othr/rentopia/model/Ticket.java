@@ -41,6 +41,6 @@ public class Ticket {
     }
 
     public enum Status {
-        New, Open, Closed
+        NEW, OPEN, CLOSED
     }
 }

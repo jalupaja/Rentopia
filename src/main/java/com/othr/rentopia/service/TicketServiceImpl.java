@@ -17,7 +17,19 @@ public class TicketServiceImpl implements TicketService {
     private EntityManager entityManager;
     @Override
     public List<Ticket> getAllTicketsByStatus(Ticket.Status status) {
-        return null;
+        List<Ticket> tickets = new ArrayList<>();
+
+        String query = "SELECT t FROM Ticket t WHERE t.status = :status";
+        try {
+            tickets = entityManager
+                    .createQuery(query, Ticket.class)
+                    .setParameter("status", status)
+                    .getResultList();
+        } catch (NoResultException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return tickets;
     }
 
     @Override
