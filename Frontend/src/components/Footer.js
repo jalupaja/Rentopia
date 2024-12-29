@@ -1,11 +1,6 @@
 import {Box, Container, Typography} from "@mui/material";
 import Grid from "@mui/material/Grid2";
 
-const FooterStyle = {
-    position : "fixed",
-    bottom: "0",
-    paddingBottom : "o"
-}
 
 function Footer(){
     return (
@@ -15,7 +10,8 @@ function Footer(){
                 height: "auto",
                 paddingTop: "1rem",
                 paddingBottom: "0",
-                backgroundColor : "lightblue"
+                backgroundColor : "lightblue",
+                position : "relative",
             }}
         >
             <Container maxWidth="lg">
