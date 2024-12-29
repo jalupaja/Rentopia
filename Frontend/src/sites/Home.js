@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 import * as React from 'react';
 import Appbar from "../components/Appbar.js";
 import { FrameStyle } from "./Register";
+import {GetAuthUser} from "../helper/BackendHelper";
 
 const DeviceGrid = styled(Grid2)(({ theme }) => ({
     margin: '2% 10%'
@@ -19,22 +20,12 @@ const DeviceGrid = styled(Grid2)(({ theme }) => ({
 
 function HomeSite() {
     const navigate = useNavigate();
-    const [authUser, setAuthUser] = useState(null);
     const [devices, setDevices] = useState([]);
     const [paginatedDevices, setPaginatedDevices] = useState([]);
     const [page, setPage] = useState(1);
     const devicesPPage = 8;
 
-    useEffect(() => {
-        if (JWTTokenExists()) {
-            FetchBackend('GET', 'user/me', null)
-                .then(response => response.json())
-                .then(data => {
-                    setAuthUser(data);
-                })
-                .catch(error => console.log(error))
-        }
-    }, []);
+    let authUser = GetAuthUser();
 
     useEffect(() => {
         FetchBackend('GET', 'device/short/all', null)

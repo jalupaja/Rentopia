@@ -1,6 +1,6 @@
 import Cookie from 'js-cookie';
 import {json, useNavigate} from "react-router-dom";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 
 export const JWT_TOKEN = "jwtToken";
 
@@ -11,7 +11,22 @@ export function JWTTokenExists(){
 
 export function Logout(){
     Cookie.remove(JWT_TOKEN);
-    console.log(Cookie.get(JWT_TOKEN))
+}
+
+export function GetAuthUser(){
+    const [authUser, setAuthUser] = useState(null);
+    useEffect(() =>{
+        if(JWTTokenExists()){
+            FetchBackend('GET', 'user/me',null)
+                .then(response => response.json())
+                .then(data => {
+                    setAuthUser(data);
+                })
+                .catch(error => console.log(error))
+        }
+    }, []);
+
+    return authUser;
 }
 
 export function ReturnHomeWhenLoggedIn(){
@@ -22,6 +37,17 @@ export function ReturnHomeWhenLoggedIn(){
         }
     }, [])
 }
+
+//todo remove
+export function ReturnHomeWhenLoggedOut(){
+    const navigation = useNavigate();
+    useEffect(() => {
+        if(!JWTTokenExists()){
+            navigation("/");
+        }
+    }, [])
+}
+
 function FetchBackend(httpMethod, uri, json){
     const requestOptions = {
         method: httpMethod,
@@ -39,7 +65,6 @@ function FetchBackend(httpMethod, uri, json){
         requestOptions.body = JSON.stringify(json)
     }
 
-    console.log(requestOptions);
     return fetch('http://127.0.0.1:8080/api/'+uri, requestOptions);
 }
 

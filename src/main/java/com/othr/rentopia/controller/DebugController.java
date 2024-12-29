@@ -57,7 +57,6 @@ public class DebugController {
         Location l1 = new Location();
         l1.setStreet("Bismarckplatz 1");
         l1.setCity("Regensburg");
-        l1.setState("Bavaria");
         l1.setCountry("Germany");
         l1.setPostalCode("93047");
 
@@ -73,7 +72,6 @@ public class DebugController {
         Location l2 = new Location();
         l2.setStreet("Domplatz 5");
         l2.setCity("Regensburg");
-        l2.setState("Bavaria");
         l2.setCountry("Germany");
         l2.setPostalCode("93047");
 
@@ -89,7 +87,6 @@ public class DebugController {
         Location l3 = new Location();
         l3.setStreet("Seybothstraße 2");
         l3.setCity("Regensburg");
-        l3.setState("Bavaria");
         l3.setCountry("Germany");
         l3.setPostalCode("93053");
 
@@ -105,7 +102,6 @@ public class DebugController {
         Location l4 = new Location();
         l4.setStreet("Galgenbergstraße 30");
         l4.setCity("Regensburg");
-        l4.setState("Bavaria");
         l4.setCountry("Germany");
         l4.setPostalCode("93053");
 
