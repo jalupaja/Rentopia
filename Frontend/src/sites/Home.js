@@ -5,7 +5,7 @@ import {
     CardMedia,
     styled, Typography, Grid2, Pagination
 } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import Footer from "../components/Footer.js";
 import FetchBackend, {GetAuthUser, JWTTokenExists} from "../helper/BackendHelper.js";
 import { useEffect, useState } from "react";
@@ -56,7 +56,7 @@ function HomeSite() {
                     {paginatedDevices.map((device, index) => (
                         <Grid2 key={index}>
                             <Card sx={{ width: 300, boxShadow: 3 }} >
-                                <CardActionArea onClick={() => navigate("/device/" + device.id)} >
+                                <CardActionArea component={Link} to={"/device/" + device.id} >
                                     <CardMedia
                                         component="img"
                                         alt={device.title}
