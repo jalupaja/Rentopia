@@ -4,6 +4,7 @@ import * as React from "react";
 import {PersonAdd, Settings} from "@mui/icons-material";
 import HelpCenterIcon from '@mui/icons-material/HelpCenter';
 import LogoutIcon from '@mui/icons-material/Logout';
+import ChatIcon from '@mui/icons-material/Chat';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import {useNavigate} from "react-router-dom";
 function MenuComponent({authUser}){
@@ -83,6 +84,13 @@ function MenuComponent({authUser}){
     >
         <MenuItem onClick={() => navigate("/profilePage")}>
             <Avatar /> Profile
+        </MenuItem>
+        <Divider />
+        <MenuItem onClick={() => navigate("/chat")}>
+            <ListItemIcon>
+                <ChatIcon fontSize="small" />
+            </ListItemIcon>
+            Chat
         </MenuItem>
         <Divider />
         <MenuItem onClick={() => navigate("/helpCenter")}>
