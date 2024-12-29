@@ -46,7 +46,7 @@ public class ChatServiceImpl implements ChatService {
 		List<Chat> userChats = new ArrayList<>();
 
 		String query = "SELECT c FROM Chat c" +
-				" WHERE c.firstAccount = :userId OR c.secondAccount = :userId";
+				" WHERE c.firstAccount.id = :userId OR c.secondAccount.id = :userId";
 		try {
 			userChats = entityManager
 					.createQuery(query, Chat.class)

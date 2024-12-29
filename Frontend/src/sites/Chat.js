@@ -1,32 +1,99 @@
-import {Box, Button, FormControl, Grid2, InputLabel, List, ListItemButton, MenuItem, Select} from "@mui/material";
+import {
+    Box,
+    Button,
+    FormControl,
+    Grid2,
+    InputLabel,
+    List,
+    ListItemButton,
+    ListItemIcon,
+    MenuItem,
+    Select, Typography
+} from "@mui/material";
 import {FrameStyle} from "./Register";
 import Appbar from "../components/Appbar";
 import * as React from "react";
-import {GetAuthUser, ReturnHomeWhenLoggedOut} from "../helper/BackendHelper";
+import FetchBackend, {GetAuthUser, ReturnHomeWhenLoggedOut} from "../helper/BackendHelper";
 import Footer from "../components/Footer";
+import PersonIcon from '@mui/icons-material/Person';
+import StoreIcon from '@mui/icons-material/Store';
+import {useEffect} from "react";
+import ResponsePopup from "../components/ResponsePopup";
 
 function ChatSite(){
     ReturnHomeWhenLoggedOut();
 
     const authUser = GetAuthUser();
 
+    const [chats, setChats] = React.useState([]);
+    const [statusLabel, setStatusLabel] = React.useState(null);
+
+    const fetchChats = () => {
+        if(authUser != null){
+            FetchBackend("GET",  "chat/all/"+authUser.id, null)
+                .then(response => response.json())
+                .then(data => setChats(data))
+                .catch(e => {
+                    setStatusLabel(<ResponsePopup message={"Chats are currently not available. Please try again"}
+                                                  reason={"error"}/>);
+                });
+        }
+
+    }
+
+    const getOtherUser = (chat) => {
+        if(authUser){
+            if(chat.firstAccount.id !== authUser.id){
+                return chat.firstAccount;
+            }
+            else if(chat.secondAccount.id !== authUser.id){
+                return chat.secondAccount;
+            }
+            else{
+                throw "User id in chat error";
+            }
+        }
+
+        return {};
+    };
+
+    const handleChatSelection = (e) => {
+
+    };
+
+    useEffect(()=>{
+        fetchChats();
+    }, [authUser]);
     return(
         <Box sx = {{ ...FrameStyle}}>
             <Appbar authUser={authUser}/>
             <Grid2 container sx={{width : "100%", height : "auto"}}>
-                <Grid2 size={3} sx={{padding : "1%"}}>
-                    Addbutton
-                    <List>
-                        <ListItemButton>test 2
-                        </ListItemButton>                        <ListItemButton>test 1
-                        </ListItemButton>
 
+                <Grid2 size={3} sx={{padding : "1%"}}>
+                    <Typography gutterBottom variant="h6" >
+                        Your Chats
+                    </Typography>
+                    <List>
+                        {
+                            chats.map((chat, index) => (
+                                <ListItemButton
+                                    key={index} onClick={handleChatSelection}>
+                                    <ListItemIcon>
+                                        {getOtherUser(chat).role !== "COMPANY"
+                                            ? <PersonIcon fontSize="small" />
+                                            : <StoreIcon fontSize="small" />
+                                        }
+                                    </ListItemIcon>
+                                    {getOtherUser(chat).name}
+                                </ListItemButton>
+                            ))
+                        }
                     </List>
 
                 </Grid2>
                 <Grid2 size={9}>
                     <Grid2>
-                        statuslabel
+                        {statusLabel}TODO:
                     </Grid2>
                     <Grid2>
                         chat
