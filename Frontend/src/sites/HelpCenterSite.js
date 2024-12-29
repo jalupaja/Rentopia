@@ -151,7 +151,7 @@ function HelpCenterSite({adm = false}){
     }, [authUser, adm]);
     return (<Box sx = {{ ...FrameStyle}}>
         <Appbar authUser={authUser}/>
-            <Grid2 container sx={{width : "100%", height : "100%"}}>
+            <Grid2 container sx={{width : "100%", height : "auto"}}>
                 <Grid2 size={3} sx={{padding : "1%"}}>{
                     isAdminPage ?
                         <FormControl fullWidth sx={{marginTop : "5%"}}>
