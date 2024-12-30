@@ -16,6 +16,7 @@ import Footer from "../components/Footer.js";
 import FetchBackend, { JWTTokenExists } from "../helper/BackendHelper.js";
 import { useEffect, useState } from "react";
 import Appbar from "../components/Appbar.js";
+import { useTranslation } from "react-i18next";
 
 const boxStyle = {
     mt: 4,
@@ -29,6 +30,7 @@ function DeviceSite() {
     const navigate = useNavigate();
     const { deviceId } = useParams();
     const [authUser, setAuthUser] = useState(null);
+    const { t } = useTranslation("", { keyPrefix: "device" });
     const [device, setDevice] = useState({
         "owner": "",
         "images": [],
@@ -188,13 +190,13 @@ function DeviceSite() {
                                                 variant="contained" color="primary" fullWidth sx={{ mr: 2 }}
                                                 onClick={btnBookmark}
                                             >
-                                                {device.isBookmarked ? ("Bookmarked") : ("Add to Bookmarks")}
+                                                {device.isBookmarked ? (t("bookmarked")) : t("add_bookmark")}
                                             </Button>
                                             <Button
                                                 variant="contained" color="secondary" fullWidth
                                             >
                                                 { /* TODO onClick={() => RENT} */}
-                                                Rent Now
+                                                {t("rent")}
                                             </Button>
                                         </Box>
 
