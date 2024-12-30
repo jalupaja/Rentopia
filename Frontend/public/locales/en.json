@@ -1,6 +1,7 @@
 {
     "home": {},
     "appbar": {
+        "logo": "Rentopia Logo",
         "search": "Search…",
         "location": "City or Postal Code",
         "all_categories": "All Categories",

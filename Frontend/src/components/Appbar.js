@@ -99,10 +99,32 @@ function Appbar({ showLogin = true, authUser = null, searchVisibility = 'hidden'
         <Box sx={{ height: 'auto', width: '100%', display: 'block' }}>
             <AppBar position="static">
                 <Toolbar>
-                    <Box sx={{ height: '63px', width: '63px', borderRadius: 25, overflow: 'hidden', cursor: 'pointer' }}>
-
-                        <img src={Logo} onClick={() => navigate("/")} alt={"Rentopia Logo"} />
                     <LanguageSelector />
+                    <Box
+                        sx={{
+                            width: 63,
+                            height: 63,
+                            margin: 1,
+                            borderRadius: '50%',
+                            overflow: 'hidden',
+                            cursor: 'pointer',
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            flexShrink: 0,
+                        }}
+                    >
+                        <img
+                            src={Logo}
+                            onClick={() => navigate("/")}
+                            alt={t("logo")}
+                            style={{
+                                width: '100%',
+                                height: '100%',
+                                objectFit: 'cover',
+                                borderRadius: '50%', // Ensure the image remains round
+                            }}
+                        />
                     </Box>
                     <FormControl sx={{ marginRight: 0, marginLeft: '7%', width: '150px', visibility: searchVisibility }} size="small">
                         <StyledSelect
@@ -135,7 +157,7 @@ function Appbar({ showLogin = true, authUser = null, searchVisibility = 'hidden'
                     {loginButton}
                 </Toolbar>
             </AppBar>
-        </Box>
+        </Box >
     )
 }
 
