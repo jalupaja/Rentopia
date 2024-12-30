@@ -12,6 +12,7 @@ function LanguageSelector() {
         { code: 'de', name: 'Deutsch', flag: '🇩🇪' },
         { code: 'fr', name: 'Français', flag: '🇫🇷' },
         { code: 'es', name: 'Español', flag: '🇪🇸' },
+        { code: 'kl', name: 'Klingon', flag: '🖖️' }, // tlhIngan Hol
     ];
 
     const currentLanguage = languages.find((lang) => lang.code === i18n.language) || languages[0];

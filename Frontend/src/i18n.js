@@ -10,7 +10,7 @@ i18n
     .init({
         fallbackLng: "en",
         debug: true,
-        supportedLngs: ["en", "de", "fr", "es"],
+        supportedLngs: ["en", "de", "fr", "es", "kl"],
         detection: {
             order: ["localStorage"],
             caches: ["localStorage"],
