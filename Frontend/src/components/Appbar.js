@@ -7,6 +7,7 @@ import Logo from "../image/RentopiaLogo64.jpg";
 import { useNavigate, Link } from "react-router-dom";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import MenuComponent from "./MenuComponent.js";
+import LanguageSelector from "./LanguageSelector.js";
 import { useTranslation } from "react-i18next";
 import { Logout } from "../helper/BackendHelper.js"
 
@@ -101,6 +102,7 @@ function Appbar({ showLogin = true, authUser = null, searchVisibility = 'hidden'
                     <Box sx={{ height: '63px', width: '63px', borderRadius: 25, overflow: 'hidden', cursor: 'pointer' }}>
 
                         <img src={Logo} onClick={() => navigate("/")} alt={"Rentopia Logo"} />
+                    <LanguageSelector />
                     </Box>
                     <FormControl sx={{ marginRight: 0, marginLeft: '7%', width: '150px', visibility: searchVisibility }} size="small">
                         <StyledSelect
