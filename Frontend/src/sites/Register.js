@@ -112,7 +112,7 @@ function RegisterSite() {
             errorMessage: ' '
         }
     };
-    const { t } = useTranslation("", { keyPrefix: "profile" });
+    const { t } = useTranslation("", { keyPrefix: "register" });
 
     //register logic
     const [userInfo, setUserInfo] = React.useState(defaultUserInfo);
