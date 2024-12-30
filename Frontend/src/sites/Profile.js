@@ -19,6 +19,7 @@ import HandymanIcon from '@mui/icons-material/Handyman';
 import AddDeviceDialog from "../components/AddDeviceDialog";
 import EditProfileDialog from "../components/EditProfileDialog";
 import PropTypes from "prop-types";
+import { useTranslation } from "react-i18next";
 
 const Item = styled(Paper)(({ theme }) => ({
     padding: theme.spacing(1),
@@ -71,6 +72,7 @@ function ProfileSite() {
     const [deviceList, setDeviceList] = React.useState([]);
     const [bookmarkList, setBookmarkList] = React.useState([]);
     const [historyList, setHistoryList] = React.useState([]);
+    const { t } = useTranslation("", { keyPrefix: "profile" });
 
     const handleAddDialogOpen = (name) => {
         setOName(name);
@@ -113,19 +115,19 @@ function ProfileSite() {
                             <Item sx={{ boxShadow: 3, display: 'flex', height: 'min-content', maxHeight: 'min-content' }}>
                                 <Avatar
                                     sx={{ width: 100, height: 100, margin: '24px' }}
-                                    alt="User"
+                                    alt={t("user")}
                                 />
                                 <Box>
                                     <Input
                                         fullWidth
                                         disabled
-                                        defaultValue="Name"
+                                        defaultValue={t("name")}
                                         sx={{ alignSelf: 'center', margin: '24px 0 12px 0' }}
                                     />
                                     <Input
                                         fullWidth
                                         disabled
-                                        defaultValue="Prename"
+                                        defaultValue={t("prename")}
                                         sx={{ alignSelf: 'center', margin: '12px 0 12px 0' }}
                                     />
                                 </Box>
@@ -133,19 +135,20 @@ function ProfileSite() {
                                     <Input
                                         fullWidth
                                         disabled
-                                        defaultValue="Company"
+                                        defaultValue={t("company")}
                                         sx={{ alignSelf: 'center', margin: '24px 0 12px 0' }}
                                     />
                                     <Input
                                         fullWidth
                                         disabled
-                                        defaultValue="Email"
+                                        defaultValue={t("email")}
                                         sx={{ alignSelf: 'center', margin: '12px 0 12px 0' }}
                                     />
                                     <Button
                                         variant={"contained"}
                                         onClick={handleEditDialogOpen}
-                                        sx={{ float: "right" }}>Edit Profile
+                                        sx={{ float: "right" }}>
+                                        {t("edit_profile")}
                                     </Button>
                                 </Box>
                             </Item>
@@ -162,12 +165,12 @@ function ProfileSite() {
                             >
                                 <Tabs value={tabValue}
                                     onChange={handleTabChange}
-                                    aria-label="Profile Tabs"
+                                    aria-label={t("profile_tabs")}
                                     sx={{ width: '100%' }}
                                 >
-                                    <Tab icon={<HandymanIcon />} label="Your Tools" {...a11yProps(0)} />
-                                    <Tab icon={<BookmarksIcon />} label="Bookmarks"  {...a11yProps(1)} />
-                                    <Tab icon={<HistoryIcon />} label="Rent Histroy" {...a11yProps(1)} />
+                                    <Tab icon={<HandymanIcon />} label={t("your_tools")} {...a11yProps(0)} />
+                                    <Tab icon={<BookmarksIcon />} label={t("bookmarks")}  {...a11yProps(1)} />
+                                    <Tab icon={<HistoryIcon />} label={t("rent_history")} {...a11yProps(1)} />
                                 </Tabs>
                                 <CustomTabPanel value={tabValue} index={0}>
                                     <List sx={{ overflow: 'auto', height: '50vh', width: '90%' }}>
@@ -175,9 +178,9 @@ function ProfileSite() {
                                             //*Your Tools*//
                                             <div>
                                                 <DeviceListItem
-                                                    DeviceName={"Insert Device Name here"}
+                                                    DeviceName={t("insert_device")}
                                                     DeviceId={index}
-                                                    handleOpenDeviceEdit={() => handleAddDialogOpen("Tool Nr " + index)}
+                                                    handleOpenDeviceEdit={() => handleAddDialogOpen(t("tool_nr") + index)}
                                                     handleAddDialogClose={() => handleAddDialogClose(index)}
                                                     tabValue={tabValue}
                                                 />
@@ -194,7 +197,7 @@ function ProfileSite() {
                                             //*Bookmarks*//
                                             <div>
                                                 <DeviceListItem
-                                                    DeviceName={"Insert Device Name here"}
+                                                    DeviceName={t("insert_device")}
                                                     DeviceId={index}
                                                     handleRemoveBookmark={() => handleDeleteTool(index)}
                                                     tabValue={tabValue}
@@ -212,7 +215,7 @@ function ProfileSite() {
                                             //*Rent Tools*//
                                             <div>
                                                 <DeviceListItem
-                                                    DeviceName={"Insert Device Name here"}
+                                                    DeviceName={t("insert_device")}
                                                     DeviceId={index}
                                                     tabValue={tabValue}
                                                 />

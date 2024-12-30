@@ -1,0 +1,86 @@
+{
+    "home": {},
+    "appbar": {
+        "search": "Search…",
+        "location": "City or Postal Code",
+        "all_categories": "All Categories",
+        "tools": "Tools",
+        "media": "Media",
+        "home": "Home",
+        "sign_in": "Sign in"
+    },
+    "device": {
+        "bookmarked": "Bookmarked",
+        "add_bookmark": "Add to Bookmarks",
+        "rent": "Rent Now"
+    },
+    "login": {
+        "error_password": "Wrong email or password!",
+        "error_unknown": "An error occurred. Please try again.",
+        "welcome": "Welcome to Rentopia",
+        "email": "Email",
+        "password": "Password",
+        "hide_password": "hide the password",
+        "display_password": "display the password",
+        "login": "Login",
+        "create_account": "Create Account",
+        "forgot_password": "Forgot your password?"
+    },
+    "register": {
+        "error_identical": "Passwords are not identical",
+        "succ_register": "Registration successful",
+        "error_unknown": "An error occurred. Please try again.",
+        "error_empty": " cannot be empty",
+        "private": "private",
+        "commercial": "commercial",
+        "company_name": "Company Name",
+        "name": "Name",
+        "email": "Email",
+        "password": "Password",
+        "text": "Text",
+        "hide_password": "hide the password",
+        "display_password": "display the password",
+        "street": "Street",
+        "postal_code": "Postal code",
+        "city": "City",
+        "country": "City",
+        "create_account": "Create Account",
+        "login": "Login"
+    },
+    "forgotpassword": {
+        "error_mail": "Sending Mail was not successful. Please try again.",
+        "succ_mail": "Send mail succeeded. Please look at your mail.",
+        "forgot_password": "Forgot your password?",
+        "write_mail": "Type in your email for resetting your password:",
+        "send_mail": "Send Email"
+    },
+    "profile": {
+        "user": "User",
+        "name": "Name",
+        "prename": "Prename",
+        "company": "Company",
+        "email": "Email",
+        "edit_profile": "Edit Profile",
+        "profile_tabs": "Profile Tabs",
+        "your_tools": "Your Tools",
+        "bookmarks": "Bookmarks",
+        "rent_history": "Rent History",
+        "insert_device": "Insert Device Name here",
+        "tool_nr": "Tool Nr "
+    },
+    "helpcenter": {
+        "error_unavailable": "Help Center is currently not available. Please try again",
+        "status": "Status",
+        "status_open": "Open",
+        "status_closed": "Closed",
+        "new_ticket": "New Ticket"
+    },
+    "profile_menu": {
+        "admin_tickesystem": "ADM Ticket System",
+        "account_settings": "Account settings",
+        "profile": "Profile",
+        "ticketsystem": "Help Center",
+        "logout": "Logout",
+        "settings": "Settings"
+    }
+}
