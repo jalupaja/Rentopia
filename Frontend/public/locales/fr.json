@@ -1,0 +1,91 @@
+{
+    "home": {},
+    "appbar": {
+        "logo": "Logo Rentopia",
+        "search": "Rechercher…",
+        "location": "Ville ou code postal",
+        "all_categories": "Toutes les catégories",
+        "tools": "Outils",
+        "media": "Médias",
+        "home": "Accueil",
+        "sign_in": "Se connecter"
+    },
+    "device": {
+        "bookmarked": "Enregistré",
+        "add_bookmark": "Ajouter aux favoris",
+        "rent": "Louer maintenant"
+    },
+    "login": {
+        "error_password": "Email ou mot de passe incorrect!",
+        "error_unknown": "Une erreur s'est produite. Veuillez réessayer.",
+        "welcome": "Bienvenue sur Rentopia",
+        "email": "E-mail",
+        "password": "Mot de passe",
+        "hide_password": "masquer le mot de passe",
+        "display_password": "afficher le mot de passe",
+        "login": "Se connecter",
+        "create_account": "Créer un compte",
+        "forgot_password": "Mot de passe oublié?"
+    },
+    "register": {
+        "error_identical": "Les mots de passe ne sont pas identiques",
+        "succ_register": "Inscription réussie",
+        "error_unknown": "Une erreur s'est produite. Veuillez réessayer.",
+        "error_empty": " ne peut pas être vide",
+        "private": "privé",
+        "commercial": "commercial",
+        "company_name": "Nom de l'entreprise",
+        "name": "Nom",
+        "email": "E-mail",
+        "password": "Mot de passe",
+        "text": "Texte",
+        "hide_password": "masquer le mot de passe",
+        "display_password": "afficher le mot de passe",
+        "street": "Rue",
+        "postal_code": "Code postal",
+        "city": "Ville",
+        "country": "Pays",
+        "create_account": "Créer un compte",
+        "login": "Se connecter"
+    },
+    "forgotpassword": {
+        "error_mail": "L'envoi de l'email a échoué. Veuillez réessayer.",
+        "succ_mail": "E-mail envoyé avec succès. Veuillez vérifier votre boîte mail.",
+        "forgot_password": "Mot de passe oublié?",
+        "write_mail": "Entrez votre e-mail pour réinitialiser votre mot de passe:",
+        "send_mail": "Envoyer un e-mail"
+    },
+    "profile": {
+        "user": "Utilisateur",
+        "name": "Nom",
+        "prename": "Prénom",
+        "company": "Entreprise",
+        "email": "E-mail",
+        "edit_profile": "Modifier le profil",
+        "profile_tabs": "Onglets de profil",
+        "your_tools": "Vos outils",
+        "bookmarks": "Favoris",
+        "rent_history": "Historique des locations",
+        "insert_device": "Entrez le nom de l'appareil ici",
+        "tool_nr": "Outil Nr "
+    },
+    "helpcenter": {
+        "error_unavailable": "Le centre d'aide est actuellement indisponible. Veuillez réessayer.",
+        "status": "Statut",
+        "status_open": "Ouvert",
+        "status_closed": "Fermé",
+        "new_ticket": "Nouveau ticket"
+    },
+    "profile_menu": {
+        "admin_tickesystem": "Système de tickets ADM",
+        "account_settings": "Paramètres du compte",
+        "profile": "Profil",
+        "ticketsystem": "Centre d'aide",
+        "logout": "Déconnexion",
+        "settings": "Paramètres"
+    },
+    "languageselector": {
+        "select_language": "Sélectionnez une langue",
+        "search": "Rechercher…"
+    }
+}
