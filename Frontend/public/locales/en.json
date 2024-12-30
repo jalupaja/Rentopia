@@ -82,5 +82,9 @@
         "ticketsystem": "Help Center",
         "logout": "Logout",
         "settings": "Settings"
+    },
+    "languageselector": {
+        "select_language": "Select a Language",
+        "search": "Search…"
     }
 }

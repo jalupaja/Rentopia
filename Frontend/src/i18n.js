@@ -8,22 +8,25 @@ i18n
     .use(LanguageDetector)
     .use(initReactI18next)
     .init({
-        fallbackLng: 'en',
+        fallbackLng: "en",
         debug: true,
-        supportedLngs: ['en', 'de'],
-        fallbackLng: 'en',
+        supportedLngs: ["en", "de", "fr", "es"],
         detection: {
-            order: ['localStorage', 'querystring'], // TODO
-            caches: ['localStorage'],
+            order: ["localStorage"],
+            caches: ["localStorage"],
+        },
+        detection: {
+            order: ["localStorage", "querystring"],
+            caches: ["localStorage"],
         },
         interpolation: {
             escapeValue: false,
         },
         react: {
-            useSuspense: false,
+            useSuspense: true,
         },
         backend: {
-            loadPath: '/locales/{{lng}}.json',
+            loadPath: "/locales/{{lng}}.json",
         },
     });
 
