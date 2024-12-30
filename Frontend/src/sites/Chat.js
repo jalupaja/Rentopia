@@ -19,6 +19,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import StoreIcon from '@mui/icons-material/Store';
 import {useEffect} from "react";
 import ResponsePopup from "../components/ResponsePopup";
+import ChatComponent from "../components/Chat";
 
 function ChatSite(){
     ReturnHomeWhenLoggedOut();
@@ -27,6 +28,7 @@ function ChatSite(){
 
     const [chats, setChats] = React.useState([]);
     const [statusLabel, setStatusLabel] = React.useState(null);
+    const [chatComponent, setChatComponent] = React.useState(null);
 
     const fetchChats = () => {
         if(authUser != null){
@@ -57,8 +59,10 @@ function ChatSite(){
         return {};
     };
 
-    const handleChatSelection = (e) => {
-
+    const handleChatSelection = (index) => {
+        if(chats != null && index >= 0 && index < chats.length){
+            setChatComponent(<ChatComponent chat={chats[index]} authUser={authUser}/>)
+        }
     };
 
     useEffect(()=>{
@@ -67,7 +71,7 @@ function ChatSite(){
     return(
         <Box sx = {{ ...FrameStyle}}>
             <Appbar authUser={authUser}/>
-            <Grid2 container sx={{width : "100%", height : "auto"}}>
+            <Grid2 container sx={{width : "100%", height : "100%"}}>
 
                 <Grid2 size={3} sx={{padding : "1%"}}>
                     <Typography gutterBottom variant="h6" >
@@ -77,7 +81,7 @@ function ChatSite(){
                         {
                             chats.map((chat, index) => (
                                 <ListItemButton
-                                    key={index} onClick={handleChatSelection}>
+                                    key={index} onClick={() => handleChatSelection(index)}>
                                     <ListItemIcon>
                                         {getOtherUser(chat).role !== "COMPANY"
                                             ? <PersonIcon fontSize="small" />
@@ -91,13 +95,9 @@ function ChatSite(){
                     </List>
 
                 </Grid2>
-                <Grid2 size={9}>
-                    <Grid2>
-                        {statusLabel}TODO:
-                    </Grid2>
-                    <Grid2>
-                        chat
-                    </Grid2>
+                <Grid2 size={9} >
+                    {statusLabel}
+                    {chatComponent}
                 </Grid2>
             </Grid2>
             <Box sx={{flex : "auto"}}/>

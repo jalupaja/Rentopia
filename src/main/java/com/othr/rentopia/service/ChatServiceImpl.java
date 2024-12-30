@@ -29,6 +29,7 @@ public class ChatServiceImpl implements ChatService {
     }
 
     @Override
+	@Transactional
     public void removeChat(Long chatId) {
 		String query = "DELETE FROM Chat WHERE id = :chatId";
 		try {
@@ -78,7 +79,25 @@ public class ChatServiceImpl implements ChatService {
 	}
 
 	@Override
+	@Transactional
 	public void saveMessage(ChatMessage message) {
 		entityManager.persist(message);
+	}
+
+	@Override
+	public Chat getChatForId(Long chatId) {
+		Chat chat = null;
+		String query = "SELECT c FROM Chat c WHERE c.id = :chatId";
+
+		try {
+			chat = entityManager
+					.createQuery(query, Chat.class)
+					.setParameter("chatId", chatId)
+					.getSingleResult();
+		} catch (NoResultException e) {
+			System.out.println(e.getMessage());
+		}
+
+		return chat;
 	}
 }

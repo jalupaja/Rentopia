@@ -1,5 +1,6 @@
 package com.othr.rentopia.controller;
 
+import com.othr.rentopia.model.Account;
 import com.othr.rentopia.model.Chat;
 import com.othr.rentopia.model.ChatMessage;
 import com.othr.rentopia.service.AccountServiceImpl;
@@ -72,8 +73,28 @@ public class ChatController {
         JSONObject response = new JSONObject();
         response.put("success", false);
 
-        //todo parse chatmessage
+        JSONObject request = new JSONObject(chatMessage);
+
         ChatMessage message = new ChatMessage();
+        message.setContent((String)request.get("content"));
+        message.setIsRead(false);
+
+        Long chatID = request.getLong("chatId");
+        Long senderId = request.getLong("senderId");
+
+        Account sender = accountService.getAccountById(senderId);
+        if(sender == null){
+            response.put("reason", "user doesnt exist");
+            return new ResponseEntity<>(response.toString(), HttpStatus.OK);
+        }
+        message.setSender(sender);
+
+        Chat chat = chatService.getChatForId(chatID);
+        if(chat == null){
+            response.put("reason", "chat doesnt exist");
+            return new ResponseEntity<>(response.toString(), HttpStatus.OK);
+        }
+        message.setChat(chat);
 
         try{
             chatService.saveMessage(message);
