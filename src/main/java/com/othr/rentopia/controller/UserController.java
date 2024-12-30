@@ -94,7 +94,7 @@ public class UserController {
             Location oldlocation = new Location();
             oldlocation.setPostalCode((String) request.get("postCode"));
             oldlocation.setCity((String) request.get("city"));
-            oldlocation.setStreet(request.get("street") + " " + request.get("houseNo"));
+            oldlocation.setStreet((String) request.get("street"));
             oldlocation.setCountry((String) request.get("country"));
             updAccount.setLocation(oldlocation);
 

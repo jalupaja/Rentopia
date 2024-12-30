@@ -23,7 +23,6 @@ function EditProfileDialog({open, userData, setUserData, handleEditDialogClose})
         postCode: userData.location.postalCode,
         city: userData.location.city,
         street: userData.location.street,
-        houseNo: "",
         country: userData.location.country,
         company: userData.company
     };
@@ -170,15 +169,7 @@ function EditProfileDialog({open, userData, setUserData, handleEditDialogClose})
                             name="street"
                             value={newUserData.street}
                             onChange={onChange}
-                            sx={{width: "79%"}}
-                        />
-                        <TextField
-                            label="House No."
-                            margin="normal"
-                            name="houseNo"
-                            value={newUserData.houseNo}
-                            onChange={onChange}
-                            sx={{width: "19%"}}
+                            fullWidth
                         />
                     </Box>
                 </DialogContent>
