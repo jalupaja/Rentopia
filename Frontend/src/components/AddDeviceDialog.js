@@ -13,6 +13,7 @@ import Grid from "@mui/material/Grid2";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EuroIcon from '@mui/icons-material/Euro';
 import {useState} from "react";
+import FetchBackend from "../helper/BackendHelper";
 
 const StyledSelect = styled(Select)(({ theme }) => ({
     '& .MuiOutlinedInput-notchedOutline': {
@@ -68,17 +69,12 @@ function AddDeviceDialog({open, handleAddDialogClose, iName="", iPrice=0, iCateg
     const handleSave = (event) => {
         event.preventDefault();
 
-        const newErrors = {
-            name: !name,
-            price: !price
-        };
+        FetchBackend('POST', '/add', null)
+            .then(response => response.json())
+            .then(data => {console.log(data)})
+            .catch(error => console.log(error));
 
-        setErrors(newErrors);
-
-        if (!Object.values(newErrors).includes(true)) {
-            console.log('Device successfully Added:', name, price, category, description);
-            closeDialog();
-        }
+        closeDialog();
     }
 
     return (

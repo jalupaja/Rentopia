@@ -5,23 +5,18 @@ import com.othr.rentopia.model.Device;
 import com.othr.rentopia.model.DeviceImage;
 import com.othr.rentopia.model.Bookmark;
 // import com.othr.rentopia.service.AccountService;
+import com.othr.rentopia.model.Location;
 import com.othr.rentopia.service.DeviceService;
 import com.othr.rentopia.service.BookmarkService;
 import com.othr.rentopia.service.RatingService;
 import com.othr.rentopia.service.AccountService;
 import com.othr.rentopia.service.DeviceImageService;
+import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.security.core.Authentication;
 
 import jakarta.persistence.PersistenceException;
@@ -147,8 +142,29 @@ public class DeviceController {
 	}
 
 	@PostMapping("/add")
-	public ResponseEntity<String> addDevice() {
-		return new ResponseEntity<>(null, HttpStatus.NOT_IMPLEMENTED);
+	public @ResponseBody String addDevice(@RequestBody String deviceInfo) {
+		JSONObject request = new JSONObject(deviceInfo);
+		JSONObject response = new JSONObject();
+
+		Device newDevice = new Device();
+		newDevice.setTitle((String) request.get("title"));
+		newDevice.setDescription((String) request.get("description"));
+		newDevice.setPrice((Double) request.get("price"));
+		newDevice.setOwnerId((Long) request.get("ownerId"));
+		//newDevice.setCategories((String) request.get("categorie"));
+		newDevice.setIsPublic((Boolean) request.get("public"));
+
+		Location newLocation = new Location();
+		newLocation.setCity((String) request.get("city"));
+		newLocation.setPostalCode((String) request.get("postalCode"));
+		newLocation.setStreet((String) request.get("street"));
+		newLocation.setCountry((String) request.get("country"));
+		newDevice.setLocation(newLocation);
+
+		deviceService.saveDevice(newDevice);
+
+		response.put("Device added successfully", true);
+		return response.toString();
 	}
 
 	@PostMapping("/remove/{id}")
