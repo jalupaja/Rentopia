@@ -100,4 +100,10 @@ public class ChatServiceImpl implements ChatService {
 
 		return chat;
 	}
+
+	@Override
+	@Transactional
+	public void updateChatMessage(ChatMessage message) {
+		entityManager.merge(message);
+	}
 }

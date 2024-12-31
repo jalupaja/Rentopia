@@ -37,7 +37,7 @@ function ChatComponent({chat = null, authUser = null}){
     }
 
     const fetchMessages = (chat) => {
-        FetchBackend("GET", "chat/messages/"+chat.id, null)
+        FetchBackend("GET", "chat/messages/"+chat.id+"/"+authUser.id, null)
             .then(response => response.json())
             .then(data => {
                 let orderedMessages = data.sort(function(a, b){

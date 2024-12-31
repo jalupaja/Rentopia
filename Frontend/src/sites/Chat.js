@@ -61,7 +61,7 @@ function ChatSite(){
 
     const handleChatSelection = (index) => {
         if(chats != null && index >= 0 && index < chats.length){
-            setChatComponent(<ChatComponent chat={chats[index]} authUser={authUser}/>)
+            setChatComponent(<ChatComponent chat={chats[index].chatInfo} authUser={authUser}/>)
         }
     };
 
@@ -83,12 +83,18 @@ function ChatSite(){
                                 <ListItemButton
                                     key={index} onClick={() => handleChatSelection(index)}>
                                     <ListItemIcon>
-                                        {getOtherUser(chat).role !== "COMPANY"
+                                        {getOtherUser(chat.chatInfo).role !== "COMPANY"
                                             ? <PersonIcon fontSize="small" />
                                             : <StoreIcon fontSize="small" />
                                         }
                                     </ListItemIcon>
-                                    {getOtherUser(chat).name}
+                                    <Typography>
+                                        {getOtherUser(chat.chatInfo).name}
+                                    </Typography>
+                                    <Box sx={{flex : "auto"}}/>
+                                    <Typography>
+                                        {chat.unreadCount > 0 && chat.unreadCount}
+                                    </Typography>
                                 </ListItemButton>
                             ))
                         }

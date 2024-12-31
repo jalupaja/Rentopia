@@ -15,4 +15,6 @@ public interface ChatService {
 
     void saveMessage(ChatMessage message);
     Chat getChatForId(Long id);
+    void updateChatMessage(ChatMessage message);
+
 }

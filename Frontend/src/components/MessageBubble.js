@@ -20,7 +20,15 @@ function MessageBubble({message = null, isSender = true}){
                 padding : "1%"
             }}>
                 <Grid2 container columns={2} >
+                    <Grid2 size={1}>
+                        <Typography sx ={{wordWrap: "break-word", fontWeight: 'bold' }}>
+                            {message.sender.name}
+                        </Typography>
+                    </Grid2>
                     <Grid2 size={10} columns={1}>
+                        <Typography sx ={{wordWrap: "break-word"}}>
+                            {message.content}
+                        </Typography>
                         <Typography sx ={{wordWrap: "break-word"}}>
                             {message.content}
                         </Typography>
