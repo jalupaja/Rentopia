@@ -20,12 +20,11 @@ function HelpCenterSite({adm = false}){
 
     //return home when not admin
     const navigation = useNavigate();
-        useEffect(() => {
-            if(authUser && authUser.role !== "ADMIN"){
-                console.log(authUser);
-                navigation("/");
-            }
-        });
+    useEffect(() => {
+        if(adm && authUser && authUser.role !== "ADMIN"){
+            navigation("/");
+        }
+    });
 
     const [tickets, setTickets] = React.useState([]);
     const [ticketDetailComponent, setTicketDetailComponent] = React.useState(null);

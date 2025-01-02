@@ -53,6 +53,8 @@ function ChatSite(){
     useEffect(()=>{
         fetchChats();
     }, [authUser]);
+
+    setInterval(fetchChats, 5000);
     return(
         <Box sx = {{ ...FrameStyle}}>
             <Appbar authUser={authUser}/>

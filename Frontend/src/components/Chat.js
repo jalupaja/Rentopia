@@ -49,6 +49,8 @@ function ChatComponent({chat = null, authUser = null}){
                 .catch(e => console.log(e));
     };
 
+    setInterval(() => fetchMessages(chat), 5000);
+
     useEffect(() => {
         fetchMessages(chat);
     }, [chat, authUser]);
