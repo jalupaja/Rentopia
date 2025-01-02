@@ -23,4 +23,8 @@ public class Finance {
 
     @Column(nullable = false)
     private Boolean processed = false;
+
+    @Id
+    @Column(nullable = false)
+    private Long deviceId;
 }
