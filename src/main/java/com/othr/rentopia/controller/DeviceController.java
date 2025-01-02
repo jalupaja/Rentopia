@@ -6,11 +6,7 @@ import com.othr.rentopia.model.DeviceImage;
 import com.othr.rentopia.model.Bookmark;
 // import com.othr.rentopia.service.AccountService;
 import com.othr.rentopia.model.Location;
-import com.othr.rentopia.service.DeviceService;
-import com.othr.rentopia.service.BookmarkService;
-import com.othr.rentopia.service.RatingService;
-import com.othr.rentopia.service.AccountService;
-import com.othr.rentopia.service.DeviceImageService;
+import com.othr.rentopia.service.*;
 import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -52,6 +48,8 @@ public class DeviceController {
 	// save to Frontend...
 	private static final String UPLOAD_DIR = System.getProperty("user.dir") + "/Frontend/public/images/";
 	private static final String DEVICE_IMAGE_UPLOAD_DIR = UPLOAD_DIR + "devices/";
+    @Autowired
+    private FinanceService financeService;
 
 	private Boolean checkAllowed(Device device) {
 		// TODO check NULL, if (! device.getHidden || device.owner == logged_in_acc)
@@ -202,6 +200,20 @@ public class DeviceController {
 		for (Device device : devices) {
 			if (checkAllowed(device)) {
 				deviceData.add(parseDeviceShort(device));
+			}
+		}
+
+		return new ResponseEntity<>(deviceData, HttpStatus.OK);
+	}
+
+	@GetMapping("/rentHistory/all/{ownerId}")
+	public ResponseEntity<List<Map<String, Object>>> getRentHistory(@PathVariable("ownerId") Long ownerId) {
+		List<Map<String, Object>> deviceData = new ArrayList<>();
+
+		List<Device> devices = financeService.getRentHistory(ownerId);
+		for (Device device : devices) {
+			if (checkAllowed(device)) {
+				deviceData.add(parseDevice(device));
 			}
 		}
 

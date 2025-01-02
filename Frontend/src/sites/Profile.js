@@ -91,11 +91,10 @@ function ProfileSite() {
                 .then(data => setDeviceList(data))
                 .catch(error => console.log(error))
 
-            //TODO: add Device rent history
-            /*FetchBackend('GET', '/all/{ownerId}', null)
+            FetchBackend('GET', '/rentHistory/all/' + ownerId, null)
                 .then(response => response.json())
-                .then(data => setBookmarkList(data))
-                .catch(error => console.log(error))*/
+                .then(data => setHistoryList(data))
+                .catch(error => console.log(error))
         } else {
             console.log("no JWT token");
         }
