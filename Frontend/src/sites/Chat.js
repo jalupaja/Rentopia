@@ -20,6 +20,7 @@ import StoreIcon from '@mui/icons-material/Store';
 import {useEffect} from "react";
 import ResponsePopup from "../components/ResponsePopup";
 import ChatComponent from "../components/Chat";
+import {getOtherUser} from "../helper/ChatHelper";
 
 function ChatSite(){
     ReturnHomeWhenLoggedOut();
@@ -42,22 +43,6 @@ function ChatSite(){
         }
 
     }
-
-    const getOtherUser = (chat) => {
-        if(authUser){
-            if(chat.firstAccount.id !== authUser.id){
-                return chat.firstAccount;
-            }
-            else if(chat.secondAccount.id !== authUser.id){
-                return chat.secondAccount;
-            }
-            else{
-                throw "User id in chat error";
-            }
-        }
-
-        return {};
-    };
 
     const handleChatSelection = (index) => {
         if(chats != null && index >= 0 && index < chats.length){
@@ -83,13 +68,13 @@ function ChatSite(){
                                 <ListItemButton
                                     key={index} onClick={() => handleChatSelection(index)}>
                                     <ListItemIcon>
-                                        {getOtherUser(chat.chatInfo).role !== "COMPANY"
+                                        {getOtherUser(chat.chatInfo, authUser).role !== "COMPANY"
                                             ? <PersonIcon fontSize="small" />
                                             : <StoreIcon fontSize="small" />
                                         }
                                     </ListItemIcon>
                                     <Typography>
-                                        {getOtherUser(chat.chatInfo).name}
+                                        {getOtherUser(chat.chatInfo, authUser).name}
                                     </Typography>
                                     <Box sx={{flex : "auto"}}/>
                                     <Typography>

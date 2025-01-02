@@ -29,9 +29,6 @@ function MessageBubble({message = null, isSender = true}){
                         <Typography sx ={{wordWrap: "break-word"}}>
                             {message.content}
                         </Typography>
-                        <Typography sx ={{wordWrap: "break-word"}}>
-                            {message.content}
-                        </Typography>
                     </Grid2>
                     <Grid2 columns={1} sx={{justifyContent : isSender ? "end" : "start"}}>
                         <Typography variant="caption">

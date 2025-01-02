@@ -17,4 +17,5 @@ public interface ChatService {
     Chat getChatForId(Long id);
     void updateChatMessage(ChatMessage message);
 
+    boolean chatExists(Chat chat);
 }

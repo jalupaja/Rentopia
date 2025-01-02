@@ -3,8 +3,10 @@ package com.othr.rentopia.controller;
 import com.othr.rentopia.model.Account;
 import com.othr.rentopia.model.Chat;
 import com.othr.rentopia.model.ChatMessage;
+import com.othr.rentopia.model.Device;
 import com.othr.rentopia.service.AccountServiceImpl;
 import com.othr.rentopia.service.ChatServiceImpl;
+import com.othr.rentopia.service.DeviceService;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,19 +27,50 @@ public class ChatController {
     @Autowired
     private AccountServiceImpl accountService;
 
+    @Autowired
+    private DeviceService deviceService;
+
     @PostMapping()
     public ResponseEntity<String> createChat(@RequestBody String chatInfo) throws Exception {
         JSONObject response = new JSONObject();
         response.put("success", false);
 
-        //todo parse chatinfo
+        JSONObject request = new JSONObject(chatInfo);
         Chat chat = new Chat();
-
-        try{
-            chatService.saveChat(chat);
-        } catch (Exception e){
-            System.out.println("Error during persistance of chat: " + e.getMessage());
+        Long authUserId = request.getLong("authUserId");
+        Account authUser = accountService.getAccountById(authUserId);
+        if(authUser == null){
+            response.put("reason", "unknown user");
             return new ResponseEntity<>(response.toString(), HttpStatus.OK);
+        }
+
+        Long deviceId = request.getLong("deviceId");
+        Device device = deviceService.getDevice(deviceId);
+        if(device == null){
+            response.put("reason", "unknown device");
+            return new ResponseEntity<>(response.toString(), HttpStatus.OK);
+        }
+        Account otherUser = accountService.getAccountById(device.getOwnerId());
+        if(otherUser == null){
+            response.put("reason", "unknown user");
+            return new ResponseEntity<>(response.toString(), HttpStatus.OK);
+        }
+
+        if(authUser.getId().equals(otherUser.getId())){
+            response.put("reason", "user cannot hav chat with himself");
+            return new ResponseEntity<>(response.toString(), HttpStatus.OK);
+        }
+
+        chat.setFirstAccount(authUser);
+        chat.setSecondAccount(otherUser);
+
+        if(!chatService.chatExists(chat)){
+            try{
+                chatService.saveChat(chat);
+            } catch (Exception e){
+                System.out.println("Error during persistance of chat: " + e.getMessage());
+                return new ResponseEntity<>(response.toString(), HttpStatus.OK);
+            }
         }
 
         response.put("success", true);

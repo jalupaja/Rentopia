@@ -4,6 +4,7 @@ import * as React from "react";
 import MessageBubble from "./MessageBubble";
 import FetchBackend from "../helper/BackendHelper";
 import {useEffect} from "react";
+import {getOtherUser} from "../helper/ChatHelper";
 
 function ChatComponent({chat = null, authUser = null}){
 
@@ -22,7 +23,6 @@ function ChatComponent({chat = null, authUser = null}){
             FetchBackend("POST", "chat/message", message)
                 .then(response => response.json())
                 .then(data => {
-                    console.log(data);
                     if(!data.success){
                         //todo
                     }
@@ -53,14 +53,16 @@ function ChatComponent({chat = null, authUser = null}){
         fetchMessages(chat);
     }, [chat, authUser]);
     return(
-        <Box sx={{
-            backgroundColor : "#ebebeb"
-        }}>
+        <Box >
+            <Typography variant="h3" >
+                {getOtherUser(chat, authUser).name}
+            </Typography>
             <Box sx={{
                 overflowY : "scroll",
                 height : "400px",
                 display :"flex",
-                flexDirection: "column-reverse"
+                flexDirection: "column-reverse",
+                backgroundColor : "#ebebeb"
             }}>
                     {
                         messages.map((message, index) => (
@@ -68,7 +70,7 @@ function ChatComponent({chat = null, authUser = null}){
                         ))
                     }
             </Box>
-            <Box sx={{}} >
+            <Box sx={{ backgroundColor : "#ebebeb" }} >
                 <TextField sx={{
                     boxSizing: "border-box",
                     padding : "1%",

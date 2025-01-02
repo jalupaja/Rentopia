@@ -106,4 +106,23 @@ public class ChatServiceImpl implements ChatService {
 	public void updateChatMessage(ChatMessage message) {
 		entityManager.merge(message);
 	}
+
+	@Override
+	public boolean chatExists(Chat chat) {
+		String query = "SELECT c FROM Chat c WHERE " +
+				"(c.firstAccount = :firstUser AND c.secondAccount = :secondUser)" +
+				"OR (c.firstAccount = :secondUser AND c.secondAccount = :firstUser)";
+
+		try {
+			chat = entityManager
+					.createQuery(query, Chat.class)
+					.setParameter("firstUser", chat.getFirstAccount())
+					.setParameter("secondUser", chat.getSecondAccount())
+					.getSingleResult();
+		} catch (NoResultException e) {
+			return false;
+		}
+
+		return true;
+	}
 }
