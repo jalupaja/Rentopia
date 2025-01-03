@@ -6,7 +6,7 @@ import RegisterSite from "./sites/Register.js";
 import DeviceSite from "./sites/Device.js";
 import { useEffect } from "react";
 import ProfileSite from "./sites/Profile";
-import HelpCenterSite from "./sites/HelpCenterSite";
+import HelpCenterSite from "./sites/HelpCenterSite.js";
 
 function App() {
     return (
@@ -21,6 +21,8 @@ function App() {
                     <Route path="helpCenter/ADM" element={<HelpCenterSite adm={true}/>}/>
                     <Route path="register" element={<RegisterSite />} />
                     <Route path="profilePage" element={<ProfileSite />} />
+                    <Route path="helpCenter" element={<HelpCenterSite/>}/>
+                    <Route path="helpCenter/ADM" element={<HelpCenterSite adm={true}/>}/>
                 </Route>
                 <Route path="device" >
                     <Route index element={<Navigate to="/" />} /> // return to the Home page

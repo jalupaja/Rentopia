@@ -17,6 +17,7 @@ import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import Appbar from "../components/Appbar.js";
 import ResponsePopup from "../components/ResponsePopup.js";
+import { GoogleLogin } from '@react-oauth/google';
 import { useTranslation } from "react-i18next";
 
 function LoginSite() {
@@ -61,6 +62,30 @@ function LoginSite() {
             });
     };
 
+
+    const OAuthSuccess = (response) => {
+        const loginData = {
+            token: response.credential,
+        };
+
+        FetchBackend('POST', 'loginOAuth', loginData)
+            .then(response => response.json())
+            .then(data => {
+                if (data.status) {
+                    Cookies.set(JWT_TOKEN, data.jwt);
+                    navigation("/");
+                } else {
+                    setRegisterStatusLabel(<ResponsePopup message={t("error_not_google")} reason={"error"} />);
+                }
+            })
+            .catch(error => {
+                setRegisterStatusLabel(<ResponsePopup message={t("error_unknown")} reason={"error"} />);
+            });
+    };
+    const OAuthError = (error) => {
+        setRegisterStatusLabel(<ResponsePopup message={t("error_unknown")} reason={"error"} />);
+    }
+
     const [registerStatusLabel, setRegisterStatusLabel] = React.useState(null);
 
     return (
@@ -104,6 +129,12 @@ function LoginSite() {
                 <Button variant="contained" onClick={() => SubmitLogin()} sx={{ ...InputFieldStyle }}>
                     {t("login")}
                 </Button>
+                <Typography variant="body2" align="center" sx={{...InputFieldStyle}}>
+                    OR
+                </Typography>
+                <div style={{...InputFieldStyle}}>
+                    <GoogleLogin onSuccess={OAuthSuccess} onError={OAuthError}  />
+                </div>
                 <Link href="./register" marginTop={2}>{t("create_account")}</Link>
                 <Link href="/resetPassword" >{t("forgot_password")}</Link>
             </Stack>

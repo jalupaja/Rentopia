@@ -8,7 +8,8 @@
         "tools": "Tools",
         "media": "Media",
         "home": "Home",
-        "sign_in": "Sign in"
+        "sign_in": "Sign in",
+        "logout": "Logout"
     },
     "device": {
         "bookmarked": "Bookmarked",
@@ -18,6 +19,7 @@
     "login": {
         "error_password": "Wrong email or password!",
         "error_unknown": "An error occurred. Please try again.",
+        "error_not_google": "Account wasn't created using Google",
         "welcome": "Welcome to Rentopia",
         "email": "Email",
         "password": "Password",

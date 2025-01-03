@@ -89,9 +89,9 @@ function Appbar({ showLogin = true, authUser = null, searchVisibility = 'hidden'
             loginButton = <Button component={Link} to={"/login"} variant="outlined" color="inherit">{t("sign_in")}</Button>;
             profileButton = <IconButton component={Link} to={"/profilePage"} size="large"><AccountCircleIcon fontSize="inherit" /></IconButton>
         }
-        else {
-            loginButton = <MenuComponent authUser={authUser} />;
-            profileButton = <IconButton onClick={() => navigate("/profilePage")} size="large"><AccountCircleIcon fontSize="inherit" /></IconButton>
+        else{
+            loginButton = <Button onClick={()=> {Logout();  window.location.reload();}} variant="outlined" color="inherit">{t("logout")}</Button>;
+            profileButton = <IconButton onClick={() => navigate("/profilePage")} size="large"><AccountCircleIcon fontSize="inherit"/></IconButton>
         }
     }
 
@@ -114,17 +114,18 @@ function Appbar({ showLogin = true, authUser = null, searchVisibility = 'hidden'
                             flexShrink: 0,
                         }}
                     >
-                        <img
-                            src={Logo}
-                            onClick={() => navigate("/")}
-                            alt={t("logo")}
-                            style={{
-                                width: '100%',
-                                height: '100%',
-                                objectFit: 'cover',
-                                borderRadius: '50%', // Ensure the image remains round
-                            }}
-                        />
+                        <Link to={"/"}>
+                            <img
+                                src={Logo}
+                                alt={t("logo")}
+                                style={{
+                                    width: '100%',
+                                    height: '100%',
+                                    objectFit: 'cover',
+                                    borderRadius: '50%',
+                                }}
+                            />
+                        </Link>
                     </Box>
                     <FormControl sx={{ marginRight: 0, marginLeft: '7%', width: '150px', visibility: searchVisibility }} size="small">
                         <StyledSelect
@@ -154,7 +155,8 @@ function Appbar({ showLogin = true, authUser = null, searchVisibility = 'hidden'
                         />
                     </Search>
                     <Box sx={{ flexGrow: 1 }}></Box>
-                    {loginButton}
+                  {profileButton}
+                  {loginButton}
                 </Toolbar>
             </AppBar>
         </Box >

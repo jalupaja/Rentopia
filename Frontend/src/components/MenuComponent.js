@@ -53,7 +53,7 @@ function MenuComponent({ authUser }) {
                 open={open}
                 onClose={handleClose}
                 onClick={handleClose}
-                slotProps={{
+               slotProps={{
                     paper: {
                         elevation: 0,
                         sx: {
@@ -84,7 +84,7 @@ function MenuComponent({ authUser }) {
                 transformOrigin={{ horizontal: 'right', vertical: 'top' }}
                 anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
             >
-                <MenuItem onClick={() => navigate("/profilePage")}>
+              <MenuItem onClick={() => navigate("/profilePage")}>
                     <Avatar />
                     {t("profile")}
                 </MenuItem>
@@ -97,7 +97,7 @@ function MenuComponent({ authUser }) {
                 </MenuItem>
                 {adminPanel}
                 <Divider />
-
+                  
                 <MenuItem onClick={handleClose}>
                     <ListItemIcon>
                         <Settings fontSize="small" />

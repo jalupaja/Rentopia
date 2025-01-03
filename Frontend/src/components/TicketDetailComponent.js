@@ -25,7 +25,6 @@ function TicketDetail({ticketInfo, handleChange, handleTicketAction, adm = false
 
     const handleSubmitTicket = () => {
         if(validate()){
-            //reset status label
             handleTicketAction({
                 success : false,
                 message : null,

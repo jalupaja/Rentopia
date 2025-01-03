@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import com.othr.rentopia.config.DotenvHelper;
+import com.othr.rentopia.api.EmailService;
 
 import java.util.List;
 
@@ -44,6 +46,9 @@ public class DebugController {
 
     @Autowired
     private DeviceImageService deviceImageService;
+
+    @Autowired
+    private EmailService emailService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -433,6 +438,51 @@ public class DebugController {
         f5.setAmount(30.0);
         f5.setProcessed(false);
         financeService.saveFinance(f5);
+    }
 
+    @GetMapping(value = "mail")
+    public void testMail() {
+        // TODO move to userController
+        // import com.othr.rentopia.config.DotenvHelper;
+        EmailService.Email mail = new EmailService.Email(null, DotenvHelper.get("GoogleEmail"), null, null);
+
+        String NAME = "TEST MAIL USER";
+        String ACTIVATE_LINK = "http://localhost:3000/activate";
+
+        String subject = "Activate your Rentopia Account";
+        String body = "<h1>Hello, " + NAME + "!</h1>\n"
+                    + "<p>We are excited to have you join our community! To get started, please click the button below to activate your account.</p>\n"
+                    + "<a href=\"" + ACTIVATE_LINK + "\" class=\"button\">Activate Account</a>\n";
+
+        mail.loadTemplate(subject, body);
+
+        emailService.sendEmail(mail);
+    }
+
+    @GetMapping(value = "update")
+    public void onDevUpdate() {
+        // TODO move to DeviceController
+        Long deviceId = 1L; // TODO change
+
+        List<Bookmark> bookmarks = bookmarkService.getUserBookmarksByDevice(deviceId);
+
+        Device device;
+        Account user;
+        for (Bookmark b : bookmarks) {
+            device = deviceService.getDevice(b.getDeviceId());
+            user = accountService.getAccount(b.getOwnerId());
+
+            String subject = "🚀 Your Bookmarked Device Just Got Better! Check Out the Latest Update!";
+            String body = "<h1>Good news, " + user.getName() + "!</h1>\n"
+                + "<p>One of your bookmarked devices has just been updated! 🎉</p>\n"
+                + "<p><strong>Device:</strong> " + device.getTitle() + "</p>\n"
+                + "<p>We think you'll love these new improvements! Click the button below to see all the details and make the most of the update.</p>\n"
+                + "<a href=\"http://localhost:3000/device/" + device.getId() + "\" class=\"button\">View Update</a>\n";
+
+            EmailService.Email mail = new EmailService.Email(null, user.getEmail(), null, null);
+            mail.loadTemplate(subject, body);
+
+            emailService.sendEmail(mail);
+        }
     }
 }

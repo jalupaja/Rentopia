@@ -10,6 +10,8 @@ public interface AccountService {
 
     public Account getAccount(String email);
 
+    public Account getAccount(Long accountId);
+
     public Account getAccountWithPassword(String email);
 
     public String getAccountName(Long accountId);
@@ -19,6 +21,8 @@ public interface AccountService {
     public String getEmail(Long accountId);
 
     public Long getId(String email);
+
+    public boolean isAdmin(Long accountId);
 
     public boolean emailExists(String email);
 

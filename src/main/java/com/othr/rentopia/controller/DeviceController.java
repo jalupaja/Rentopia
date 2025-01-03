@@ -70,7 +70,7 @@ public class DeviceController {
         if (authentication != null) {
             String principalEmail = (String) authentication.getPrincipal();
             Long principalId = accountService.getId(principalEmail);
-            if (device.getOwnerId() == principalId)
+            if (device.getOwnerId() == principalId || accountService.isAdmin(principalId))
                 return true;
         }
         return false;
@@ -85,7 +85,7 @@ public class DeviceController {
         Long principalId = accountService.getId(principalEmail);
 
         // if device does not exist or if current logged in person is not its owner
-        if (device_ownerId == null || device_ownerId != principalId)
+        if (device_ownerId == null || device_ownerId != principalId || !accountService.isAdmin(principalId))
             return false;
 
         return true;

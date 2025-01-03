@@ -1,4 +1,6 @@
 import Footer from "../components/Footer.js";
+import Cookies from "js-cookie";
+import { useNavigate } from "react-router-dom";
 import ResponsePopup from "../components/ResponsePopup.js";
 import * as React from 'react';
 import { useTranslation } from "react-i18next";
@@ -47,6 +49,8 @@ const GridCellStyle = {
 }
 
 function RegisterSite() {
+    const navigation = useNavigate();
+
     ReturnHomeWhenLoggedIn();
 
     //hide password logic
@@ -157,12 +161,13 @@ function RegisterSite() {
             FetchBackend('POST', 'register', registerData)
                 .then(response => response.json())
                 .then(data => {
-                    if (data.registrationSuccess) {
+                    if (data.status) {
                         setRegisterStatusLabel(<ResponsePopup reason={"success"} message={t("succ_register")} />);
-                        setUserInfo(defaultUserInfo);
+                        Cookies.set(JWT_TOKEN, data.jwt);
+                        navigation("/");
                     }
                     else {
-                        setRegisterStatusLabel(<ResponsePopup reason={"error"} message={data.reason} />);
+                        setRegisterStatusLabel(<ResponsePopup reason={"error"} message={data.message} />);
                     }
                 })
                 .catch((error) => {

@@ -57,6 +57,23 @@ public class BookmarkServiceImpl implements BookmarkService {
     }
 
     @Override
+    public List<Bookmark> getUserBookmarksByDevice(Long deviceId) {
+        List<Bookmark> bookmarks = null;
+
+        String query = "SELECT b FROM Bookmark b WHERE deviceId = :deviceId";
+        try {
+            bookmarks = entityManager
+                .createQuery(query, Bookmark.class)
+                .setParameter("deviceId", deviceId)
+                .getResultList();
+        } catch (NoResultException e) {
+            // no Bookmarks yet
+        }
+
+        return bookmarks;
+    }
+
+    @Override
     public List<Device> getBookmarkedDevices(Long ownerId) {
         List<Device> devices = null;
 
@@ -72,5 +89,6 @@ public class BookmarkServiceImpl implements BookmarkService {
 
         return devices;
     }
+
 
 }
