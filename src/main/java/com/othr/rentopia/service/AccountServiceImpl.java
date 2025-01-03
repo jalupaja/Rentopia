@@ -25,13 +25,13 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
     public void saveAccount(Account account) {
         if (account.getId() == null) {
             // Create new account
-	    try {
-		entityManager.persist(account);
-	    } catch (PersistenceException e) {
-		System.out.println("Account " + account.getEmail() + " already exists in the database");
-		// TODO handle below exception
-		throw e;
-	    }
+			try {
+				entityManager.persist(account);
+			} catch (PersistenceException e) {
+				System.out.println("Account " + account.getEmail() + " already exists in the database");
+				// TODO handle below exception
+				throw e;
+			}
         } else {
             // Update existing account
             entityManager.merge(account);
