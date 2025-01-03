@@ -7,6 +7,7 @@ import jakarta.mail.internet.MimeMessage;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.nio.file.*;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Properties;
@@ -82,7 +83,8 @@ public class EmailService {
             message.setFrom(new InternetAddress(GmailUsername));
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(email.getTo()));
             message.setSubject(email.getSubject());
-            message.setText(email.getBody());
+            // message.setText(email.getBody());
+            message.setContent(email.getBody(), "text/html; charset=utf-8");
 
             Transport transport = session.getTransport("smtp");
             transport.connect(SMTP_HOST, GmailUsername, GmailPassword);
@@ -133,6 +135,25 @@ public class EmailService {
                 ", subject='" + subject + '\'' +
                 ", body='" + body + '\'' +
                 '}';
+        }
+
+        public void loadTemplate(String subject, String body) {
+            String template;
+
+            try {
+                template = new String(Files.readAllBytes(Paths.get("src/main/java/com/othr/rentopia/api/EmailTemplate.html")));
+
+            } catch (IOException e) {
+                e.printStackTrace();
+                template = null;
+            }
+
+            if (template != null) {
+                template = template.replace("{{SUBJECT}}", subject);
+                template = template.replace("{{BODY}}", body);
+                this.subject = subject;
+                this.body = template;
+            }
         }
     }
 }
