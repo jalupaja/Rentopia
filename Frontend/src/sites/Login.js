@@ -19,7 +19,6 @@ import Appbar from "../components/Appbar.js";
 import ResponsePopup from "../components/ResponsePopup.js";
 import { GoogleLogin } from '@react-oauth/google';
 import { useTranslation } from "react-i18next";
-import { GoogleLogin } from '@react-oauth/google';
 
 function LoginSite() {
     const navigation = useNavigate();
@@ -76,15 +75,16 @@ function LoginSite() {
                     Cookies.set(JWT_TOKEN, data.jwt);
                     navigation("/");
                 } else {
-                    setRegisterStatusLabel(<ResponsePopup message={"Account wasn't created using Google"} reason={"error"} />);
+                    setRegisterStatusLabel(<ResponsePopup message={t("error_not_google")} reason={"error"} />);
                 }
             })
             .catch(error => {
-                setRegisterStatusLabel(<ResponsePopup message={"An error occurred. Please try again."} reason={"error"} />);
+                setRegisterStatusLabel(<ResponsePopup message={t("error_unknown")} reason={"error"} />);
             });
     };
     const OAuthError = (error) => {
-        setRegisterStatusLabel(<ResponsePopup message={"An error occurred. Please try again."} reason={"error"} />);
+        setRegisterStatusLabel(<ResponsePopup message={t("error_unknown")} reason={"error"} />);
+    }
 
     const [registerStatusLabel, setRegisterStatusLabel] = React.useState(null);
 

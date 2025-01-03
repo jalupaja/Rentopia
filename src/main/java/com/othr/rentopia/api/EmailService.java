@@ -3,7 +3,6 @@ package com.othr.rentopia.api;
 import jakarta.mail.*;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
-<<<<<<< HEAD
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;

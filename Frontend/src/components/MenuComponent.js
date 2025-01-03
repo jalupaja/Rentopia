@@ -53,7 +53,7 @@ function MenuComponent({ authUser }) {
                 open={open}
                 onClose={handleClose}
                 onClick={handleClose}
-                slotProps={{
+               slotProps={{
                     paper: {
                         elevation: 0,
                         sx: {
@@ -80,43 +80,11 @@ function MenuComponent({ authUser }) {
                             },
                         },
                     },
-<<<<<<< HEAD
-                    '&::before': {
-                        content: '""',
-                        display: 'block',
-                        position: 'absolute',
-                        top: 0,
-                        right: 14,
-                        width: 10,
-                        height: 10,
-                        bgcolor: 'background.paper',
-                        transform: 'translateY(-50%) rotate(45deg)',
-                        zIndex: 0,
-                    },
-                },
-            },
-        }}
-        transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-        anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-    >
-        <MenuItem onClick={handleClose}>
-            <Avatar /> Profile
-        </MenuItem>
-        <Divider />
-        <MenuItem onClick={() => navigate("/helpCenter")}>
-            <ListItemIcon>
-                <HelpCenterIcon fontSize="small" />
-            </ListItemIcon>
-            Help Center
-        </MenuItem>
-        {adminPanel}
-        <Divider />
-=======
                 }}
                 transformOrigin={{ horizontal: 'right', vertical: 'top' }}
                 anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
             >
-                <MenuItem onClick={() => navigate("/profilePage")}>
+              <MenuItem onClick={() => navigate("/profilePage")}>
                     <Avatar />
                     {t("profile")}
                 </MenuItem>
@@ -129,8 +97,6 @@ function MenuComponent({ authUser }) {
                 </MenuItem>
                 {adminPanel}
                 <Divider />
->>>>>>> f919536 (Add multi language support)
-
                 <MenuItem onClick={handleClose}>
                     <ListItemIcon>
                         <Settings fontSize="small" />

@@ -12,7 +12,6 @@ import { useEffect, useState } from "react";
 import * as React from 'react';
 import Appbar from "../components/Appbar.js";
 import { FrameStyle } from "./Register";
-import { GetAuthUser } from "../helper/BackendHelper";
 import { useTranslation } from "react-i18next";
 
 const DeviceGrid = styled(Grid2)(({ theme }) => ({

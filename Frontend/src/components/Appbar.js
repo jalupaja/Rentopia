@@ -90,7 +90,7 @@ function Appbar({ showLogin = true, authUser = null, searchVisibility = 'hidden'
             profileButton = <IconButton component={Link} to={"/profilePage"} size="large"><AccountCircleIcon fontSize="inherit" /></IconButton>
         }
         else{
-            loginButton = <Button onClick={()=> {Logout();  window.location.reload();}} variant="outlined" color="inherit">Log out</Button>;
+            loginButton = <Button onClick={()=> {Logout();  window.location.reload();}} variant="outlined" color="inherit">{t("logout")}</Button>;
             profileButton = <IconButton onClick={() => navigate("/profilePage")} size="large"><AccountCircleIcon fontSize="inherit"/></IconButton>
         }
     }
@@ -114,17 +114,18 @@ function Appbar({ showLogin = true, authUser = null, searchVisibility = 'hidden'
                             flexShrink: 0,
                         }}
                     >
-                        <img
-                            src={Logo}
-                            onClick={() => navigate("/")}
-                            alt={t("logo")}
-                            style={{
-                                width: '100%',
-                                height: '100%',
-                                objectFit: 'cover',
-                                borderRadius: '50%',
-                            }}
-                        />
+                        <Link to={"/"}>
+                            <img
+                                src={Logo}
+                                alt={t("logo")}
+                                style={{
+                                    width: '100%',
+                                    height: '100%',
+                                    objectFit: 'cover',
+                                    borderRadius: '50%',
+                                }}
+                            />
+                        </Link>
                     </Box>
                     <FormControl sx={{ marginRight: 0, marginLeft: '7%', width: '150px', visibility: searchVisibility }} size="small">
                         <StyledSelect
