@@ -22,6 +22,8 @@ public interface AccountService {
 
     public Long getId(String email);
 
+    public boolean isAdmin(Long accountId);
+
     public boolean emailExists(String email);
 
     public void removeAccount(Long accountId);

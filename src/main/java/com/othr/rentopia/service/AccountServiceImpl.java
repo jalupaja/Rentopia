@@ -156,6 +156,23 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
     }
 
     @Override
+    public boolean isAdmin(Long accountId) {
+        String query = "SELECT a.role FROM Account a WHERE a.id = :accountId";
+        Account.Role role;
+        try {
+             role = entityManager
+                    .createQuery(query, Account.Role.class)
+                    .setParameter("accountId", accountId)
+                    .getSingleResult();
+        } catch (NoResultException e) {
+            return false;
+        }
+
+        return role == Account.Role.ADMIN;
+  }
+
+
+    @Override
     public boolean emailExists(String email) {
         String query = "SELECT a.Id FROM Account a WHERE a.email = :email";
         try {
