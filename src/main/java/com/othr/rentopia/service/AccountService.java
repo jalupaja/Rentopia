@@ -10,6 +10,8 @@ public interface AccountService {
 
     public Account getAccount(String email);
 
+    public Account getAccount(Long accountId);
+
     public Account getAccountWithPassword(String email);
 
     public String getAccountName(Long accountId);
