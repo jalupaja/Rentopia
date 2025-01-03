@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import com.othr.rentopia.config.DotenvHelper;
 
 import com.othr.rentopia.api.EmailService;
 
@@ -451,7 +452,8 @@ public class DebugController {
     @GetMapping(value = "mail")
     public void testMail() {
         // TODO move to userController
-        EmailService.Email mail = new EmailService.Email(null, "mail.rentopia@gmail.com", null, null);
+        // import com.othr.rentopia.config.DotenvHelper;
+        EmailService.Email mail = new EmailService.Email(null, DotenvHelper.get("GoogleEmail"), null, null);
 
         String NAME = "TEST MAIL USER";
         String ACTIVATE_LINK = "http://localhost:3000/activate";
