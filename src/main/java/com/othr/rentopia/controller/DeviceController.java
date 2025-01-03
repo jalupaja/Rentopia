@@ -1,12 +1,10 @@
 package com.othr.rentopia.controller;
 
 // import com.othr.rentopia.model.Account;
-import com.othr.rentopia.model.Device;
-import com.othr.rentopia.model.DeviceImage;
-import com.othr.rentopia.model.Bookmark;
+import com.othr.rentopia.model.*;
 // import com.othr.rentopia.service.AccountService;
-import com.othr.rentopia.model.Location;
 import com.othr.rentopia.service.*;
+import jdk.jfr.Category;
 import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,11 +15,7 @@ import org.springframework.security.core.Authentication;
 
 import jakarta.persistence.PersistenceException;
 
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.UUID;
+import java.util.*;
 import java.io.File;
 import java.io.IOException;
 
@@ -322,5 +316,27 @@ public class DeviceController {
 			System.out.println("Error while uploading file!" + e.getMessage());
 			return ResponseEntity.status(500).body("Error while uploading file!");
 		}
+	}
+
+	@PostMapping(path="update")
+	public @ResponseBody ResponseEntity<Device> updateDevice(@RequestBody String device) {
+		JSONObject request = new JSONObject(device);
+
+		if(device != null) {
+			Device updDevcie = new Device();
+			updDevcie.setTitle((String) request.get("title"));
+			updDevcie.setDescription((String) request.get("description"));
+			updDevcie.setPrice((Double) request.get("price"));
+			updDevcie.setLocation((Location) request.get("location"));
+			updDevcie.setOwnerId((Long) request.get("ownerId"));
+			updDevcie.setIsPublic((Boolean) request.get("isPublic"));
+			updDevcie.setId((Long) request.get("id"));
+			//TODO: add Category
+
+			updDevcie = deviceService.updateDevice(updDevcie);
+			return new ResponseEntity<>(updDevcie, HttpStatus.OK);
+		}
+
+		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 	}
 }

@@ -104,4 +104,32 @@ public class DeviceServiceImpl implements DeviceService {
 
 		return devices;
 	}
+
+	@Override
+	@Transactional
+	public Device updateDevice(Device device) {
+		//TODO add categories
+		String query = "UPDATE Device d SET " +
+				"d.title = :title, " +
+				"d.description = :description, " +
+				"d.price = :price, " +
+				"d.isPublic = :isPublic, " +
+				"d.location = :location " +
+				"WHERE d.id = :id";
+
+		try {
+			entityManager.createQuery(query)
+					.setParameter("title", device.getTitle())
+					.setParameter("description", device.getDescription())
+					.setParameter("price", device.getPrice())
+					.setParameter("location", device.getLocation())
+					.setParameter("id", device.getId())
+					.setParameter("isPublic", device.getIsPublic())
+					.executeUpdate();
+		} catch (PersistenceException e) {
+			System.err.println("ERROR updating Device with ID " + device.getId() + ": " + e.getMessage());
+		}
+
+		return getDevice(device.getId());
+	}
 }

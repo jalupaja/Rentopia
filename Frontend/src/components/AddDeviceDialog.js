@@ -26,13 +26,27 @@ const StyledSelect = styled(Select)(({ theme }) => ({
     color: 'inherit',
 }))
 
-function AddDeviceDialog({open, handleAddDialogClose, iName="", iPrice=0, iCategory="%", iDescription=""}) {
+function AddDeviceDialog({open, handleAddDialogClose, iDevice, getAllDeviceData}) {
 
     const [images, setImages] = useState([]);
-    const [name, setName] = useState(iName);
-    const [description, setDescription] = useState(iDescription);
-    const [category, setCategory] = React.useState(iCategory);
-    const [price, setPrice] = useState(iPrice);
+    const initialValues = {
+        title: iDevice.title,
+        description: iDevice.description,
+        price: iDevice.price,
+        category: iDevice.category,
+        ownerId: iDevice.ownerId,
+        location: iDevice.location
+    };
+    const [newDeviceData, setNewDeviceData] = React.useState(initialValues);
+
+    const onChange = (e) => {
+        const {name, value } = e.target;
+        setNewDeviceData(prevState => ({...prevState, [name]: value}));
+    }
+
+    const clearFields = () => {
+        setNewDeviceData({...initialValues});
+    }
 
     const handleFileChange = (event) => {
         const selectedFiles = Array.from(event.target.files);
@@ -48,31 +62,35 @@ function AddDeviceDialog({open, handleAddDialogClose, iName="", iPrice=0, iCateg
         setImages(images.filter(image => image.id !== id));
     };
 
-    const handleCategoryChange = (event) => {
-        setCategory(event.target.value);
-    }
-
     const [errors, setErrors] = useState({
         name: false,
         price: false
     });
 
     const closeDialog = (event) => {
-        setCategory("%");
-        setName("");
-        setDescription("");
-        setPrice(0);
-        setImages([]);
+        clearFields();
         handleAddDialogClose();
     }
 
     const handleSave = (event) => {
         event.preventDefault();
 
-        FetchBackend('POST', '/add', null)
-            .then(response => response.json())
-            .then(data => {console.log(data)})
-            .catch(error => console.log(error));
+        if(iDevice.id === null) {
+            FetchBackend('POST', 'device/add', newDeviceData)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data)
+                })
+                .catch(error => console.log(error));
+        } else {
+            FetchBackend('POST', 'device/update', newDeviceData)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data)
+                })
+                .catch(error => console.log(error));
+        }
+        getAllDeviceData();
 
         closeDialog();
     }
@@ -97,24 +115,24 @@ function AddDeviceDialog({open, handleAddDialogClose, iName="", iPrice=0, iCateg
                             <TextField
                                 variant="outlined"
                                 label={"Name"}
-                                value={name}
-                                onChange={(e) => setName(e.target.value)}
+                                value={newDeviceData.title}
+                                onChange={onChange}
                                 required
                                 error={errors.name}
                                 helperText={errors.name ? 'Name is required' : ''}/>
                             <TextField
                                 variant="outlined"
                                 label={"Price"}
-                                value={price}
-                                onChange={(e) => setPrice(e.target.value)}
+                                value={newDeviceData.price}
+                                onChange={onChange}
                                 required
                                 error={errors.price}
                                 helperText={errors.price ? 'Price is required' : ''}
                                 slotProps={{ input: { inputMode: 'numeric', pattern: '[0-9]*', endAdornment: <EuroIcon/> }}}/>
                             <FormControl size="small">
                                 <StyledSelect
-                                    value={category}
-                                    onChange={handleCategoryChange}
+                                    value={newDeviceData.category}
+                                    onChange={onChange}
                                 >
                                     <MenuItem value={"%"}><em>Category</em></MenuItem>
                                     <MenuItem value={"tools"}>Tools</MenuItem>
@@ -127,8 +145,8 @@ function AddDeviceDialog({open, handleAddDialogClose, iName="", iPrice=0, iCateg
                                 variant="outlined"
                                 multiline rows={5}
                                 label={"Description"}
-                                value={description}
-                                onChange={(e) => setDescription(e.target.value)}/>
+                                value={newDeviceData.description}
+                                onChange={onChange}/>
                         </Grid>
                     </Box>
                     <Box

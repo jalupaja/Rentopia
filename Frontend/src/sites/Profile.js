@@ -73,6 +73,7 @@ function ProfileSite() {
     const [deviceList, setDeviceList] = React.useState([]);
     const [bookmarkList, setBookmarkList] = React.useState([]);
     const [historyList, setHistoryList] = React.useState([]);
+    const [newDevice, setNewDevice] = React.useState({});
 
     useEffect(() => {
         if (JWTTokenExists()) {
@@ -81,24 +82,37 @@ function ProfileSite() {
                 .then(data => { setAuthUser(data); setOwnerId(data.id) })
                 .catch(error => console.log(error))
 
-            FetchBackend('GET', '/bookmarks/all/' + ownerId, null)
+            getAllDeviceData();
+
+            FetchBackend('GET', 'device/bookmarks/all/' + ownerId, null)
                 .then(response => response.json())
                 .then(data => setBookmarkList(data))
                 .catch(error => console.log(error))
 
-            FetchBackend('GET', '/all/' + ownerId, null)
-                .then(response => response.json())
-                .then(data => setDeviceList(data))
-                .catch(error => console.log(error))
-
-            FetchBackend('GET', '/rentHistory/all/' + ownerId, null)
+            FetchBackend('GET', 'device/rentHistory/all/' + ownerId, null)
                 .then(response => response.json())
                 .then(data => setHistoryList(data))
                 .catch(error => console.log(error))
+
+            setNewDevice({   id: null,
+                title: "",
+                description: "",
+                price: 0.0,
+                category: "",
+                ownerId: ownerId,
+                location: authUser.location,
+            })
         } else {
             console.log("no JWT token");
         }
     }, []);
+
+    const getAllDeviceData = () => {
+        FetchBackend('GET', 'device/all/' + ownerId, null)
+            .then(response => response.json())
+            .then(data => setDeviceList(data))
+            .catch(error => console.log(error))
+    }
 
     const handleAddDialogOpen = (device) => {
         setClickedDevice(device)
@@ -122,7 +136,7 @@ function ProfileSite() {
     }
 
     const handleRemoveBookmark = (id) => {
-        FetchBackend('POST', '/bookmarks/remove/' + id, null)
+        FetchBackend('POST', 'device/bookmarks/remove/' + id, null)
             .then(response => response.json())
             .then(data => { console.log(data); setBookmarkList(data) })
             .catch((error) => {
@@ -131,7 +145,7 @@ function ProfileSite() {
     }
 
     const handleDeleteTool = (id) => {
-        FetchBackend('POST', '/remove/' + id, null)
+        FetchBackend('POST', 'device/remove/' + id, null)
             .then(response => response.json())
             .then(data => { console.log(data);})
             .catch((error) => {
@@ -219,14 +233,13 @@ function ProfileSite() {
                                                     DeviceName={device.title}
                                                     DeviceId={device.id}
                                                     handleOpenDeviceEdit={() => handleAddDialogOpen(device)}
-                                                    handleAddDialogClose={() => handleAddDialogClose(index)}
                                                     handleDeleteTool={() => handleDeleteTool(device.id)}
                                                     tabValue={tabValue}
                                                 />
                                             </div>))
                                         }
                                     </List>
-                                    <Fab color="primary" aria-label="add" style={fabStyle} onClick={() => handleAddDialogOpen(null)}>
+                                    <Fab color="primary" aria-label="add" style={fabStyle} onClick={() => handleAddDialogOpen(newDevice)}>
                                         <AddIcon />
                                     </Fab>
                                 </CustomTabPanel>
@@ -236,8 +249,8 @@ function ProfileSite() {
                                             //*Bookmarks*//
                                             <div>
                                                 <DeviceListItem
-                                                    DeviceName={"Insert Device Name here"}
-                                                    DeviceId={index}
+                                                    DeviceName={device.title}
+                                                    DeviceId={device.id}
                                                     handleRemoveBookmark={() => handleRemoveBookmark(device.id)}
                                                     tabValue={tabValue}
                                                 />
@@ -254,8 +267,8 @@ function ProfileSite() {
                                             //*Rent Tools*//
                                             <div>
                                                 <DeviceListItem
-                                                    DeviceName={"Insert Device Name here"}
-                                                    DeviceId={index}
+                                                    DeviceName={device.title}
+                                                    DeviceId={device.id}
                                                     tabValue={tabValue}
                                                 />
                                             </div>))
@@ -276,7 +289,8 @@ function ProfileSite() {
                     {openAddItem ? (
                         <AddDeviceDialog open={openAddItem}
                                          handleAddDialogClose={handleAddDialogClose}
-                                         device={clickedDevice}
+                                         iDevice={clickedDevice}
+                                         getAllDeviceData={getAllDeviceData}
                         />
                     ) : ('')}
                 </div>
