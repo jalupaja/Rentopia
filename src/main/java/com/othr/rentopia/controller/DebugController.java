@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import com.othr.rentopia.config.DotenvHelper;
-
 import com.othr.rentopia.api.EmailService;
 
 import java.util.List;
@@ -439,7 +438,6 @@ public class DebugController {
         f5.setAmount(30.0);
         f5.setProcessed(false);
         financeService.saveFinance(f5);
-
     }
 
     @GetMapping(value = "mail")
@@ -486,6 +484,5 @@ public class DebugController {
 
             emailService.sendEmail(mail);
         }
-
     }
 }

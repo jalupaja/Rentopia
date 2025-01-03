@@ -8,8 +8,6 @@ import com.othr.rentopia.model.Location;
 public interface AccountService {
     public void saveAccount(Account account);
 
-    public Account getAccount(Long accountId);
-
     public Account getAccount(String email);
 
     public Account getAccountWithPassword(String email);

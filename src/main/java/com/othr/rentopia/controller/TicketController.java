@@ -73,7 +73,7 @@ public class TicketController {
 
         Ticket newTicket = new Ticket();
 
-        if(request.get("id") != null){
+        if(!request.isNull("id")){
             throw new Exception("Ticket alraedy exists");
             //todo ?
         }

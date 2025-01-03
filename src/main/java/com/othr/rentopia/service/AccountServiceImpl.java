@@ -40,7 +40,7 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
     }
 
     @Override
-    public Account getAccount(Long accountId) {
+    public Account getAccountById(Long accountId) {
         Account account = null;
 
         String query = "SELECT a FROM Account a WHERE a.id = :accountId";
@@ -49,7 +49,6 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
                     .createQuery(query, Account.class)
                     .setParameter("accountId", accountId)
                     .getSingleResult();
-            account.setPassword(null);
         } catch (NoResultException e) {
 			System.out.println("Selecting user threw exception: "+e.getMessage());
         }

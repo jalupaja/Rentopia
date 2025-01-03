@@ -20,23 +20,13 @@ const DeviceGrid = styled(Grid2)(({ theme }) => ({
 
 function HomeSite() {
     const navigate = useNavigate();
-    const [authUser, setAuthUser] = useState(null);
     const [devices, setDevices] = useState([]);
     const [paginatedDevices, setPaginatedDevices] = useState([]);
     const [page, setPage] = useState(1);
     const devicesPPage = 8;
     const { t } = useTranslation("", { keyPrefix: 'home' });
 
-    useEffect(() => {
-        if (JWTTokenExists()) {
-            FetchBackend('GET', 'user/me', null)
-                .then(response => response.json())
-                .then(data => {
-                    setAuthUser(data);
-                })
-                .catch(error => console.log(error))
-        }
-    }, []);
+    let authUser = GetAuthUser();
 
     useEffect(() => {
         FetchBackend('GET', 'device/short/all', null)

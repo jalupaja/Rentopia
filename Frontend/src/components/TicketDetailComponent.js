@@ -30,21 +30,33 @@ function TicketDetail({ticketInfo, handleChange, handleTicketAction, adm = false
                 message : null,
                 fetch : false
             });
+
+            let responseSuccess = false;
+            let responseMessage = null;
+            let responseFetch = false;
             FetchBackend("Post", "ticket", ticketInfo)
                 .then(response => {
                     if(response.ok){
-                        handleTicketAction({
-                            success : true,
-                            message : "Creating Ticket was successful",
-                            fetch : true
-                        });
+                        responseSuccess = true;
+                        responseMessage = "Creating Ticket was successful";
+                        responseFetch = true;
+                    }
+                    else{
+                        responseSuccess = false;
+                        responseMessage = "An error occured, please try again";
+                        responseFetch = false;
                     }
                 })
                 .catch(e =>{
+                    responseSuccess = false;
+                    responseMessage = "An error occured, please try again";
+                    responseFetch = false;
+                })
+                .finally(() => {
                     handleTicketAction({
-                        success : false,
-                        message : "An error occured, please try again",
-                        fetch : false
+                        success : responseSuccess,
+                        message : responseMessage,
+                        fetch : responseFetch
                     });
                 });
 

@@ -139,7 +139,6 @@ function HelpCenterSite({ adm = false }) {
 
     const handleStatusSelection = (e) => {
         const status = e.target.value;
-        console.log("status",status);
         setSelectedStatus(status);
         fetchTickets(status)
     };

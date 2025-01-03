@@ -97,6 +97,7 @@ function MenuComponent({ authUser }) {
                 </MenuItem>
                 {adminPanel}
                 <Divider />
+                  
                 <MenuItem onClick={handleClose}>
                     <ListItemIcon>
                         <Settings fontSize="small" />

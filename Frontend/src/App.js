@@ -16,6 +16,9 @@ function App() {
                     <Route index element={<HomeSite />} />
                     <Route path="login" element={<LoginSite />} />
                     <Route path="resetPassword" element={<ForgetPasswordSite />} />
+                    <Route path="register" element={<RegisterSite/>}/>
+                    <Route path="helpCenter" element={<HelpCenterSite/>}/>
+                    <Route path="helpCenter/ADM" element={<HelpCenterSite adm={true}/>}/>
                     <Route path="register" element={<RegisterSite />} />
                     <Route path="profilePage" element={<ProfileSite />} />
                     <Route path="helpCenter" element={<HelpCenterSite/>}/>
