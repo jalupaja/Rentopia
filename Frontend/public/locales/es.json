@@ -105,5 +105,10 @@
     "chat" : {
         "your_chats" : "Definir  Chats",
         "message_hint" : "Escribe un mensaje"
+    },
+    "new_password" : {
+        "title_new_password" : "Escriba su nueva contraseña",
+        "password" : "Contraseña",
+        "reset_password" : "Actualizar contraseña"
     }
 }

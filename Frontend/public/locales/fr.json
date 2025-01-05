@@ -105,5 +105,10 @@
     "chat" : {
         "your_chats" : "Tes Chats",
         "message_hint" : "Tapez un message"
+    },
+    "new_password" : {
+        "title_new_password" : "Tapez votre nouveau mot de passe",
+        "password" : "mot de passe",
+        "reset_password" : "Mettre à jour le mot de passe"
     }
 }

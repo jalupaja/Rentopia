@@ -107,5 +107,10 @@
     "chat" : {
         "your_chats" : "Your Chats",
         "message_hint" : "Type a message"
+    },
+    "new_password" : {
+        "title_new_password" : "Type in your new password",
+        "password" : "password",
+        "reset_password" : "Update password"
     }
 }

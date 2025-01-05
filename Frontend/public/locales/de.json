@@ -105,5 +105,10 @@
     "chat" : {
       "your_chats" : "Deine Chats",
       "message_hint" : "Schreibe eine Nachricht"
+    },
+    "new_password" : {
+        "title_new_password" : "Tippe hier dein neues Passwort ein",
+        "password" : "Passwort",
+        "reset_password" : "Update Passwort"
     }
 }

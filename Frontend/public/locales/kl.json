@@ -105,5 +105,10 @@
     "chat" : {
         "your_chats" : "layerteS",
         "message_hint" : "QIH"
+    },
+    "new_password" : {
+        "title_new_password" : "mu'wIj pegh yIQoy",
+        "password" : "leng chaw'",
+        "reset_password" : "ghopDu'"
     }
 }

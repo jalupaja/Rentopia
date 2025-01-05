@@ -167,7 +167,6 @@ public class UserController {
             return new ResponseEntity<>(response.toString(), HttpStatus.OK);
         }
 
-        //todo send email
         String subject = "Reset your password of your Rentopia Account";
         String body = "<h1>Hello, " + user.getName() + "!</h1>\n"
                 + "<p>Click on this button to reset your password</p>\n"
@@ -176,6 +175,7 @@ public class UserController {
         EmailService.Email mail = new EmailService.Email(null, user.getEmail(), null, null);
         mail.loadTemplate(subject, body);
 
+        //todo send email
         //emailService.sendEmail(mail);
 
         response.put("success", true);

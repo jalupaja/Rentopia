@@ -8,6 +8,7 @@ import { useEffect } from "react";
 import ProfileSite from "./sites/Profile";
 import HelpCenterSite from "./sites/HelpCenterSite.js";
 import ChatSite from "./sites/Chat";
+import NewPasswordSite from "./sites/NewPassword";
 
 function App() {
     return (
@@ -17,6 +18,7 @@ function App() {
                     <Route index element={<HomeSite />} />
                     <Route path="login" element={<LoginSite />} />
                     <Route path="resetPassword" element={<ForgetPasswordSite />} />
+                    <Route path="newPassword/:token" element={<NewPasswordSite />} />
                     <Route path="register" element={<RegisterSite/>}/>
                     <Route path="helpCenter" element={<HelpCenterSite/>}/>
                     <Route path="helpCenter/ADM" element={<HelpCenterSite adm={true}/>}/>
