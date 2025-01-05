@@ -1,23 +1,25 @@
 package com.othr.rentopia.controller;
 
+import com.othr.rentopia.api.EmailService;
 import com.othr.rentopia.config.AuthResponse;
 import com.othr.rentopia.config.JwtProvider;
 import com.othr.rentopia.model.Account;
 import com.othr.rentopia.model.Location;
+import com.othr.rentopia.model.ResetPasswordToken;
 import com.othr.rentopia.service.AccountService;
-import com.othr.rentopia.service.AccountServiceImpl;
 import com.othr.rentopia.api.GoogleOAuthService;
+import com.othr.rentopia.service.ResetPasswordService;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController()
 @RequestMapping("api")
@@ -30,6 +32,12 @@ public class UserController {
 
     @Autowired
     private AccountService accountService;
+
+    @Autowired
+    private ResetPasswordService resetPasswordService;
+
+    @Autowired
+    private EmailService emailService;
 
     @PostMapping(value = "login", produces = "application/json")
     public @ResponseBody ResponseEntity<AuthResponse> processLoginRequest(@RequestBody String loginRequest) {
@@ -131,10 +139,44 @@ public class UserController {
     }
 
     @PostMapping(path = "resetPasswordMail", produces = "application/json")
-    public @ResponseBody boolean SendResetPasswordMail(@RequestBody String userMail) {
-        // todo:
+    public @ResponseBody ResponseEntity<String> SendResetPasswordMail(@RequestBody String userMail) {
+        JSONObject response = new JSONObject();
+        response.put("success", false);
 
-        return true;
+        Account user = accountService.getAccount(userMail);
+        if(user == null){
+            response.put("reason", "no_existent_user");
+            return new ResponseEntity<>(response.toString(), HttpStatus.OK);
+        }
+
+        resetPasswordService.removeTokenIfExists(user);
+
+        String token = UUID.randomUUID().toString();
+        ResetPasswordToken newToken = new ResetPasswordToken();
+        newToken.setToken(token);
+        newToken.setUser(user);
+
+        try{
+            resetPasswordService.saveToken(newToken);
+        } catch(Exception e){
+            System.out.println("Storing resetpasswordtoken threw exception: "+e.getMessage());
+            response.put("reason", "exception");
+            return new ResponseEntity<>(response.toString(), HttpStatus.OK);
+        }
+
+        //todo send email
+        String subject = "Reset your password of your Rentopia Account";
+        String body = "<h1>Hello, " + user.getName() + "!</h1>\n"
+                + "<p>Click on this button to reset your password</p>\n"
+                + "<p>We think you'll love these new improvements! Click the button below to see all the details and make the most of the update.</p>\n"
+                + "<a href=\"http://localhost:3000/resetPassword/" + token + "\" class=\"button\">Reset Password</a>\n";
+        EmailService.Email mail = new EmailService.Email(null, user.getEmail(), null, null);
+        mail.loadTemplate(subject, body);
+
+        //emailService.sendEmail(mail);
+
+        response.put("success", true);
+        return new ResponseEntity<>(response.toString(), HttpStatus.OK);
     }
 
     @PostMapping(path = "register", produces = "application/json")
@@ -185,4 +227,6 @@ public class UserController {
         authResponse.setJwt(token);
         return new ResponseEntity<AuthResponse>(authResponse, HttpStatus.OK);
     }
+
+
 }
