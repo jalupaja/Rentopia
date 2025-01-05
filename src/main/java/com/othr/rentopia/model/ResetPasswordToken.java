@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Data
 public class ResetPasswordToken {
 
-    private static final int EXPIRATION = 60 * 24;
+    public static final Long EXPIRATION = 60 * 24L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -17,9 +17,10 @@ public class ResetPasswordToken {
 
     @Column
     private String token;
-    @OneToOne(targetEntity = Account.class, fetch = FetchType.EAGER)
-    @JoinColumn(nullable = false, name = "user_id")
-    private Account user;
+
+    @Column
+    private String userEmail;
+
     @Column(nullable = false)
-    private LocalDateTime timestamp = LocalDateTime.now();
+    private LocalDateTime expiration;
 }

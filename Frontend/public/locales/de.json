@@ -54,7 +54,8 @@
         "succ_mail": "E-Mail wurde erfolgreich gesendet. Bitte überprüfen Sie Ihre E-Mails.",
         "forgot_password": "Passwort vergessen?",
         "write_mail": "Geben Sie Ihre E-Mail-Adresse ein, um Ihr Passwort zurückzusetzen:",
-        "send_mail": "E-Mail senden"
+        "send_mail": "E-Mail senden",
+        "no_existent_user" : "Nutzer mit dieser Email existiert nicht"
     },
     "profile": {
         "user": "Benutzer",

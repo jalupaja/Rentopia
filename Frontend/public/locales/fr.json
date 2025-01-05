@@ -54,7 +54,8 @@
         "succ_mail": "E-mail envoyé avec succès. Veuillez vérifier votre boîte mail.",
         "forgot_password": "Mot de passe oublié?",
         "write_mail": "Entrez votre e-mail pour réinitialiser votre mot de passe:",
-        "send_mail": "Envoyer un e-mail"
+        "send_mail": "Envoyer un e-mail",
+        "no_existent_user" : "L'utilisateur avec cet email n'existe pas"
     },
     "profile": {
         "user": "Utilisateur",

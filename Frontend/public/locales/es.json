@@ -54,7 +54,8 @@
         "succ_mail": "Correo enviado con éxito. Por favor, revisa tu correo.",
         "forgot_password": "¿Olvidaste tu contraseña?",
         "write_mail": "Escribe tu correo electrónico para restablecer tu contraseña:",
-        "send_mail": "Enviar correo"
+        "send_mail": "Enviar correo",
+        "no_existent_user" : "El usuario con este correo electrónico no existe"
     },
     "profile": {
         "user": "Usuario",

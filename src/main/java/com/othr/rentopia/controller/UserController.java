@@ -19,6 +19,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @RestController()
@@ -135,32 +136,34 @@ public class UserController {
         String email = (String) authentication.getPrincipal();
 
         Account account = accountService.getAccount(email);
+        account.setPassword(null);
         return new ResponseEntity<>(account, HttpStatus.OK);
     }
 
     @PostMapping(path = "resetPasswordMail", produces = "application/json")
     public @ResponseBody ResponseEntity<String> SendResetPasswordMail(@RequestBody String userMail) {
+        JSONObject request = new JSONObject(userMail);
         JSONObject response = new JSONObject();
         response.put("success", false);
 
-        Account user = accountService.getAccount(userMail);
+        Account user = accountService.getAccount(request.getString("mail"));
         if(user == null){
             response.put("reason", "no_existent_user");
             return new ResponseEntity<>(response.toString(), HttpStatus.OK);
         }
 
-        resetPasswordService.removeTokenIfExists(user);
+        resetPasswordService.removeTokenIfExists(user.getEmail());
 
         String token = UUID.randomUUID().toString();
         ResetPasswordToken newToken = new ResetPasswordToken();
         newToken.setToken(token);
-        newToken.setUser(user);
+        newToken.setUserEmail(user.getEmail());
+        newToken.setExpiration(LocalDateTime.now().plusMinutes(ResetPasswordToken.EXPIRATION));
 
         try{
             resetPasswordService.saveToken(newToken);
         } catch(Exception e){
             System.out.println("Storing resetpasswordtoken threw exception: "+e.getMessage());
-            response.put("reason", "exception");
             return new ResponseEntity<>(response.toString(), HttpStatus.OK);
         }
 

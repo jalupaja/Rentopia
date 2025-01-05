@@ -54,7 +54,8 @@
         "succ_mail": "nav ngeHchu'. yInav yIlegh.",
         "forgot_password": "mu'wIj Dargh?",
         "write_mail": "mu'wIj chenmoHmeH email yIghItlh:",
-        "send_mail": "nav ngeH"
+        "send_mail": "nav ngeH",
+        "no_existent_user" : "ngeDbe'chugh vay' ngaSbe'chugh vay'"
     },
     "profile": {
         "user": "loDnal",

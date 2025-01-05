@@ -7,7 +7,9 @@ import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.PersistenceException;
 import jakarta.transaction.Transactional;
+import org.springframework.stereotype.Service;
 
+@Service
 public class ResetPasswordServiceImpl implements ResetPasswordService {
     @PersistenceContext
     private EntityManager entityManager;
@@ -21,11 +23,11 @@ public class ResetPasswordServiceImpl implements ResetPasswordService {
     public ResetPasswordToken getToken(Account user) {
         ResetPasswordToken token = null;
 
-        String query = "SELECT a FROM ResetPasswordToken a WHERE a.user.id = :accountId";
+        String query = "SELECT a FROM ResetPasswordToken a WHERE a.userEmail = :accountEmail";
         try {
             token = entityManager
                     .createQuery(query, ResetPasswordToken.class)
-                    .setParameter("accountId", user.getId())
+                    .setParameter("accountEmail", user.getEmail())
                     .getSingleResult();
         } catch (NoResultException ignore) {
         }
@@ -35,10 +37,10 @@ public class ResetPasswordServiceImpl implements ResetPasswordService {
 
     @Override
     @Transactional
-    public void removeTokenIfExists(Account user) {
-        String query = "DELETE FROM ResetPasswordToken t WHERE t.user.id = :userId";
+    public void removeTokenIfExists(String userMail) {
+        String query = "DELETE FROM ResetPasswordToken t WHERE t.userEmail = :userMail";
         entityManager.createQuery(query)
-                .setParameter("userId", user.getId())
+                .setParameter("userMail", userMail)
                 .executeUpdate();
     }
 }

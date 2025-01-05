@@ -56,7 +56,8 @@
         "succ_mail": "Send mail succeeded. Please look at your mail.",
         "forgot_password": "Forgot your password?",
         "write_mail": "Type in your email for resetting your password:",
-        "send_mail": "Send Email"
+        "send_mail": "Send Email",
+        "no_existent_user" : "User with this email does not exist"
     },
     "profile": {
         "user": "User",
