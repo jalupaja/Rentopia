@@ -12,5 +12,7 @@ public interface BookmarkService {
 
 	boolean checkBookmark(Long ownerId, Long deviceId);
 
+    List<Bookmark> getUserBookmarksByDevice(Long deviceId);
+
 	List<Device> getBookmarkedDevices(Long ownerId);
 }

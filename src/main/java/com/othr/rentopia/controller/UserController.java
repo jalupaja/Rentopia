@@ -6,6 +6,7 @@ import com.othr.rentopia.model.Account;
 import com.othr.rentopia.model.Location;
 import com.othr.rentopia.service.AccountService;
 import com.othr.rentopia.service.AccountServiceImpl;
+import com.othr.rentopia.api.GoogleOAuthService;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,6 +26,9 @@ public class UserController {
     private PasswordEncoder passwordEncoder;
 
     @Autowired
+    private GoogleOAuthService googleOAuthService;
+
+    @Autowired
     private AccountService accountService;
 
     @PostMapping(value = "login", produces = "application/json")
@@ -40,6 +44,7 @@ public class UserController {
         if (userDetails == null || !passwordEncoder.matches(password, userDetails.getPassword())) {
             authResponse.setStatus(false);
             authResponse.setMessage("Invalid username or password");
+            return new ResponseEntity<AuthResponse>(authResponse, HttpStatus.UNAUTHORIZED);
         } else {
             Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null,
                     userDetails.getAuthorities());
@@ -51,13 +56,74 @@ public class UserController {
             authResponse.setMessage("Login success");
             authResponse.setJwt(token);
             authResponse.setStatus(true);
+            return new ResponseEntity<AuthResponse>(authResponse, HttpStatus.OK);
         }
-
-        return new ResponseEntity<AuthResponse>(authResponse, HttpStatus.OK);
     }
 
-    @GetMapping(path = "user/me", produces = "application/json")
-    public @ResponseBody ResponseEntity<Account> GetAuthUser(Authentication authentication) {
+    @PostMapping(value="loginOAuth", produces="application/json")
+    public ResponseEntity<AuthResponse> loginSuccess(@RequestBody String loginRequest) {
+        // login via Google OAuth
+        JSONObject request = new JSONObject(loginRequest);
+
+        String googleToken = (String) request.get("token");
+
+        AuthResponse authResponse = new AuthResponse();
+        String email;
+        try {
+            // verify token with google
+            email = googleOAuthService.getEmail(googleToken);
+            System.out.println("Google Authenticated: " + email);
+        } catch (Exception e) {
+            authResponse.setStatus(false);
+            authResponse.setMessage("Invalid Login");
+            System.out.println("Invalid token: " + e.getMessage());
+            return new ResponseEntity<AuthResponse>(authResponse, HttpStatus.UNAUTHORIZED);
+        }
+
+        Account account = accountService.getAccountWithPassword(email);
+        if(account == null){
+            // Account doesn't exist -> create new account
+
+            account = new Account();
+            account.setEmail(email);
+            account.setName(email.substring(0, email.indexOf('@')));
+            account.setPassword("");
+            account.setRole(Account.Role.USER);
+
+            Location location = new Location();
+            location.setCity("");
+            location.setPostalCode("");
+            location.setStreet("");
+            location.setCountry("");
+            account.setLocation(location);
+
+            accountService.saveAccount(account);
+        }
+
+        if ("".equals(account.getPassword())) {
+            // Account existed (or was just created) and was created using Google Login (Password == "") -> login
+            Authentication authentication = new UsernamePasswordAuthenticationToken(account, null,
+                    account.getAuthorities());
+
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            String token = JwtProvider.generateToken(authentication, account.getId());
+
+            authResponse.setMessage("Login success");
+            authResponse.setJwt(token);
+            authResponse.setStatus(true);
+
+            return new ResponseEntity<AuthResponse>(authResponse, HttpStatus.OK);
+        } else {
+            // Account exists but wasn't created using Google Login -> ERROR
+            authResponse.setStatus(false);
+            authResponse.setMessage("Account wasn't created using Google");
+            return new ResponseEntity<AuthResponse>(authResponse, HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    @GetMapping(path="user/me", produces="application/json")
+    public @ResponseBody ResponseEntity<Account> GetAuthUser(Authentication authentication){
         String email = (String) authentication.getPrincipal();
 
         Account account = accountService.getAccount(email);
@@ -72,19 +138,18 @@ public class UserController {
     }
 
     @PostMapping(path = "register", produces = "application/json")
-    public @ResponseBody String RegisterUser(@RequestBody String userInfo) {
+    public @ResponseBody ResponseEntity<AuthResponse> RegisterUser(@RequestBody String userInfo) {
         JSONObject request = new JSONObject(userInfo);
-        JSONObject response = new JSONObject();
+        AuthResponse authResponse = new AuthResponse();
 
         String email = (String) request.get("email");
         if (accountService.emailExists(email)) {
-            response.put("registrationSuccess", false);
-            response.put("reason", "There is already an account for this email");
-            return response.toString();
+            authResponse.setStatus(false);
+            authResponse.setMessage("There is already an account for this email");
+            return new ResponseEntity<AuthResponse>(authResponse, HttpStatus.UNAUTHORIZED);
         }
 
         Account newAccount = new Account();
-        newAccount.setEmail((String) request.get("email"));
         newAccount.setName((String) request.get("name"));
         newAccount.setEmail((String) request.get("email"));
 
@@ -109,7 +174,15 @@ public class UserController {
 
         accountService.saveAccount(newAccount);
 
-        response.put("registrationSuccess", true);
-        return response.toString();
+        authResponse.setStatus(true);
+
+        Authentication authentication = new UsernamePasswordAuthenticationToken(newAccount, null,
+                newAccount.getAuthorities());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String token = JwtProvider.generateToken(authentication, newAccount.getId());
+
+        authResponse.setMessage("Registration successful");
+        authResponse.setJwt(token);
+        return new ResponseEntity<AuthResponse>(authResponse, HttpStatus.OK);
     }
 }

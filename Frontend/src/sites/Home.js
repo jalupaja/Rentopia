@@ -5,14 +5,14 @@ import {
     CardMedia,
     styled, Typography, Grid2, Pagination
 } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import Footer from "../components/Footer.js";
-import FetchBackend, { JWTTokenExists } from "../helper/BackendHelper.js";
+import FetchBackend, {GetAuthUser, JWTTokenExists} from "../helper/BackendHelper.js";
 import { useEffect, useState } from "react";
 import * as React from 'react';
 import Appbar from "../components/Appbar.js";
 import { FrameStyle } from "./Register";
-import {GetAuthUser} from "../helper/BackendHelper";
+import { useTranslation } from "react-i18next";
 
 const DeviceGrid = styled(Grid2)(({ theme }) => ({
     margin: '2% 10%'
@@ -24,6 +24,7 @@ function HomeSite() {
     const [paginatedDevices, setPaginatedDevices] = useState([]);
     const [page, setPage] = useState(1);
     const devicesPPage = 8;
+    const { t } = useTranslation("", { keyPrefix: 'home' });
 
     let authUser = GetAuthUser();
 
@@ -47,7 +48,7 @@ function HomeSite() {
                     {paginatedDevices.map((device, index) => (
                         <Grid2 key={index}>
                             <Card sx={{ width: 300, boxShadow: 3 }} >
-                                <CardActionArea onClick={() => navigate("/device/" + device.id)} >
+                                <CardActionArea component={Link} to={"/device/" + device.id} >
                                     <CardMedia
                                         component="img"
                                         alt={device.title}

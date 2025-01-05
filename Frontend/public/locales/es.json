@@ -1,0 +1,91 @@
+{
+    "home": {},
+    "appbar": {
+        "logo": "Logotipo de Rentopia",
+        "search": "Buscar…",
+        "location": "Ciudad o código postal",
+        "all_categories": "Todas las categorías",
+        "tools": "Herramientas",
+        "media": "Medios",
+        "home": "Inicio",
+        "sign_in": "Iniciar sesión"
+    },
+    "device": {
+        "bookmarked": "Marcado",
+        "add_bookmark": "Agregar a marcadores",
+        "rent": "Alquilar ahora"
+    },
+    "login": {
+        "error_password": "¡Correo o contraseña incorrectos!",
+        "error_unknown": "Ocurrió un error. Por favor, inténtalo de nuevo.",
+        "welcome": "Bienvenido a Rentopia",
+        "email": "Correo electrónico",
+        "password": "Contraseña",
+        "hide_password": "ocultar la contraseña",
+        "display_password": "mostrar la contraseña",
+        "login": "Iniciar sesión",
+        "create_account": "Crear cuenta",
+        "forgot_password": "¿Olvidaste tu contraseña?"
+    },
+    "register": {
+        "error_identical": "Las contraseñas no son idénticas",
+        "succ_register": "Registro exitoso",
+        "error_unknown": "Ocurrió un error. Por favor, inténtalo de nuevo.",
+        "error_empty": " no puede estar vacío",
+        "private": "privado",
+        "commercial": "comercial",
+        "company_name": "Nombre de la empresa",
+        "name": "Nombre",
+        "email": "Correo electrónico",
+        "password": "Contraseña",
+        "text": "Texto",
+        "hide_password": "ocultar la contraseña",
+        "display_password": "mostrar la contraseña",
+        "street": "Calle",
+        "postal_code": "Código postal",
+        "city": "Ciudad",
+        "country": "País",
+        "create_account": "Crear cuenta",
+        "login": "Iniciar sesión"
+    },
+    "forgotpassword": {
+        "error_mail": "El envío del correo no fue exitoso. Por favor, inténtalo de nuevo.",
+        "succ_mail": "Correo enviado con éxito. Por favor, revisa tu correo.",
+        "forgot_password": "¿Olvidaste tu contraseña?",
+        "write_mail": "Escribe tu correo electrónico para restablecer tu contraseña:",
+        "send_mail": "Enviar correo"
+    },
+    "profile": {
+        "user": "Usuario",
+        "name": "Nombre",
+        "prename": "Nombre de pila",
+        "company": "Empresa",
+        "email": "Correo electrónico",
+        "edit_profile": "Editar perfil",
+        "profile_tabs": "Pestañas de perfil",
+        "your_tools": "Tus herramientas",
+        "bookmarks": "Marcadores",
+        "rent_history": "Historial de alquiler",
+        "insert_device": "Inserte el nombre del dispositivo aquí",
+        "tool_nr": "Herramienta Nr "
+    },
+    "helpcenter": {
+        "error_unavailable": "El centro de ayuda no está disponible actualmente. Por favor, inténtalo de nuevo.",
+        "status": "Estado",
+        "status_open": "Abierto",
+        "status_closed": "Cerrado",
+        "new_ticket": "Nuevo ticket"
+    },
+    "profile_menu": {
+        "admin_tickesystem": "Sistema de tickets ADM",
+        "account_settings": "Configuración de la cuenta",
+        "profile": "Perfil",
+        "ticketsystem": "Centro de ayuda",
+        "logout": "Cerrar sesión",
+        "settings": "Configuración"
+    },
+    "languageselector": {
+        "select_language": "Seleccionar un idioma",
+        "search": "Buscar…"
+    }
+}

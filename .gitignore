@@ -1,5 +1,7 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
+/Frontend/.env
+/Frontend/package-lock.json
 HELP.md
 target/
 !.mvn/wrapper/maven-wrapper.jar

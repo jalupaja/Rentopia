@@ -16,6 +16,7 @@ import Footer from "../components/Footer.js";
 import FetchBackend, { JWTTokenExists } from "../helper/BackendHelper.js";
 import { useEffect, useState } from "react";
 import Appbar from "../components/Appbar.js";
+import { useTranslation } from "react-i18next";
 import {StartChatFromDevice} from "../helper/ChatHelper";
 
 const boxStyle = {
@@ -30,6 +31,7 @@ function DeviceSite() {
     const navigate = useNavigate();
     const { deviceId } = useParams();
     const [authUser, setAuthUser] = useState(null);
+    const { t } = useTranslation("", { keyPrefix: "device" });
     const [device, setDevice] = useState({
         "owner": "",
         "images": [],
@@ -205,7 +207,7 @@ function DeviceSite() {
                                                     variant="contained" color="secondary" fullWidth
                                                 >
                                                     { /* TODO onClick={() => RENT} */}
-                                                    Rent Now
+                                                    {t("rent")}
                                                 </Button>
                                             </Grid2>
                                             <Grid2 container size={12} sx={{marginBottom : "1%"}}>
@@ -213,7 +215,7 @@ function DeviceSite() {
                                                     <Button
                                                         variant="contained" color="primary" sx={{marginRight : "1%"}}
                                                         onClick={btnBookmark} fullWidth>
-                                                        {device.isBookmarked ? ("Bookmarked") : ("Add to Bookmarks")}
+                                                        {device.isBookmarked ? (t("bookmarked")) : t("add_bookmark")}
                                                     </Button>
                                                 </Grid2>
                                                 <Grid2 size={6}>

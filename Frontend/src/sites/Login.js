@@ -17,7 +17,8 @@ import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import Appbar from "../components/Appbar.js";
 import ResponsePopup from "../components/ResponsePopup.js";
-
+import { GoogleLogin } from '@react-oauth/google';
+import { useTranslation } from "react-i18next";
 
 function LoginSite() {
     const navigation = useNavigate();
@@ -33,6 +34,7 @@ function LoginSite() {
     const handleMouseUpPassword = (event) => {
         event.preventDefault();
     };
+    const { t } = useTranslation("", { keyPrefix: "login" });
 
     //login
     const [userEmail, setUserEmail] = React.useState("");
@@ -51,14 +53,38 @@ function LoginSite() {
                     navigation("/");
                 }
                 else {
-                    setRegisterStatusLabel(<ResponsePopup message={"Wrong email or password!"} reason={"error"} />);
+                    setRegisterStatusLabel(<ResponsePopup message={t("error_password")} reason={"error"} />);
                 }
 
             })
             .catch((error) => {
-                setRegisterStatusLabel(<ResponsePopup message={"An error occurred. Please try again."} reason={"error"} />);
+                setRegisterStatusLabel(<ResponsePopup message={t("error_unknown")} reason={"error"} />);
             });
     };
+
+
+    const OAuthSuccess = (response) => {
+        const loginData = {
+            token: response.credential,
+        };
+
+        FetchBackend('POST', 'loginOAuth', loginData)
+            .then(response => response.json())
+            .then(data => {
+                if (data.status) {
+                    Cookies.set(JWT_TOKEN, data.jwt);
+                    navigation("/");
+                } else {
+                    setRegisterStatusLabel(<ResponsePopup message={t("error_not_google")} reason={"error"} />);
+                }
+            })
+            .catch(error => {
+                setRegisterStatusLabel(<ResponsePopup message={t("error_unknown")} reason={"error"} />);
+            });
+    };
+    const OAuthError = (error) => {
+        setRegisterStatusLabel(<ResponsePopup message={t("error_unknown")} reason={"error"} />);
+    }
 
     const [registerStatusLabel, setRegisterStatusLabel] = React.useState(null);
 
@@ -71,22 +97,22 @@ function LoginSite() {
             <Stack sx={{ ...centeredDivStyle }}>
 
                 <Typography variant="button" gutterBottom variant="h5">
-                    Welcome to Rentopia
+                    {t("welcome")}
                 </Typography>
-                <TextField sx={{ ...InputFieldStyle }} id="emailTextfield" label="Email" variant="outlined"
+                <TextField sx={{ ...InputFieldStyle }} id="emailTextfield" label={t("email")} variant="outlined"
                     required value={userEmail} onChange={(event) => setUserEmail(event.target.value)}
                 />
                 <FormControl sx={{ ...InputFieldStyle }} variant="outlined">
-                    <InputLabel required htmlFor="outlined-adornment-password">Password</InputLabel>
+                    <InputLabel required htmlFor="outlined-adornment-password">{t("password")}</InputLabel>
                     <OutlinedInput
                         value={userPassword} onChange={(event) => setUserPassword(event.target.value)}
                         id="outlined-adornment-password"
-                        type={showPassword ? 'text' : 'password'}
+                        type={showPassword ? 'text' : t("password")}
                         endAdornment={
                             <InputAdornment position="end">
                                 <IconButton
                                     aria-label={
-                                        showPassword ? 'hide the password' : 'display the password'
+                                        showPassword ? t("hide_password") : t("display_password")
                                     }
                                     onClick={handleClickShowPassword}
                                     onMouseDown={handleMouseDownPassword}
@@ -97,14 +123,20 @@ function LoginSite() {
                                 </IconButton>
                             </InputAdornment>
                         }
-                        label="Password"
+                        label={t("password")}
                     />
                 </FormControl>
                 <Button variant="contained" onClick={() => SubmitLogin()} sx={{ ...InputFieldStyle }}>
-                    Login
+                    {t("login")}
                 </Button>
-                <Link href="./register" marginTop={2}>Create Account</Link>
-                <Link href="/resetPassword" >Forget your password?</Link>
+                <Typography variant="body2" align="center" sx={{...InputFieldStyle}}>
+                    OR
+                </Typography>
+                <div style={{...InputFieldStyle}}>
+                    <GoogleLogin onSuccess={OAuthSuccess} onError={OAuthError}  />
+                </div>
+                <Link href="./register" marginTop={2}>{t("create_account")}</Link>
+                <Link href="/resetPassword" >{t("forgot_password")}</Link>
             </Stack>
             <Box flex={"auto"} />
             <Footer />

@@ -50,6 +50,7 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
                     .setParameter("accountId", accountId)
                     .getSingleResult();
         } catch (NoResultException e) {
+			System.out.println("Selecting user threw exception: "+e.getMessage());
         }
 
         return account;
@@ -67,6 +68,25 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
                     .getSingleResult();
             account.setPassword(null);
         } catch (NoResultException e) {
+			System.out.println("Selecting user threw exception: " + e.getMessage());
+        }
+
+        return account;
+    }
+
+    @Override
+    public Account getAccount(Long accountId) {
+        Account account = null;
+
+        String query = "SELECT a FROM Account a WHERE a.id = :accountId";
+        try {
+            account = entityManager
+                    .createQuery(query, Account.class)
+                    .setParameter("accountId", accountId)
+                    .getSingleResult();
+            account.setPassword(null);
+        } catch (NoResultException e) {
+			System.out.println("Selecting user threw exception: " + e.getMessage());
         }
 
         return account;
@@ -135,6 +155,23 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
 
         return id;
     }
+
+    @Override
+    public boolean isAdmin(Long accountId) {
+        String query = "SELECT a.role FROM Account a WHERE a.id = :accountId";
+        Account.Role role;
+        try {
+             role = entityManager
+                    .createQuery(query, Account.Role.class)
+                    .setParameter("accountId", accountId)
+                    .getSingleResult();
+        } catch (NoResultException e) {
+            return false;
+        }
+
+        return role == Account.Role.ADMIN;
+  }
+
 
     @Override
     public boolean emailExists(String email) {

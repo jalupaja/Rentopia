@@ -6,7 +6,7 @@ import RegisterSite from "./sites/Register.js";
 import DeviceSite from "./sites/Device.js";
 import { useEffect } from "react";
 import ProfileSite from "./sites/Profile";
-import HelpCenterSite from "./sites/HelpCenterSite";
+import HelpCenterSite from "./sites/HelpCenterSite.js";
 import ChatSite from "./sites/Chat";
 
 function App() {
