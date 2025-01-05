@@ -21,8 +21,11 @@ import {useEffect} from "react";
 import ResponsePopup from "../components/ResponsePopup";
 import ChatComponent from "../components/Chat";
 import {getOtherUser} from "../helper/ChatHelper";
+import {useTranslation} from "react-i18next";
 
 function ChatSite(){
+    const { t } = useTranslation("", { keyPrefix: "chat" });
+
     ReturnHomeWhenLoggedOut();
 
     const authUser = GetAuthUser();
@@ -62,7 +65,7 @@ function ChatSite(){
 
                 <Grid2 size={3} sx={{padding : "1%"}}>
                     <Typography gutterBottom variant="h6" >
-                        Your Chats
+                        {t("your_chats")}
                     </Typography>
                     <List>
                         {

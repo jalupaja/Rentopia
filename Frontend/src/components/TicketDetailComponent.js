@@ -4,8 +4,11 @@ import {InputFieldStyle} from "../sites/Register.js";
 import FetchBackend from "../helper/BackendHelper.js";
 import ResponsePopup from "./ResponsePopup.js";
 import {useEffect} from "react";
+import {useTranslation} from "react-i18next";
 
 function TicketDetail({ticketInfo, handleChange, handleTicketAction, adm = false}){
+    const { t } = useTranslation("", { keyPrefix: "helpcenter" });
+
     if(!handleTicketAction){
         handleTicketAction = (e) => {};
     }
@@ -38,18 +41,18 @@ function TicketDetail({ticketInfo, handleChange, handleTicketAction, adm = false
                 .then(response => {
                     if(response.ok){
                         responseSuccess = true;
-                        responseMessage = "Creating Ticket was successful";
+                        responseMessage = t("success_ticket_creation");
                         responseFetch = true;
                     }
                     else{
                         responseSuccess = false;
-                        responseMessage = "An error occured, please try again";
+                        responseMessage = t("error_ticket_action");
                         responseFetch = false;
                     }
                 })
                 .catch(e =>{
                     responseSuccess = false;
-                    responseMessage = "An error occured, please try again";
+                    responseMessage = t("error_ticket_action");
                     responseFetch = false;
                 })
                 .finally(() => {
@@ -73,7 +76,7 @@ function TicketDetail({ticketInfo, handleChange, handleTicketAction, adm = false
             //ticket only local, no api call necessary
             handleTicketAction({
                 success : true,
-                message : "Deleting Ticket was successful",
+                message : t("success_ticket_delete"),
                 fetch : true
             });
             return;
@@ -84,14 +87,14 @@ function TicketDetail({ticketInfo, handleChange, handleTicketAction, adm = false
                 if(response.ok){
                     handleTicketAction({
                         success : true,
-                        message : "Deleting Ticket was successful",
+                        message : t("success_ticket_delete"),
                         fetch : true
                     });
                 }
                 else{
                     handleTicketAction({
                         success : false,
-                        message : "An error occured, please try again",
+                        message : t("error_ticket_action"),
                         fetch : false
                     });
                 }
@@ -99,7 +102,7 @@ function TicketDetail({ticketInfo, handleChange, handleTicketAction, adm = false
             .catch(e =>{
                 handleTicketAction({
                     success : false,
-                    message : "An error occured, please try again",
+                    message : t("error_ticket_action"),
                     fetch : false
                 });
             });
@@ -119,14 +122,14 @@ function TicketDetail({ticketInfo, handleChange, handleTicketAction, adm = false
                 if(data.success){
                     handleTicketAction({
                         success : true,
-                        message : "Closing ticket was successful",
+                        message : t("success_ticket_close"),
                         fetch : true
                     });
                 }
                 else{
                     handleTicketAction({
                         success : false,
-                        message : "An error occured, please try again",
+                        message : t("error_ticket_action"),
                         fetch : false
                     });
                 }
@@ -134,7 +137,7 @@ function TicketDetail({ticketInfo, handleChange, handleTicketAction, adm = false
             .catch(e => {
                 handleTicketAction({
                     success : false,
-                    message : "An error occured, please try again",
+                    message : t("error_ticket_action"),
                     fetch : false
                 });
             });
@@ -145,10 +148,10 @@ function TicketDetail({ticketInfo, handleChange, handleTicketAction, adm = false
                 Ticket {ticketInfo.id ? "#"+ticketInfo.id : ""}
             </Typography>
             <Typography variant="button" gutterBottom variant="h5">
-                Owner: {ticketInfo.owner.name}
+                {t("owner")}: {ticketInfo.owner.name}
             </Typography>
             <Typography variant="button" gutterBottom variant="h5">
-                Status: {ticketInfo.status}
+                {t("status")}: {ticketInfo.status}
             </Typography>
             <TextField label="Title" variant="outlined" required disabled={editable}
                        name="title" value={ticketInfo.title} onChange={handleChange}
@@ -160,7 +163,7 @@ function TicketDetail({ticketInfo, handleChange, handleTicketAction, adm = false
                     value={ticketInfo.category} name="category" onChange={handleChange}
                     label="Category"
                 >
-                    <MenuItem value={"general"}>General</MenuItem>
+                    <MenuItem value={"general"}>{t("category_general")}</MenuItem>
                 </Select>
             </FormControl>
             <TextField
@@ -189,15 +192,15 @@ function TicketDetail({ticketInfo, handleChange, handleTicketAction, adm = false
                 <Button variant="contained" sx={{marginRight : "1%"}}
                     style={{display: ticketInfo.status==="new" ? "inherit": "none"}}
                     onClick={handleSubmitTicket}>
-                    Submit Ticket
+                    {t("submit_ticket")}
                 </Button>
                 <Button variant="contained" sx={{marginRight : "1%"}} onClick={handleDeleteTicket}>
-                    Delete Ticket
+                    {t("submit_ticket")}
                 </Button>
                 <Button variant="contained" sx={{marginRight : "1%", color: "secondary"}}
                         style={{display: adm ? "inherit": "none"}}
                         onClick={handleCloseTicket}>
-                    Close Ticket
+                    {t("submit_ticket")}
                 </Button>
             </Grid2>
         </Box>

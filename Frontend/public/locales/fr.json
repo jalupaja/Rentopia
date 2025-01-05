@@ -13,7 +13,8 @@
     "device": {
         "bookmarked": "Enregistré",
         "add_bookmark": "Ajouter aux favoris",
-        "rent": "Louer maintenant"
+        "rent": "Louer maintenant",
+        "StartConversation" : "Démarrer une conversation"
     },
     "login": {
         "error_password": "Email ou mot de passe incorrect!",
@@ -74,7 +75,18 @@
         "status": "Statut",
         "status_open": "Ouvert",
         "status_closed": "Fermé",
-        "new_ticket": "Nouveau ticket"
+        "new_ticket": "Nouveau ticket",
+        "submit_ticket" : "Soumettre le billet",
+        "delete_ticket" : "Supprimer le billet",
+        "close_ticket" : "Fermer le billet",
+        "error_ticket_action" : "Une erreur s'est produite, veuillez réessayer",
+        "success_ticket_creation" : "La création du ticket a réussi",
+        "success_ticket_delete" : "La suppression du ticket a réussi",
+        "success_ticket_close" : "La fermeture du ticket a réussi",
+        "owner" : "Propriétaire",
+        "category_general" : "général",
+        "title_error_input" : "Le titre ne doit pas être vide",
+        "status_new" : "Nouveau"
     },
     "profile_menu": {
         "admin_tickesystem": "Système de tickets ADM",
@@ -82,10 +94,15 @@
         "profile": "Profil",
         "ticketsystem": "Centre d'aide",
         "logout": "Déconnexion",
-        "settings": "Paramètres"
+        "settings": "Paramètres",
+        "chat" : "Chat"
     },
     "languageselector": {
         "select_language": "Sélectionnez une langue",
         "search": "Rechercher…"
+    },
+    "chat" : {
+        "your_chats" : "Tes Chats",
+        "message_hint" : "Tapez un message"
     }
 }

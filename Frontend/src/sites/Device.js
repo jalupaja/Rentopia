@@ -220,7 +220,7 @@ function DeviceSite() {
                                                 </Grid2>
                                                 <Grid2 size={6}>
                                                     <Button variant="contained" onClick={handleConversationStart} fullWidth>
-                                                        Start Conversation
+                                                        {t("StartConversation")}
                                                     </Button>
                                                 </Grid2>
                                             </Grid2>

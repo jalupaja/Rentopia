@@ -5,8 +5,10 @@ import MessageBubble from "./MessageBubble";
 import FetchBackend from "../helper/BackendHelper";
 import {useEffect} from "react";
 import {getOtherUser} from "../helper/ChatHelper";
+import {useTranslation} from "react-i18next";
 
 function ChatComponent({chat = null, authUser = null}){
+    const { t } = useTranslation("", { keyPrefix: "chat" });
 
     const [messages, setMessages] = React.useState([]);
     const [newMessage, setNewMessage] = React.useState("");
@@ -89,7 +91,7 @@ function ChatComponent({chat = null, authUser = null}){
                                        </IconButton>
                                    </InputAdornment>)
                            }}
-                           placeholder="Type a message..."
+                           placeholder={t("message_hint") + "..."}
                            onKeyPress={(e) => {
                                if (e.key === 'Enter') {
                                    handleSend();

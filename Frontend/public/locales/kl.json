@@ -13,7 +13,8 @@
     "device": {
         "bookmarked": "luqonnIS",
         "add_bookmark": "qonwI' chel",
-        "rent": "DaH tlhap"
+        "rent": "DaH tlhap",
+        "StartConversation" : "HablI'mo'"
     },
     "login": {
         "error_password": "Qagh email pagh mu'wIj!",
@@ -74,7 +75,18 @@
         "status": "ghu'",
         "status_open": "poS",
         "status_closed": "SoQ",
-        "new_ticket": "chu' nav"
+        "new_ticket": "chu' nav",
+        "submit_ticket" : "sengvam",
+        "delete_ticket" : "'e' yIHar",
+        "close_ticket" : "qo'",
+        "error_ticket_action" : "'ej ghu'vam yISambe'choHlu'",
+        "success_ticket_creation" : "yInmeH pe'vIl yInmoH",
+        "success_ticket_delete" : "yIntaHvIS ghotpu'",
+        "success_ticket_close" : "yIntaHvIS ghotpu'",
+        "owner" : "'oSrIq",
+        "category_general" : "Sa'",
+        "title_error_input" : "'ej chuQunghomlaw'",
+        "status_new" : "chu'"
     },
     "profile_menu": {
         "admin_tickesystem": "ADM nav QuS",
@@ -82,10 +94,15 @@
         "profile": "De'",
         "ticketsystem": "QaH ghom",
         "logout": "nge'",
-        "settings": "choHmey"
+        "settings": "choHmey",
+        "chat" : "jaw"
     },
     "languageselector": {
         "select_language": "Hol wIv",
         "search": "nej…"
+    },
+    "chat" : {
+        "your_chats" : "layerteS",
+        "message_hint" : "QIH"
     }
 }

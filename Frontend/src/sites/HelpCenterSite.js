@@ -34,7 +34,7 @@ function HelpCenterSite({ adm = false }) {
     const [statusLabel, setStatusLabel] = React.useState(null);
     const [isAdminPage, setIsAdminPage] = React.useState(false);
     const [selectedStatus, setSelectedStatus] = React.useState('');
-    const { t } = useTranslation("", { keyPrefix: "helpercenter" });
+    const { t } = useTranslation("", { keyPrefix: "helpcenter" });
 
     let fetchTickets = () => { };
     if (adm) {
@@ -109,7 +109,7 @@ function HelpCenterSite({ adm = false }) {
             {
                 id: null,
                 owner: authUser,
-                title: "new ticket",
+                title: t("new_ticket"),
                 status: "new",
                 category: "general",
                 details: ""

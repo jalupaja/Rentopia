@@ -105,7 +105,7 @@ function MenuComponent({ authUser }) {
             <ListItemIcon>
                 <ChatIcon fontSize="small" />
             </ListItemIcon>
-            Chat
+            {t("chat")}
         </MenuItem>
         <Divider />
         <MenuItem onClick={() => navigate("/helpCenter")}>
