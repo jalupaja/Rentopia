@@ -83,15 +83,12 @@ function Appbar({ showLogin = true, authUser = null, searchVisibility = 'hidden'
 
     const navigate = useNavigate();
     let loginButton = <Button sx={{ visibility: 'hidden' }} />;
-    let profileButton = <IconButton sx={{ visibility: 'hidden' }}></IconButton>;
     if (showLogin) {
         if (authUser === null) {
             loginButton = <Button component={Link} to={"/login"} variant="outlined" color="inherit">{t("sign_in")}</Button>;
-            profileButton = <IconButton component={Link} to={"/profilePage"} size="large"><AccountCircleIcon fontSize="inherit" /></IconButton>
         }
         else{
-            loginButton = <Button onClick={()=> {Logout();  window.location.reload();}} variant="outlined" color="inherit">{t("logout")}</Button>;
-            profileButton = <IconButton onClick={() => navigate("/profilePage")} size="large"><AccountCircleIcon fontSize="inherit"/></IconButton>
+            loginButton = <MenuComponent authUser={authUser}/>;
         }
     }
 
@@ -155,7 +152,6 @@ function Appbar({ showLogin = true, authUser = null, searchVisibility = 'hidden'
                         />
                     </Search>
                     <Box sx={{ flexGrow: 1 }}></Box>
-                  {profileButton}
                   {loginButton}
                 </Toolbar>
             </AppBar>

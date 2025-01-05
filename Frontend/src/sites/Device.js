@@ -17,6 +17,7 @@ import FetchBackend, { JWTTokenExists } from "../helper/BackendHelper.js";
 import { useEffect, useState } from "react";
 import Appbar from "../components/Appbar.js";
 import { useTranslation } from "react-i18next";
+import {StartChatFromDevice} from "../helper/ChatHelper";
 
 const boxStyle = {
     mt: 4,
@@ -96,6 +97,21 @@ function DeviceSite() {
         }
     }
 
+    const navigation = useNavigate();
+    const handleConversationStart = (e) => {
+        const chatData = {
+            authUserId : authUser.id,
+            deviceId : device.id
+        };
+        FetchBackend("POST", "chat", chatData)
+            .then(response => response.json())
+            .then(data => {
+                if(data.success){
+                    navigation("/chat");
+                }
+            })
+            .catch((e) => console.log(e));
+    };
     return (
         <Box display="flex" flexDirection="column" height="100vh">
             <Appbar authUser={authUser} />
@@ -185,20 +201,30 @@ function DeviceSite() {
                                             {device.price} €
                                         </Typography>
 
-                                        <Box display="flex" mb={2}>
-                                            <Button
-                                                variant="contained" color="primary" fullWidth sx={{ mr: 2 }}
-                                                onClick={btnBookmark}
-                                            >
-                                                {device.isBookmarked ? (t("bookmarked")) : t("add_bookmark")}
-                                            </Button>
-                                            <Button
-                                                variant="contained" color="secondary" fullWidth
-                                            >
-                                                { /* TODO onClick={() => RENT} */}
-                                                {t("rent")}
-                                            </Button>
-                                        </Box>
+                                        <Grid2 container>
+                                            <Grid2 size={12} sx={{marginBottom : "1%"}}>
+                                                <Button
+                                                    variant="contained" color="secondary" fullWidth
+                                                >
+                                                    { /* TODO onClick={() => RENT} */}
+                                                    {t("rent")}
+                                                </Button>
+                                            </Grid2>
+                                            <Grid2 container size={12} sx={{marginBottom : "1%"}}>
+                                                <Grid2 size={6}>
+                                                    <Button
+                                                        variant="contained" color="primary" sx={{marginRight : "1%"}}
+                                                        onClick={btnBookmark} fullWidth>
+                                                        {device.isBookmarked ? (t("bookmarked")) : t("add_bookmark")}
+                                                    </Button>
+                                                </Grid2>
+                                                <Grid2 size={6}>
+                                                    <Button variant="contained" onClick={handleConversationStart} fullWidth>
+                                                        {t("StartConversation")}
+                                                    </Button>
+                                                </Grid2>
+                                            </Grid2>
+                                        </Grid2>
 
                                         {/* Seller Information */}
                                         <Box

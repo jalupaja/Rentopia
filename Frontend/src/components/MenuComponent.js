@@ -4,6 +4,7 @@ import * as React from "react";
 import { PersonAdd, Settings } from "@mui/icons-material";
 import HelpCenterIcon from '@mui/icons-material/HelpCenter';
 import LogoutIcon from '@mui/icons-material/Logout';
+import ChatIcon from '@mui/icons-material/Chat';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -80,37 +81,55 @@ function MenuComponent({ authUser }) {
                             },
                         },
                     },
-                }}
-                transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-                anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-            >
-              <MenuItem onClick={() => navigate("/profilePage")}>
-                    <Avatar />
-                    {t("profile")}
-                </MenuItem>
-                <Divider />
-                <MenuItem onClick={() => navigate("/helpCenter")}>
-                    <ListItemIcon>
-                        <HelpCenterIcon fontSize="small" />
-                    </ListItemIcon>
-                    {t("ticketsystem")}
-                </MenuItem>
-                {adminPanel}
-                <Divider />
-                  
-                <MenuItem onClick={handleClose}>
-                    <ListItemIcon>
-                        <Settings fontSize="small" />
-                    </ListItemIcon>
-                    {t("settings")}
-                </MenuItem>
-                <MenuItem onClick={() => { Logout(); window.location.reload(); }}>
-                    <ListItemIcon>
-                        <LogoutIcon />
-                    </ListItemIcon>
-                    {t("logout")}
-                </MenuItem>
-            </Menu>
+                    '&::before': {
+                        content: '""',
+                        display: 'block',
+                        position: 'absolute',
+                        top: 0,
+                        right: 14,
+                        width: 10,
+                        height: 10,
+                        bgcolor: 'background.paper',
+                        transform: 'translateY(-50%) rotate(45deg)',
+                        zIndex: 0,
+                    },
+        }}
+        transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+        anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+    >
+        <MenuItem onClick={() => navigate("/profilePage")}>
+            <Avatar /> {t("profile")}
+        </MenuItem>
+        <Divider />
+        <MenuItem onClick={() => navigate("/chat")}>
+            <ListItemIcon>
+                <ChatIcon fontSize="small" />
+            </ListItemIcon>
+            {t("chat")}
+        </MenuItem>
+        <Divider />
+        <MenuItem onClick={() => navigate("/helpCenter")}>
+            <ListItemIcon>
+                <HelpCenterIcon fontSize="small" />
+            </ListItemIcon>
+            {t("ticketsystem")}
+        </MenuItem>
+        {adminPanel}
+        <Divider />
+
+        <MenuItem onClick={handleClose}>
+            <ListItemIcon>
+                <Settings fontSize="small" />
+            </ListItemIcon>
+            {t("settings")}
+        </MenuItem>
+        <MenuItem onClick={() => {Logout();  window.location.reload();}}>
+            <ListItemIcon>
+                <LogoutIcon/>
+            </ListItemIcon>
+            Logout
+        </MenuItem>
+    </Menu>
         </Box>
     );
 }

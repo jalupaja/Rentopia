@@ -1,14 +1,21 @@
 package com.othr.rentopia.service;
 
 import java.util.List;
-import jakarta.persistence.Tuple;
+
+import com.othr.rentopia.model.ChatMessage;
 
 import com.othr.rentopia.model.Chat;
-import com.othr.rentopia.model.Account;
 
 public interface ChatService {
-    public void saveChat(Chat chat);
-    public List<Chat> getChatsBetweenAccounts(Long fromId, Long toId);
-    public List<Tuple> getChatsforAccount(Long toId);
-    public void removeChat(Long chatId);
+    void saveChat(Chat chat);
+    void removeChat(Long chatId);
+
+    List<Chat> getChatsForUser(Long userId);
+    List<ChatMessage> getMessagesFromChat(Long chatId);
+
+    void saveMessage(ChatMessage message);
+    Chat getChatForId(Long id);
+    void updateChatMessage(ChatMessage message);
+
+    boolean chatExists(Chat chat);
 }
