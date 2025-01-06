@@ -8,5 +8,6 @@ import org.springframework.stereotype.Service;
 public interface ResetPasswordService {
     void saveToken(ResetPasswordToken token);
     ResetPasswordToken getToken(Account user);
+    ResetPasswordToken getTokenByValue(String tokenValue);
     void removeTokenIfExists(String userMail);
 }

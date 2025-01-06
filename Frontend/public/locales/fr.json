@@ -109,6 +109,9 @@
     "new_password" : {
         "title_new_password" : "Tapez votre nouveau mot de passe",
         "password" : "mot de passe",
-        "reset_password" : "Mettre à jour le mot de passe"
+        "reset_password" : "Mettre à jour le mot de passe",
+        "general_error" : "Une erreur s'est produite, veuillez réessayer",
+        "invalid_token" : "Impossible de mettre à jour le mot de passe en raison d'un jeton non valide",
+        "update_success" : "La mise à jour de votre mot de passe a réussi"
     }
 }

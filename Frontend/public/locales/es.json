@@ -109,6 +109,9 @@
     "new_password" : {
         "title_new_password" : "Escriba su nueva contraseña",
         "password" : "Contraseña",
-        "reset_password" : "Actualizar contraseña"
+        "reset_password" : "Actualizar contraseña",
+        "general_error" : "Ocurrió un error, por favor inténtalo nuevamente",
+        "invalid_token" : "No se puede actualizar la contraseña debido a un token no válido",
+        "update_success" : "La actualización de su contraseña fue exitosa"
     }
 }

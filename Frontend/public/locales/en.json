@@ -82,7 +82,7 @@
         "submit_ticket" : "Submit Ticket",
         "delete_ticket" : "Delete Ticket",
         "close_ticket" : "Close Ticket",
-        "error_ticket_action" : "An error occured, please try again",
+        "error_ticket_action" : "An error occurred, please try again",
         "success_ticket_creation" : "Creating Ticket was successful",
         "success_ticket_delete" : "Deleting Ticket was successful",
         "success_ticket_close" : "Closing ticket was successful",
@@ -111,6 +111,9 @@
     "new_password" : {
         "title_new_password" : "Type in your new password",
         "password" : "password",
-        "reset_password" : "Update password"
+        "reset_password" : "Update password",
+        "general_error" : "An error occurred, please try again",
+        "invalid_token" : "Cannot update password due to invalid token",
+        "update_success" : "Updating your password was successful"
     }
 }

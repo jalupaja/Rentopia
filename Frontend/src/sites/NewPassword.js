@@ -16,9 +16,11 @@ import {
 import * as React from "react";
 import {useTranslation} from "react-i18next";
 import {Visibility, VisibilityOff} from "@mui/icons-material";
+import FetchBackend from "../helper/BackendHelper";
+import ResponsePopup from "../components/ResponsePopup";
 
 function NewPasswordSite(){
-    const {token} = useParams()
+    const {token} = useParams();
 
     const [statusLabel, setStatusLabel] = React.useState(null);
     const [password, setPassword] = React.useState(null);
@@ -33,7 +35,36 @@ function NewPasswordSite(){
 
     const resetPassword = () => {
         //validate
-        //fetch bakcend
+        if(password && password.length !== 0){
+            const request = {
+                token : token,
+                password : password
+            };
+
+            let message = "";
+            let reason = "error";
+            FetchBackend("POST", "user/password", request)
+                .then(response => response.json())
+                .then(data => {
+                    if(data.success){
+                        reason = "success";
+                        message = t("update_success");
+                    }
+                    else if(data.reason === "invalid_token"){
+                        message = t("invalid_token");
+                    }
+                    else {
+                        message = t("general_error");
+                    }
+                })
+                .catch((e) => {
+                    message = t("general_error");
+                })
+                .finally(() => {
+                    setStatusLabel(<ResponsePopup message={message} reason={reason} />);
+                });
+
+        }
     }
     return (
         <Box sx={{ ...FrameStyle }}>

@@ -109,6 +109,9 @@
     "new_password" : {
         "title_new_password" : "mu'wIj pegh yIQoy",
         "password" : "leng chaw'",
-        "reset_password" : "ghopDu'"
+        "reset_password" : "ghopDu'",
+        "general_error" : "'ej ghu'vam yISambe'choHlu'.",
+        "invalid_token" : "Hegh qo' HochDaq lengmeH mIw wIlo'",
+        "update_success" : "ghojmeylIj bIvo'chugh, vaj yInlIj ngo'"
     }
 }

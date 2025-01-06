@@ -36,6 +36,22 @@ public class ResetPasswordServiceImpl implements ResetPasswordService {
     }
 
     @Override
+    public ResetPasswordToken getTokenByValue(String tokenValue) {
+        ResetPasswordToken token = null;
+
+        String query = "SELECT a FROM ResetPasswordToken a WHERE a.token = :tokenValue";
+        try {
+            token = entityManager
+                    .createQuery(query, ResetPasswordToken.class)
+                    .setParameter("tokenValue", tokenValue)
+                    .getSingleResult();
+        } catch (NoResultException ignore) {
+        }
+
+        return token;
+    }
+
+    @Override
     @Transactional
     public void removeTokenIfExists(String userMail) {
         String query = "DELETE FROM ResetPasswordToken t WHERE t.userEmail = :userMail";

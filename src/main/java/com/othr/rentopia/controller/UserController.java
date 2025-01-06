@@ -231,5 +231,39 @@ public class UserController {
         return new ResponseEntity<AuthResponse>(authResponse, HttpStatus.OK);
     }
 
+    @PostMapping(path = "user/password")
+    public @ResponseBody ResponseEntity<String> UpdatePassword(@RequestBody String newPasswordInfo){
+        JSONObject request = new JSONObject(newPasswordInfo);
+        JSONObject response = new JSONObject();
+        response.put("success", false);
 
+        String token = request.getString("token");
+        String newPassword = request.getString("password");
+
+        //check if token is valid
+        ResetPasswordToken userToken = resetPasswordService.getTokenByValue(token);
+        if(userToken == null || userToken.getExpiration().isBefore(LocalDateTime.now())){
+            response.put("reason", "invalid_token");
+            return new ResponseEntity<>(response.toString(), HttpStatus.OK);
+        }
+
+        //get user from token
+        Account user = accountService.getAccountWithPassword(userToken.getUserEmail());
+        user.setPassword(passwordEncoder.encode(newPassword));
+
+        try{
+            accountService.saveAccount(user);
+        } catch(Exception e){
+            return new ResponseEntity<>(response.toString(), HttpStatus.OK);
+        }
+
+        try{
+            resetPasswordService.removeTokenIfExists(user.getEmail());
+        } catch(Exception e){
+            System.out.println("Removing consumed token after updating password threw exception : "+ e.getMessage());
+        }
+
+        response.put("success", true);
+        return new ResponseEntity<>(response.toString(), HttpStatus.OK);
+    }
 }
