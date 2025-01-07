@@ -1,4 +1,15 @@
-import { AppBar, Box, FormControl, InputBase, Select, Toolbar, Button, MenuItem, IconButton } from "@mui/material";
+import {
+    AppBar,
+    Box,
+    FormControl,
+    InputBase,
+    Select,
+    Toolbar,
+    Button,
+    MenuItem,
+    IconButton,
+    Dialog, TextField, DialogTitle, DialogContent, InputLabel, Slider, DialogActions, Popover
+} from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import { alpha, styled } from "@mui/material";
@@ -6,6 +17,7 @@ import * as React from 'react';
 import Logo from "../image/RentopiaLogo64.jpg";
 import { useNavigate, Link } from "react-router-dom";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import TuneIcon from '@mui/icons-material/Tune';
 import MenuComponent from "./MenuComponent.js";
 import LanguageSelector from "./LanguageSelector.js";
 import { useTranslation } from "react-i18next";
@@ -76,6 +88,13 @@ const logo = {
 function Appbar({ showLogin = true, authUser = null, searchVisibility = 'hidden' }) {
     const { t } = useTranslation("", { keyPrefix: "appbar" });
     const [category, setCategory] = React.useState("%");
+    const [openFilter, setOpenFilter] = React.useState(false);
+    const initialFilterOptions = {
+        priceRange: [0, 9999],
+        postalCode: "",
+        sortOption: "" //dateAsc, priceDesc, priceAsc
+    };
+    const [filterOptions, setFilterOptions] = React.useState(initialFilterOptions);
 
     const handleCategoryChange = (event) => {
         setCategory(event.target.value);
@@ -90,6 +109,19 @@ function Appbar({ showLogin = true, authUser = null, searchVisibility = 'hidden'
         else{
             loginButton = <MenuComponent authUser={authUser}/>;
         }
+    }
+
+    const handleFilterOpen = (event) => {
+        setOpenFilter(true);
+    };
+
+    const handleFilterClose = () => {
+        setOpenFilter(false);
+    }
+
+    const handleFilterReset = () => {
+        setFilterOptions({...initialFilterOptions});
+        setOpenFilter(false);
     }
 
     return (
@@ -124,18 +156,7 @@ function Appbar({ showLogin = true, authUser = null, searchVisibility = 'hidden'
                             />
                         </Link>
                     </Box>
-                    <FormControl sx={{ marginRight: 0, marginLeft: '7%', width: '150px', visibility: searchVisibility }} size="small">
-                        <StyledSelect
-                            value={category}
-                            onChange={handleCategoryChange}
-                        >
-                            <MenuItem value={"%"}><em>{t("all_categories")}</em></MenuItem>
-                            <MenuItem value={"tools"}>{t("tools")}</MenuItem>
-                            <MenuItem value={"media"}>{t("media")}</MenuItem>
-                            <MenuItem value={"home"}>{t("home")}</MenuItem>
-                        </StyledSelect>
-                    </FormControl>
-                    <Search sx={{ marginLeft: 0, marginRight: 0, visibility: searchVisibility }}>
+                    <Search sx={{ marginLeft: '7%', marginRight: 0, visibility: searchVisibility }}>
                         <SearchIconWrapper>
                             <SearchIcon />
                         </SearchIconWrapper>
@@ -143,18 +164,85 @@ function Appbar({ showLogin = true, authUser = null, searchVisibility = 'hidden'
                             placeholder={t('search')}
                         />
                     </Search>
-                    <Search sx={{ marginLeft: 0, visibility: searchVisibility }} >
-                        <SearchIconWrapper>
-                            <LocationOnIcon />
-                        </SearchIconWrapper>
-                        <StyledInputBase
-                            placeholder={t('location')}
-                        />
-                    </Search>
+                    <IconButton size="large" color={"inherit"} onClick={handleFilterOpen}>
+                        <TuneIcon/>
+                    </IconButton>
                     <Box sx={{ flexGrow: 1 }}></Box>
                   {loginButton}
                 </Toolbar>
             </AppBar>
+
+            {/*Filter Popup*/}
+            <Dialog open={openFilter} onClose={handleFilterClose}>
+                <DialogTitle>Filters</DialogTitle>
+                <DialogContent>
+                    {/* Postal Code */}
+                    <TextField
+                        label="Postal Code"
+                        variant="outlined"
+                        fullWidth
+                        margin="normal"
+                        value={filterOptions.postalCode}
+                        onChange={(e) => {
+                            setFilterOptions(prevState => ({
+                                ...prevState,
+                                postalCode: e.target.value
+                            }));
+                        }}
+                    />
+
+                    {/* Price Range */}
+                    <Box>
+                        <InputLabel>Price Range</InputLabel>
+                        <Slider
+                            sx={{width:'97%'}}
+                            value={filterOptions.priceRange}
+                            onChange={(e, newValue) => {
+                                setFilterOptions(prevState => ({
+                                    ...prevState,
+                                    priceRange: newValue
+                                }));
+                            }}
+                            valueLabelDisplay="auto"
+                            getAriaValueText={() => `${filterOptions.priceRange}€`}
+                            min={0}
+                            max={10000}
+                            step={10}
+                        />
+                    </Box>
+
+                    {/* Sort By */}
+                    <FormControl fullWidth margin="normal">
+                        <InputLabel>Sort By</InputLabel>
+                        <Select
+                            value={filterOptions.sortOption}
+                            onChange={(e) => {
+                                setFilterOptions(prevState => ({
+                                    ...prevState,
+                                    sortOption: e.target.value
+                                }));
+                            }}
+                            label="Sort By"
+                         variant={"outlined"}>
+                            <MenuItem value="priceAsc">Price (Low to High)</MenuItem>
+                            <MenuItem value="priceDesc">Price (High to Low)</MenuItem>
+                            <MenuItem value="dateAsc">Date (Oldest First)</MenuItem>
+                            <MenuItem value="dateDesc">Date (Newest First)</MenuItem>
+                        </Select>
+                    </FormControl>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleFilterReset} color="primary">
+                        Cancel
+                    </Button>
+                    <Button color="primary" onClick={handleFilterClose}>
+                        Apply Filters
+                    </Button>
+                    <Button  onClick={handleFilterReset} color="error">
+                        ResetFilters
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </Box >
     )
 }
