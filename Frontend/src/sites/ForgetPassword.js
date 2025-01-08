@@ -3,13 +3,13 @@ import { Box, Typography, Stack, Button, TextField, Alert, Snackbar } from "@mui
 import * as React from "react";
 import { centeredDivStyle, FrameStyle, InputFieldStyle } from "./Register.js";
 import { useNavigate } from "react-router-dom";
-import FetchBackend, { ReturnHomeWhenLoggedIn } from "../helper/BackendHelper.js";
+import FetchBackend, {GetAuthUser, ReturnHomeWhenLoggedIn} from "../helper/BackendHelper.js";
 import Appbar from "../components/Appbar.js";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import ResponsePopup from "../components/ResponsePopup";
 function ForgetPasswordSite() {
-    ReturnHomeWhenLoggedIn();
+    const authUser = GetAuthUser();
 
     const [statusLabel, setStatusLabel] = React.useState(null);
     const [userEmail, setUserEmail] = React.useState("");
@@ -44,7 +44,7 @@ function ForgetPasswordSite() {
     }
     return (
         <Box sx={{ ...FrameStyle }}>
-            <Appbar />
+            <Appbar authUser={authUser}/>
             {statusLabel}
             <Stack sx={{ ...centeredDivStyle }}>
                 <Typography variant="button" gutterBottom variant="h6">

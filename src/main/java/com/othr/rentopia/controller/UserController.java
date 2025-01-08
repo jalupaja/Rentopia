@@ -249,11 +249,8 @@ public class UserController {
 
         //get user from token
         Account user = accountService.getAccountWithPassword(userToken.getUserEmail());
-        user.setPassword(passwordEncoder.encode(newPassword));
 
-        try{
-            accountService.saveAccount(user);
-        } catch(Exception e){
+        if(!setUpdatedPassword(user, newPassword)){
             return new ResponseEntity<>(response.toString(), HttpStatus.OK);
         }
 
@@ -265,5 +262,46 @@ public class UserController {
 
         response.put("success", true);
         return new ResponseEntity<>(response.toString(), HttpStatus.OK);
+    }
+
+    @PostMapping(path = "user/changePassword")
+    public @ResponseBody ResponseEntity<String> changePassword(@RequestBody String newPasswordInfo,
+                                                               Authentication authentication) {
+        JSONObject request = new JSONObject(newPasswordInfo);
+        JSONObject response = new JSONObject();
+        response.put("success", false);
+
+        String oldPassword = request.getString("oldPassword");
+        String newPassword = request.getString("newPassword");
+
+        if(!authentication.isAuthenticated()){
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
+        String principalEmail = (String) authentication.getPrincipal();
+        Account account = accountService.getAccount(principalEmail);
+
+        if(!passwordEncoder.matches(oldPassword, account.getPassword())){
+            response.put("reason", "password_invalid");
+            return new ResponseEntity<>(response.toString(), HttpStatus.OK);
+        }
+
+        boolean success = setUpdatedPassword(account, newPassword);
+
+        response.put("success", success);
+        return new ResponseEntity<>(response.toString(), HttpStatus.OK);
+    }
+
+    private boolean setUpdatedPassword(Account user, String newPassword){
+        user.setPassword(passwordEncoder.encode(newPassword));
+
+        try{
+            accountService.saveAccount(user);
+        } catch(Exception e){
+            System.out.println("Changing PAssword threw Exception: "+e.getMessage());
+            return false;
+        }
+
+        return true;
     }
 }
