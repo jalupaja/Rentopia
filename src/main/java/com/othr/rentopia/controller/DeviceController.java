@@ -169,7 +169,6 @@ public class DeviceController {
     @GetMapping("/short/search")
     public ResponseEntity<List<Map<String, Object>>> getDeviceShortSorted(
             Authentication authentication, @RequestParam Map<String, String> filterOptions) {
-        System.out.println(filterOptions);
 
         List<Device> devices = deviceService.getDevicesSorted(filterOptions);
         List<Map<String, Object>> deviceData = new ArrayList<>();
