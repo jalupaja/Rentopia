@@ -1,6 +1,10 @@
 package com.othr.rentopia.service;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import jakarta.persistence.NoResultException;
@@ -114,6 +118,45 @@ public class DeviceServiceImpl implements DeviceService {
 		try {
 			devices = entityManager
 					.createQuery(query, Device.class)
+					.getResultList();
+		} catch (NoResultException e) {
+			System.err.println("No device found");
+		}
+
+		return devices;
+	}
+
+	@Override
+	public List<Device> getDevicesSorted(Map<String, String> filterOptions) {
+		List<Device> devices = null;
+
+		String title = "%" + filterOptions.get("title") + "%";
+		String priceRange = filterOptions.get("priceRange");
+		String postalCode = filterOptions.get("postalCode") + "%";
+		String sortOption = filterOptions.get("sortOption");
+		String[] priceRangeArray = priceRange.split(",");
+		Integer minPrice = Integer.parseInt(priceRangeArray[0]);
+		Integer maxPrice = Integer.parseInt(priceRangeArray[1]);
+
+		String query = "SELECT d " +
+				        "FROM Device d " +
+				       "where d.title like :title " +
+				         "and d.location.postalCode like :postalCode " +
+				         "and d.price >= :minPrice and d.price <= :maxPrice ";
+
+		if (sortOption != null && sortOption.equals("priceDesc")) {
+			query = query + "order by d.price desc";
+		} else if (sortOption != null && sortOption.equals("priceAsc")) {
+			query = query + "order by d.price asc";
+		}
+
+		try{
+			devices = entityManager
+					.createQuery(query, Device.class)
+					.setParameter("title", title)
+					.setParameter("postalCode", postalCode)
+					.setParameter("maxPrice", maxPrice)
+					.setParameter("minPrice", minPrice)
 					.getResultList();
 		} catch (NoResultException e) {
 			System.err.println("No device found");

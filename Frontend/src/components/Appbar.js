@@ -73,6 +73,7 @@ function Appbar({ showLogin = true, authUser = null, searchVisibility = 'hidden'
     const { t } = useTranslation("", { keyPrefix: "appbar" });
     const [openFilter, setOpenFilter] = React.useState(false);
     const initialFilterOptions = {
+        title: "",
         priceRange: [0, 9999],
         postalCode: "",
         sortOption: "" //dateAsc, priceDesc, priceAsc
@@ -110,9 +111,9 @@ function Appbar({ showLogin = true, authUser = null, searchVisibility = 'hidden'
     }
 
     const handleSearch = () =>{
-        console.log(filterOptions);
+        const queryString = new URLSearchParams(filterOptions).toString();
 
-        FetchBackend('GET', 'device/short/search', filterOptions)
+        FetchBackend('GET', `device/short/search?${queryString}`)
             .then(response => response.json())
             .then(data => setDevices(data))
             .catch(error => console.log(error));
@@ -160,6 +161,13 @@ function Appbar({ showLogin = true, authUser = null, searchVisibility = 'hidden'
                             <SearchIcon />
                         </SearchIconWrapper>
                         <StyledInputBase
+                            value={filterOptions.title}
+                            onChange={(e) => {
+                                setFilterOptions(prevState => ({
+                                    ...prevState,
+                                    title: e.target.value
+                                }));
+                            }}
                             placeholder={t('search')}
                             onKeyDown={(event) => {
                                 if (event.key === 'Enter')
@@ -225,8 +233,6 @@ function Appbar({ showLogin = true, authUser = null, searchVisibility = 'hidden'
                          variant={"outlined"}>
                             <MenuItem value="priceAsc">Price (Low to High)</MenuItem>
                             <MenuItem value="priceDesc">Price (High to Low)</MenuItem>
-                            <MenuItem value="dateAsc">Date (Oldest First)</MenuItem>
-                            <MenuItem value="dateDesc">Date (Newest First)</MenuItem>
                         </Select>
                     </FormControl>
                 </DialogContent>
@@ -238,7 +244,7 @@ function Appbar({ showLogin = true, authUser = null, searchVisibility = 'hidden'
                         Apply Filters
                     </Button>
                     <Button  onClick={handleFilterReset} color="error">
-                        ResetFilters
+                        Reset Filters
                     </Button>
                 </DialogActions>
             </Dialog>
