@@ -71,7 +71,20 @@
         "bookmarks": "Bookmarks",
         "rent_history": "Rent History",
         "insert_device": "Insert Device Name here",
-        "tool_nr": "Tool Nr "
+        "tool_nr": "Tool Nr ",
+        "general_error" : "An error occurred, please try again.",
+        "passwords_dont_match" : "Passwords do not match",
+        "input_empty" : "Input fields cannot be empty",
+        "change_password_success" : "Changing password was successful",
+        "password_invalid" : "Your old password is not correct",
+        "old_password" : "old password",
+        "new_password" : "new password",
+        "confirm_password" : "confirm password",
+        "forgot_password" : "Forgot your password?",
+        "change_password" : "Change Password",
+        "password_dialog_title" : "Change your password",
+        "change" : "change",
+        "cancel" : "cancel"
     },
     "helpcenter": {
         "error_unavailable": "Help Center is currently not available. Please try again",

@@ -13,14 +13,26 @@ import {
 import FetchBackend from "../helper/BackendHelper";
 import ResponsePopup from "./ResponsePopup";
 import {useEffect} from "react";
+import {useTranslation} from "react-i18next";
 
 function ChangePasswordDialog({open, handleEditDialogClose}){
+    const { t } = useTranslation("", { keyPrefix: "profile" });
 
     const [oldPassword, setOldPassword] = React.useState(null);
     const [newPassword, setNewPassword] = React.useState(null);
     const [confirmedPassword, setConfirmedPassword] = React.useState(null);
     const [errorLabel, setErrorLabel] = React.useState(null);
 
+    const resetUI = () => {
+        setErrorLabel(null);
+        setOldPassword(null);
+        setNewPassword(null);
+        setConfirmedPassword(null);
+    };
+    const giveFeedback = (message, success) => {
+        const reason = success ? "success" : "error";
+        setErrorLabel(<ResponsePopup reason={reason} message={message}/>);
+    }
     const closeDialog = (event) => {
         handleEditDialogClose();
     };
@@ -32,44 +44,45 @@ function ChangePasswordDialog({open, handleEditDialogClose}){
             if(newPassword === confirmedPassword){
                 return true;
             }
+            else{
+                giveFeedback( t("passwords_dont_match"), false);
+            }
+        }
+        else{
+            giveFeedback(t("input_empty"), false);
         }
 
         return false;
     }
     const changePassword = () => {
-        //validate length and equality
         if(validate()){
             const request = {
                 oldPassword : oldPassword,
                 newPassword : newPassword
             }
 
-            let message = "An error occured. Please try again";
+            let message = t("general_error");
             FetchBackend("POST", "user/changePassword", request)
                 .then(response => response.json())
                 .then(data => {
                     if(data.success){
-                        //todo
-                        closeDialog();
+                        resetUI();
+                        giveFeedback(t("change_password_success"), true);
                         return;
                     }
 
-                    if(reason && reason === "password_invalid"){
-                        message = "Password invalid";
+                    if(data.reason && data.reason === "password_invalid"){
+                        message = t("password_invalid");
                     }
+
+                    giveFeedback(message, false);
                 })
-                .catch((e) => console.log(e))
-                .finally(() => {
-                    setErrorLabel(<ResponsePopup reason="error" message={message}/>);
-                });
+                .catch((e) => giveFeedback( t("general_error"), false));
         }
     };
 
     useEffect(() => {
-        setErrorLabel(null);
-        setOldPassword(null);
-        setNewPassword(null);
-        setConfirmedPassword(null);
+        resetUI();
     }, [open]);
     return(
         <React.Fragment>
@@ -80,11 +93,11 @@ function ChangePasswordDialog({open, handleEditDialogClose}){
                     component: 'form'
                 }}
             >
-                <DialogTitle>Change Password todo: translation</DialogTitle>
+                <DialogTitle>{t("password_dialog_title")}</DialogTitle>
                 <DialogContent>
                     {errorLabel}
                     <TextField
-                        label="password todo traslation"
+                        label={t("old_password")}
                         fullWidth
                         margin="normal"
                         value={oldPassword}
@@ -92,7 +105,7 @@ function ChangePasswordDialog({open, handleEditDialogClose}){
                     />
 
                     <TextField
-                        label="new password"
+                        label={t("new_password")}
                         fullWidth
                         margin="normal"
                         value={newPassword}
@@ -100,19 +113,19 @@ function ChangePasswordDialog({open, handleEditDialogClose}){
                     />
 
                     <TextField
-                        label="confirm password"
+                        label={t("confirm_password")}
                         fullWidth
                         margin="normal"
                         value={confirmedPassword}
                         onChange={(e) => setConfirmedPassword(e.target.value)}
                     />
-                    <Link href="/resetPassword" >forgot_password</Link>
+                    <Link href="/resetPassword" >{t("forgot_password")}</Link>
                     {//todo : password visibility
                          }
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={closeDialog} color={"error"}>Cancel</Button>
-                    <Button onClick={changePassword} >Change</Button>
+                    <Button onClick={closeDialog} color={"error"}>{t("cancel")}</Button>
+                    <Button onClick={changePassword} >{t("change")}</Button>
                 </DialogActions>
             </Dialog>
         </React.Fragment>

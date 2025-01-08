@@ -69,7 +69,20 @@
         "bookmarks": "Lesezeichen",
         "rent_history": "Mietverlauf",
         "insert_device": "Gerätenamen hier eingeben",
-        "tool_nr": "Werkzeug Nr "
+        "tool_nr": "Werkzeug Nr ",
+        "general_error" : "Ein Fehler ist aufgetreten, bitte erneut versuchen",
+        "passwords_dont_match" : "Passwords sind nicht identisch",
+        "input_empty" : "Eingabefelder dürfen nicht leer sein",
+        "change_password_success" : "Passwort wurde erfolgreich geändert",
+        "password_invalid" : "Ihr altes Passwort ist nicht korrekt",
+        "old_password" : "Altes Password",
+        "new_password" : "Neues Passwort",
+        "confirm_password" : "Passwort bestätigen",
+        "forgot_password" : "Passwort vergessen?",
+        "change_password" : "Passwort ändern",
+        "password_dialog_title" : "Ändere dein Passwort",
+        "change" : "Ändern",
+        "cancel" : "Abbrechen"
     },
     "helpcenter": {
         "error_unavailable": "Das Help Center ist derzeit nicht verfügbar. Bitte versuchen Sie es erneut.",

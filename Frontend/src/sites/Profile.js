@@ -21,6 +21,7 @@ import EditProfileDialog from "../components/EditProfileDialog";
 import ChangePasswordDialog from "../components/ChangePasswordDialog";
 import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
+import {ReturnHomeWhenLoggedOut} from "../helper/BackendHelper";
 
 const Item = styled(Paper)(({ theme }) => ({
     padding: theme.spacing(1),
@@ -64,7 +65,7 @@ function a11yProps(index) {
 }
 
 function ProfileSite() {
-    //todo ReturnHomeWhenLoggedOut
+    ReturnHomeWhenLoggedOut();
 
     const [authUser, setAuthUser] = useState(null);
     const [openAddItem, setOpenAddItem] = React.useState(false);
@@ -92,11 +93,6 @@ function ProfileSite() {
 
     const handleEditDialogClose = () => {
         setOpenEditProfile(false);
-    }
-
-    const handleChangePasswordDialog = () => {
-        //todo how to invert state value
-        // setOpenChangePassword(!openChangePassword);
     }
     const handleTabChange = (event, newValue) => {
         setTabValue(newValue);
@@ -163,7 +159,7 @@ function ProfileSite() {
                                     <Button
                                         variant={"contained"}
                                         onClick={() => setOpenChangePassword(!openChangePassword)}>
-                                        Change Password
+                                        {t("change_password")}
                                     </Button>
                                 </Box>
                             </Item>

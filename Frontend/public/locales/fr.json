@@ -69,7 +69,20 @@
         "bookmarks": "Favoris",
         "rent_history": "Historique des locations",
         "insert_device": "Entrez le nom de l'appareil ici",
-        "tool_nr": "Outil Nr "
+        "tool_nr": "Outil Nr ",
+        "general_error" : "Une erreur s'est produite, veuillez réessayer.",
+        "passwords_dont_match" : "Les mots de passe ne correspondent pas",
+        "input_empty" : "Les champs de saisie ne peuvent pas être vides",
+        "change_password_success" : "Le changement du mot de passe a réussi",
+        "password_invalid" : "Votre ancien mot de passe n'est pas correct",
+        "old_password" : "ancien mot de passe",
+        "new_password" : "nouveau mot de passe",
+        "confirm_password" : "Confirmez le mot de passe",
+        "forgot_password" : "Mot de passe oublié ?",
+        "change_password" : "Changer le mot de passe",
+        "password_dialog_title" : "Changez votre mot de passe",
+        "change" : "Change",
+        "cancel" : "Annuler"
     },
     "helpcenter": {
         "error_unavailable": "Le centre d'aide est actuellement indisponible. Veuillez réessayer.",

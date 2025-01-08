@@ -69,7 +69,20 @@
         "bookmarks": "Marcadores",
         "rent_history": "Historial de alquiler",
         "insert_device": "Inserte el nombre del dispositivo aquí",
-        "tool_nr": "Herramienta Nr "
+        "tool_nr": "Herramienta Nr ",
+        "general_error" : "Ocurrió un error, por favor inténtalo nuevamente.",
+        "passwords_dont_match" : "Las contraseñas no coinciden",
+        "input_empty" : "Los campos de entrada no pueden estar vacíos",
+        "change_password_success" : "El cambio de contraseña fue exitoso",
+        "password_invalid" : "Su contraseña anterior no es correcta",
+        "old_password" : "Contraseña anterior",
+        "new_password" : "Nueva contraseña",
+        "confirm_password" : "confirmar Contraseña",
+        "forgot_password" : "¿Olvidaste tu contraseña?",
+        "change_password" : "Cambiar la contraseña",
+        "password_dialog_title" : "Cambia tu contraseña",
+        "change" : "Cambiar",
+        "cancel" : "Cancelar"
     },
     "helpcenter": {
         "error_unavailable": "El centro de ayuda no está disponible actualmente. Por favor, inténtalo de nuevo.",
