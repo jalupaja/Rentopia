@@ -37,7 +37,7 @@ function ForgetPasswordSite() {
                     setStatusLabel(<ResponsePopup message={message} reason={status} />);
                 })
                 .catch((error) => {
-                    const message = t("error");
+                    const message = t("error_mail");
                     setStatusLabel(<ResponsePopup message={message} reason={"error"} />);
                 });
         }

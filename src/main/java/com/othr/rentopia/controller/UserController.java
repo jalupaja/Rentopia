@@ -2,6 +2,7 @@ package com.othr.rentopia.controller;
 
 import com.othr.rentopia.api.EmailService;
 import com.othr.rentopia.config.AuthResponse;
+import com.othr.rentopia.config.DotenvHelper;
 import com.othr.rentopia.config.JwtProvider;
 import com.othr.rentopia.model.Account;
 import com.othr.rentopia.model.Location;
@@ -170,13 +171,11 @@ public class UserController {
         String subject = "Reset your password of your Rentopia Account";
         String body = "<h1>Hello, " + user.getName() + "!</h1>\n"
                 + "<p>Click on this button to reset your password</p>\n"
-                + "<p>We think you'll love these new improvements! Click the button below to see all the details and make the most of the update.</p>\n"
-                + "<a href=\"http://localhost:3000/resetPassword/" + token + "\" class=\"button\">Reset Password</a>\n";
-        EmailService.Email mail = new EmailService.Email(null, user.getEmail(), null, null);
+                + "<a href=\"http://localhost:3000/newPassword/" + token + "\" class=\"button\">Reset Password</a>\n";
+        EmailService.Email mail = new EmailService.Email(DotenvHelper.get("GoogleEmail"), user.getEmail(), subject, body);
         mail.loadTemplate(subject, body);
 
-        //todo send email
-        //emailService.sendEmail(mail);
+        emailService.sendEmail(mail);
 
         response.put("success", true);
         return new ResponseEntity<>(response.toString(), HttpStatus.OK);
