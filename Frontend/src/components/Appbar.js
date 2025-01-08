@@ -117,11 +117,6 @@ function Appbar({ showLogin = true, authUser = null, searchVisibility = 'hidden'
             .then(response => response.json())
             .then(data => setDevices(data))
             .catch(error => console.log(error));
-
-        /*useEffect(() => {
-            let _paginatedDevices = devices.slice((page - 1) * devicesPPage, page * devicesPPage);
-            setPaginatedDevices(_paginatedDevices);
-        }, [devices, page]);*/
     }
 
     return (
@@ -175,7 +170,7 @@ function Appbar({ showLogin = true, authUser = null, searchVisibility = 'hidden'
                             }}
                         />
                     </Search>
-                    <IconButton size="large" color={"inherit"} onClick={handleFilterOpen}>
+                    <IconButton sx={{visibility: searchVisibility }} size="large" color={"inherit"} onClick={handleFilterOpen}>
                         <TuneIcon/>
                     </IconButton>
                     <Box sx={{ flexGrow: 1 }}></Box>
