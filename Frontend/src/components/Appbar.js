@@ -21,7 +21,8 @@ import TuneIcon from '@mui/icons-material/Tune';
 import MenuComponent from "./MenuComponent.js";
 import LanguageSelector from "./LanguageSelector.js";
 import { useTranslation } from "react-i18next";
-import { Logout } from "../helper/BackendHelper.js"
+import FetchBackend, { Logout } from "../helper/BackendHelper.js"
+import {useEffect} from "react";
 
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
     color: 'inherit',
@@ -37,23 +38,6 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     },
     width: '100%',
 }));
-
-const StyledSelect = styled(Select)(({ theme }) => ({
-    '& .MuiOutlinedInput-notchedOutline': {
-        border: `1px solid ${alpha(theme.palette.common.white, 0.5)}`,
-        backgroundColor: 'transparent',
-        '&:hover': {
-            borderColor: alpha(theme.palette.common.white, 0.75),
-        },
-    },
-    '& .MuiSelect-icon': {
-        color: 'white',
-    },
-    '& .MuiInputBase-input': {
-        color: 'white',
-    },
-    color: 'inherit',
-}))
 
 const SearchIconWrapper = styled('div')(({ theme }) => ({
     padding: theme.spacing(0, 2),
@@ -85,22 +69,17 @@ const logo = {
     imageUrl: '/pictures/RentopiaLogo64.jpg',
 };
 
-function Appbar({ showLogin = true, authUser = null, searchVisibility = 'hidden' }) {
+function Appbar({ showLogin = true, authUser = null, searchVisibility = 'hidden', setDevices}) {
     const { t } = useTranslation("", { keyPrefix: "appbar" });
-    const [category, setCategory] = React.useState("%");
     const [openFilter, setOpenFilter] = React.useState(false);
     const initialFilterOptions = {
         priceRange: [0, 9999],
         postalCode: "",
         sortOption: "" //dateAsc, priceDesc, priceAsc
     };
+    const [prevFilterOptions, setPrevFilterOptions] = React.useState(initialFilterOptions);
     const [filterOptions, setFilterOptions] = React.useState(initialFilterOptions);
 
-    const handleCategoryChange = (event) => {
-        setCategory(event.target.value);
-    }
-
-    const navigate = useNavigate();
     let loginButton = <Button sx={{ visibility: 'hidden' }} />;
     if (showLogin) {
         if (authUser === null) {
@@ -111,17 +90,37 @@ function Appbar({ showLogin = true, authUser = null, searchVisibility = 'hidden'
         }
     }
 
-    const handleFilterOpen = (event) => {
+    const handleFilterOpen = () => {
         setOpenFilter(true);
     };
 
     const handleFilterClose = () => {
         setOpenFilter(false);
+        setPrevFilterOptions(filterOptions);
+    }
+
+    const handleFilterCancel = () => {
+        setOpenFilter(false);
+        setFilterOptions(prevFilterOptions);
     }
 
     const handleFilterReset = () => {
         setFilterOptions({...initialFilterOptions});
         setOpenFilter(false);
+    }
+
+    const handleSearch = () =>{
+        console.log(filterOptions);
+
+        FetchBackend('GET', 'device/short/search', filterOptions)
+            .then(response => response.json())
+            .then(data => setDevices(data))
+            .catch(error => console.log(error));
+
+        /*useEffect(() => {
+            let _paginatedDevices = devices.slice((page - 1) * devicesPPage, page * devicesPPage);
+            setPaginatedDevices(_paginatedDevices);
+        }, [devices, page]);*/
     }
 
     return (
@@ -162,6 +161,10 @@ function Appbar({ showLogin = true, authUser = null, searchVisibility = 'hidden'
                         </SearchIconWrapper>
                         <StyledInputBase
                             placeholder={t('search')}
+                            onKeyDown={(event) => {
+                                if (event.key === 'Enter')
+                                    handleSearch();
+                            }}
                         />
                     </Search>
                     <IconButton size="large" color={"inherit"} onClick={handleFilterOpen}>
@@ -190,8 +193,6 @@ function Appbar({ showLogin = true, authUser = null, searchVisibility = 'hidden'
                             }));
                         }}
                     />
-
-                    {/* Price Range */}
                     <Box>
                         <InputLabel>Price Range</InputLabel>
                         <Slider
@@ -210,8 +211,6 @@ function Appbar({ showLogin = true, authUser = null, searchVisibility = 'hidden'
                             step={10}
                         />
                     </Box>
-
-                    {/* Sort By */}
                     <FormControl fullWidth margin="normal">
                         <InputLabel>Sort By</InputLabel>
                         <Select
@@ -232,7 +231,7 @@ function Appbar({ showLogin = true, authUser = null, searchVisibility = 'hidden'
                     </FormControl>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleFilterReset} color="primary">
+                    <Button onClick={handleFilterCancel} color="primary">
                         Cancel
                     </Button>
                     <Button color="primary" onClick={handleFilterClose}>

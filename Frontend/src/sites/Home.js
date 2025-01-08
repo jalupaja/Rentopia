@@ -42,7 +42,7 @@ function HomeSite() {
 
     return (
         <Box sx={{ ...FrameStyle }}>
-            <Appbar authUser={authUser} searchVisibility={'visible'} />
+            <Appbar authUser={authUser} searchVisibility={'visible'} setDevices={setDevices} />
             <Box sx={{ flexGrow: 1 }} >
                 <DeviceGrid container spacing={{ xs: 4 }} justifyContent={'center'} >
                     {paginatedDevices.map((device, index) => (
