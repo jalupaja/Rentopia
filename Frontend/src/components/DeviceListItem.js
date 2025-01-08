@@ -3,6 +3,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import BookmarkIcon from '@mui/icons-material/Bookmark';
 import * as React from "react";
+import {Link} from "react-router-dom";
 
 function DeviceListItem({DeviceName="Test Tool",
                             DeviceId=null,
@@ -12,13 +13,9 @@ function DeviceListItem({DeviceName="Test Tool",
                             tabValue})
 {
 
-    const handleOpenDevice = () => {
-        //TODO: go to new Site
-    }
-
     return (
         <div>
-            <ListItem onClick={handleOpenDevice}>
+            <ListItem component={Link} to={"/device/" + DeviceId}>
                 <ListItemAvatar></ListItemAvatar>
                 <ListItemText primary={DeviceName} />
                 {tabValue === 0 ? (

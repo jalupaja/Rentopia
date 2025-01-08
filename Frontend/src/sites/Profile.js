@@ -174,14 +174,14 @@ function ProfileSite() {
                                 </Tabs>
                                 <CustomTabPanel value={tabValue} index={0}>
                                     <List sx={{ overflow: 'auto', height: '50vh', width: '90%' }}>
-                                        {Array.from({ length: 10 }).map((_, index) => (
+                                        {Array.from({ length: 10 }).map((device, index) => (
                                             //*Your Tools*//
                                             <div>
                                                 <DeviceListItem
-                                                    DeviceName={t("insert_device")}
-                                                    DeviceId={index}
-                                                    handleOpenDeviceEdit={() => handleAddDialogOpen(t("tool_nr") + index)}
-                                                    handleAddDialogClose={() => handleAddDialogClose(index)}
+                                                    DeviceName={t(device.name)}
+                                                    DeviceId={device.id}
+                                                    handleOpenDeviceEdit={() => handleAddDialogOpen(device.id)}
+                                                    handleAddDialogClose={() => handleAddDialogClose(device.id)}
                                                     tabValue={tabValue}
                                                 />
                                             </div>))
