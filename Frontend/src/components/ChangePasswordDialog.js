@@ -7,13 +7,14 @@ import {
     DialogActions,
     DialogContent,
     DialogTitle,
-    IconButton, Link,
+    IconButton, InputAdornment, Link,
     TextField
 } from "@mui/material";
 import FetchBackend from "../helper/BackendHelper";
 import ResponsePopup from "./ResponsePopup";
 import {useEffect} from "react";
 import {useTranslation} from "react-i18next";
+import {Visibility, VisibilityOff} from "@mui/icons-material";
 
 function ChangePasswordDialog({open, handleEditDialogClose}){
     const { t } = useTranslation("", { keyPrefix: "profile" });
@@ -22,7 +23,30 @@ function ChangePasswordDialog({open, handleEditDialogClose}){
     const [newPassword, setNewPassword] = React.useState(null);
     const [confirmedPassword, setConfirmedPassword] = React.useState(null);
     const [errorLabel, setErrorLabel] = React.useState(null);
+    const [showPassword, setShowPassword] = React.useState(false);
 
+    const handleClickShowPassword = () => setShowPassword((show) => !show);
+    const handleMouseDownPassword = (event) => {
+        event.preventDefault();
+    };
+    const handleMouseUpPassword = (event) => {
+        event.preventDefault();
+    };
+    const showPasswordComponent = () => {
+        return { endAdornment : (
+                <InputAdornment position="end">
+                    <IconButton
+                        onClick={handleClickShowPassword}
+                        onMouseDown={handleMouseDownPassword}
+                        onMouseUp={handleMouseUpPassword}
+                        edge="end"
+                    >
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                </InputAdornment>
+            )
+        };
+    }
     const resetUI = () => {
         setErrorLabel(null);
         setOldPassword(null);
@@ -102,6 +126,8 @@ function ChangePasswordDialog({open, handleEditDialogClose}){
                         margin="normal"
                         value={oldPassword}
                         onChange={(e) => setOldPassword(e.target.value)}
+                        type={showPassword ? 'text' : "password"}
+                        InputProps={showPasswordComponent()}
                     />
 
                     <TextField
@@ -110,6 +136,8 @@ function ChangePasswordDialog({open, handleEditDialogClose}){
                         margin="normal"
                         value={newPassword}
                         onChange={(e) => setNewPassword(e.target.value)}
+                        type={showPassword ? 'text' : "password"}
+                        InputProps={showPasswordComponent()}
                     />
 
                     <TextField
@@ -118,10 +146,10 @@ function ChangePasswordDialog({open, handleEditDialogClose}){
                         margin="normal"
                         value={confirmedPassword}
                         onChange={(e) => setConfirmedPassword(e.target.value)}
+                        type={showPassword ? 'text' : "password"}
+                        InputProps={showPasswordComponent()}
                     />
                     <Link href="/resetPassword" >{t("forgot_password")}</Link>
-                    {//todo : password visibility
-                         }
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={closeDialog} color={"error"}>{t("cancel")}</Button>
