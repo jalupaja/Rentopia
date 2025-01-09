@@ -12,7 +12,7 @@ import Footer from "../components/Footer.js";
 import { centeredDivStyle, FrameStyle, InputFieldStyle } from "./Register.js"
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import * as React from "react";
-import FetchBackend, { JWT_TOKEN, ReturnHomeWhenLoggedIn } from "../helper/BackendHelper.js";
+import FetchBackend, {JWT_TOKEN, LOGIN_TOKEN, ReturnHomeWhenLoggedIn} from "../helper/BackendHelper.js";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import Appbar from "../components/Appbar.js";
@@ -49,9 +49,9 @@ function LoginSite() {
         FetchBackend('POST', 'login', loginData)
             .then(response => response.json())
             .then(data => {
-                if (data.status) {
-                    Cookies.set(JWT_TOKEN, data.jwt);
-                    navigation("/");
+                if (data.success) {
+                    Cookies.set(LOGIN_TOKEN, data.loginToken);
+                    navigation("/login/confirm");
                 }
                 else {
                     setRegisterStatusLabel(<ResponsePopup message={t("error_password")} reason={"error"} />);
@@ -72,9 +72,9 @@ function LoginSite() {
         FetchBackend('POST', 'loginOAuth', loginData)
             .then(response => response.json())
             .then(data => {
-                if (data.status) {
-                    Cookies.set(JWT_TOKEN, data.jwt);
-                    navigation("/");
+                if (data.success) {
+                    Cookies.set(LOGIN_TOKEN, data.loginToken);
+                    navigation("/login/confirm");
                 } else {
                     setRegisterStatusLabel(<ResponsePopup message={t("error_not_google")} reason={"error"} />);
                 }
