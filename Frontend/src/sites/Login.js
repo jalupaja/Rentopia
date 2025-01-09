@@ -18,6 +18,7 @@ import Cookies from "js-cookie";
 import Appbar from "../components/Appbar.js";
 import ResponsePopup from "../components/ResponsePopup.js";
 import { GoogleLogin } from '@react-oauth/google';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 import { useTranslation } from "react-i18next";
 
 function LoginSite() {
@@ -133,7 +134,9 @@ function LoginSite() {
                     OR
                 </Typography>
                 <div style={{...InputFieldStyle}}>
+                  <GoogleOAuthProvider clientId={process.env.REACT_APP_OAuthClientId}>
                     <GoogleLogin onSuccess={OAuthSuccess} onError={OAuthError}  />
+                  </GoogleOAuthProvider>
                 </div>
                 <Link href="./register" marginTop={2}>{t("create_account")}</Link>
                 <Link href="/resetPassword" >{t("forgot_password")}</Link>
