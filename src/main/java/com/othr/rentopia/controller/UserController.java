@@ -86,6 +86,7 @@ public class UserController {
 
         if(account != null) {
             Account updAccount = new Account();
+            updAccount.setId(Long.valueOf((Integer) request.get("id")));
             updAccount.setName((String) request.get("name"));
             updAccount.setEmail((String) request.get("email"));
             updAccount.setDescription((String) request.get("description"));

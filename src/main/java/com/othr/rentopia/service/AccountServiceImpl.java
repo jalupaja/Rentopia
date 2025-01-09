@@ -141,6 +141,7 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
 					.setParameter("street", account.getLocation().getStreet())
 					.setParameter("country", account.getLocation().getCountry())
 					.setParameter("company", account.getCompany())
+					.setParameter("accountId", account.getId())
 					.executeUpdate();
 
 		} catch (PersistenceException e) {

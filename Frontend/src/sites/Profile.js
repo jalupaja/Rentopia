@@ -79,13 +79,13 @@ function ProfileSite() {
         if (JWTTokenExists()) {
             FetchBackend('GET', 'user/me', null)
                 .then(response => response.json())
-                .then(data => { setAuthUser(data); setOwnerId(data.id) })
+                .then(data => { setAuthUser(data); setOwnerId(data.id); })
                 .catch(error => console.log(error))
 
             getAllDeviceData();
 
             FetchBackend('GET', 'device/bookmarks/all/' + ownerId, null)
-                .then(response => response.json())
+                .then(response => response ? response.json() : console.log("error " + response))
                 .then(data => setBookmarkList(data))
                 .catch(error => console.log(error))
 
@@ -94,18 +94,21 @@ function ProfileSite() {
                 .then(data => setHistoryList(data))
                 .catch(error => console.log(error))
 
-            setNewDevice({   id: null,
-                title: "",
-                description: "",
-                price: 0.0,
-                category: "",
-                ownerId: ownerId,
-                location: authUser.location,
-            })
+            if(authUser) {
+                setNewDevice({
+                    id: null,
+                    title: "",
+                    description: "",
+                    price: 0.0,
+                    category: "",
+                    ownerId: ownerId,
+                    location: authUser.location,
+                })
+            }
         } else {
             console.log("no JWT token");
         }
-    });
+    }, []);
 
     const getAllDeviceData = () => {
         FetchBackend('GET', 'device/all/' + ownerId, null)

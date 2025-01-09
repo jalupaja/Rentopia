@@ -7,7 +7,7 @@ import {
     DialogTitle, IconButton, TextField
 } from "@mui/material";
 import * as React from 'react';
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import UploadIcon from '@mui/icons-material/Upload';
 import FetchBackend from "../helper/BackendHelper";
@@ -16,17 +16,22 @@ function EditProfileDialog({open, userData, setUserData, handleEditDialogClose})
 
     const [avatar, setAvatar] = useState(null);
     const initialUserData = {
+        id: userData.id,
         name: userData.name,
         email: userData.email,
-        description: userData.description,
+        description: userData.description ? userData.description : " ",
         postCode: userData.location.postalCode,
         city: userData.location.city,
         street: userData.location.street,
         country: userData.location.country,
-        company: userData.company
+        company: userData.company ? userData.company : " ",
     };
 
     const [newUserData, setNewUserData] = useState(initialUserData);
+
+    useEffect(() => {
+        setNewUserData(initialUserData);
+    }, [userData]);
 
     const onChange = (e) => {
         const {name, value} = e.target;
@@ -48,7 +53,7 @@ function EditProfileDialog({open, userData, setUserData, handleEditDialogClose})
         }
     };
 
-    const closeDialog = (event) => {
+    const closeDialog = () => {
         clearFields();
         handleEditDialogClose();
     }
@@ -58,7 +63,7 @@ function EditProfileDialog({open, userData, setUserData, handleEditDialogClose})
 
         FetchBackend('POST', 'user/update', newUserData)
             .then(response => response.json())
-            .then(data => { console.log(data); setUserData(data) })
+            .then(data => {setUserData(data) })
             .catch((error) => {
                 console.log(error);
             });

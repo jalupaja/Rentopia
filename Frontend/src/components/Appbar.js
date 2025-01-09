@@ -67,9 +67,7 @@ const Search = styled('div')(({ theme }) => ({
 }));
 
 function Appbar({showLogin = true, authUser = null, searchVisibility = 'hidden'}) {
-    console.log(authUser);
     const [category, setCategory] = React.useState("%");
-
     const handleCategoryChange = (event) => {
         setCategory(event.target.value);
     }
