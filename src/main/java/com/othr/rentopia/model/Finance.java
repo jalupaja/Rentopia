@@ -24,7 +24,7 @@ public class Finance {
     @Column(nullable = false)
     private Boolean processed = false;
 
-    @Id
-    @Column(nullable = false)
-    private Long deviceId;
+    @ManyToOne
+    @JoinColumn(name = "device_id", nullable = false)
+    private Device device;
 }
