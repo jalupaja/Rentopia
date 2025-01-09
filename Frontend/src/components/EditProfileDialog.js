@@ -14,7 +14,6 @@ import FetchBackend from "../helper/BackendHelper";
 
 function EditProfileDialog({open, userData, setUserData, handleEditDialogClose}) {
 
-    const [errors, setErrors] = useState({});
     const [avatar, setAvatar] = useState(null);
     const initialUserData = {
         name: userData.name,

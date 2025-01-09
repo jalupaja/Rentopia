@@ -105,7 +105,7 @@ function ProfileSite() {
         } else {
             console.log("no JWT token");
         }
-    }, []);
+    });
 
     const getAllDeviceData = () => {
         FetchBackend('GET', 'device/all/' + ownerId, null)

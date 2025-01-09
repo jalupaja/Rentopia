@@ -62,11 +62,6 @@ function AddDeviceDialog({open, handleAddDialogClose, iDevice, getAllDeviceData}
         setImages(images.filter(image => image.id !== id));
     };
 
-    const [errors, setErrors] = useState({
-        name: false,
-        price: false
-    });
-
     const closeDialog = (event) => {
         clearFields();
         handleAddDialogClose();
@@ -118,17 +113,15 @@ function AddDeviceDialog({open, handleAddDialogClose, iDevice, getAllDeviceData}
                                 value={newDeviceData.title}
                                 onChange={onChange}
                                 required
-                                error={errors.name}
-                                helperText={errors.name ? 'Name is required' : ''}/>
+                            />
                             <TextField
                                 variant="outlined"
                                 label={"Price"}
                                 value={newDeviceData.price}
                                 onChange={onChange}
                                 required
-                                error={errors.price}
-                                helperText={errors.price ? 'Price is required' : ''}
-                                slotProps={{ input: { inputMode: 'numeric', pattern: '[0-9]*', endAdornment: <EuroIcon/> }}}/>
+                                slotProps={{ input: { inputMode: 'numeric', pattern: '[0-9]*', endAdornment: <EuroIcon/> }}}
+                            />
                             <FormControl size="small">
                                 <StyledSelect
                                     value={newDeviceData.category}

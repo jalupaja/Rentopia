@@ -66,10 +66,6 @@ const Search = styled('div')(({ theme }) => ({
     },
 }));
 
-const logo = {
-    imageUrl: '/pictures/RentopiaLogo64.jpg',
-};
-
 function Appbar({showLogin = true, authUser = null, searchVisibility = 'hidden'}) {
     console.log(authUser);
     const [category, setCategory] = React.useState("%");
