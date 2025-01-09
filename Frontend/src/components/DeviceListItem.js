@@ -16,7 +16,7 @@ function DeviceListItem({DeviceName="Test Tool",
 
     return (
         <div>
-            <ListItem onClick={() => navigate("/device/" + DeviceId)}>
+            <ListItem /*onClick={() => navigate("/device/" + DeviceId)}*/>
                 <ListItemAvatar></ListItemAvatar>
                 <ListItemText primary={DeviceName} />
                 {tabValue === 0 ? (

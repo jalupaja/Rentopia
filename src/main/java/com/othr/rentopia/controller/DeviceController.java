@@ -134,28 +134,36 @@ public class DeviceController {
 	}
 
 	@PostMapping("/add")
-	public @ResponseBody String addDevice(@RequestBody String deviceInfo) {
-		JSONObject request = new JSONObject(deviceInfo);
+	public @ResponseBody String addDevice(@RequestBody String device) {
+		JSONObject request = new JSONObject(device);
 		JSONObject response = new JSONObject();
 
-		Device newDevice = new Device();
-		newDevice.setTitle((String) request.get("title"));
-		newDevice.setDescription((String) request.get("description"));
-		newDevice.setPrice((Double) request.get("price"));
-		newDevice.setOwnerId((Long) request.get("ownerId"));
-		//newDevice.setCategories((String) request.get("categorie"));
-		newDevice.setIsPublic((Boolean) request.get("public"));
+		if(device != null) {
+			Device newDevice = new Device();
+			newDevice.setTitle((String) request.get("title"));
+			newDevice.setDescription((String) request.get("description"));
+			newDevice.setPrice(Double.valueOf((String) request.get("price")));
+			newDevice.setOwnerId(Long.valueOf((Integer) request.get("ownerId")));
+			//newDevice.setIsPublic((Boolean) request.get("isPublic"));
+			//TODO: add isPublic
+			//TODO: add Category
 
-		Location newLocation = new Location();
-		newLocation.setCity((String) request.get("city"));
-		newLocation.setPostalCode((String) request.get("postalCode"));
-		newLocation.setStreet((String) request.get("street"));
-		newLocation.setCountry((String) request.get("country"));
-		newDevice.setLocation(newLocation);
+			JSONObject locationJSON = (JSONObject) request.get("location");
 
-		deviceService.saveDevice(newDevice);
+			Location location = new Location();
+			location.setPostalCode((String) locationJSON.get("postalCode"));
+			location.setCity((String) locationJSON.get("city"));
+			location.setStreet((String) locationJSON.get("street"));
+			location.setCountry((String) locationJSON.get("country"));
+			newDevice.setLocation(location);
 
-		response.put("Device added successfully", true);
+			deviceService.saveDevice(newDevice);
+
+			response.put("Device added successfully", true);
+			return response.toString();
+		}
+
+		response.put("That did not work sry!", true);
 		return response.toString();
 	}
 
@@ -318,7 +326,7 @@ public class DeviceController {
 		}
 	}
 
-	@PostMapping(path="update")
+	@PostMapping(path="update", produces = "application/json")
 	public @ResponseBody ResponseEntity<Device> updateDevice(@RequestBody String device) {
 		JSONObject request = new JSONObject(device);
 
@@ -326,14 +334,23 @@ public class DeviceController {
 			Device updDevcie = new Device();
 			updDevcie.setTitle((String) request.get("title"));
 			updDevcie.setDescription((String) request.get("description"));
-			updDevcie.setPrice((Double) request.get("price"));
-			updDevcie.setLocation((Location) request.get("location"));
-			updDevcie.setOwnerId((Long) request.get("ownerId"));
-			updDevcie.setIsPublic((Boolean) request.get("isPublic"));
-			updDevcie.setId((Long) request.get("id"));
+			updDevcie.setPrice(Double.valueOf((String) request.get("price")));
+			updDevcie.setOwnerId(Long.valueOf((Integer) request.get("ownerId")));
+			updDevcie.setId(Long.valueOf((Integer) request.get("id")));
+			//updDevcie.setIsPublic((Boolean) request.get("isPublic"));
+			//TODO: add isPublic
 			//TODO: add Category
 
+			JSONObject locationJSON = (JSONObject) request.get("location");
+
+			Location location = new Location();
+			location.setPostalCode((String) locationJSON.get("postalCode"));
+			location.setCity((String) locationJSON.get("city"));
+			location.setStreet((String) locationJSON.get("street"));
+			location.setCountry((String) locationJSON.get("country"));
+			updDevcie.setLocation(location);
 			updDevcie = deviceService.updateDevice(updDevcie);
+
 			return new ResponseEntity<>(updDevcie, HttpStatus.OK);
 		}
 

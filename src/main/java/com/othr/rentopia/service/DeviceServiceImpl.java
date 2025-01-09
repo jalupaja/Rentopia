@@ -19,7 +19,11 @@ public class DeviceServiceImpl implements DeviceService {
 	@Override
 	@Transactional
 	public void saveDevice(Device device) {
-		entityManager.persist(device);
+		try {
+			entityManager.persist(device);
+		} catch (PersistenceException e) {
+			System.err.println("ERROR saving new Device " + e.getMessage());
+		}
 	}
 
 	@Override

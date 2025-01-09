@@ -294,6 +294,7 @@ function ProfileSite() {
                                          handleAddDialogClose={handleAddDialogClose}
                                          iDevice={clickedDevice}
                                          getAllDeviceData={getAllDeviceData}
+                                         authUser={authUser}
                         />
                     ) : ('')}
                 </div>

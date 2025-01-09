@@ -26,16 +26,17 @@ const StyledSelect = styled(Select)(({ theme }) => ({
     color: 'inherit',
 }))
 
-function AddDeviceDialog({open, handleAddDialogClose, iDevice, getAllDeviceData}) {
+function AddDeviceDialog({open, handleAddDialogClose, iDevice, getAllDeviceData, authUser}) {
 
     const [images, setImages] = useState([]);
     const initialValues = {
+        id: iDevice.id ? iDevice.id : null,
         title: iDevice.title,
         description: iDevice.description,
-        price: iDevice.price,
-        category: iDevice.category,
-        ownerId: iDevice.ownerId,
-        location: iDevice.location
+        price: iDevice.price ? iDevice.price : 0.0,
+        category: iDevice.category ? iDevice.category : '%',
+        ownerId: authUser.id,
+        location: authUser.location,
     };
     const [newDeviceData, setNewDeviceData] = React.useState(initialValues);
 
@@ -69,16 +70,21 @@ function AddDeviceDialog({open, handleAddDialogClose, iDevice, getAllDeviceData}
 
     const handleSave = (event) => {
         event.preventDefault();
+        console.log(newDeviceData);
+        setNewDeviceData(prevState => ({
+            ...prevState,
+            price: Math.round(prevState.price* 10) / 10
+        }));
 
-        if(iDevice.id === null) {
-            FetchBackend('POST', 'device/add', newDeviceData)
+        if(iDevice.id != null) {
+            FetchBackend('POST', 'device/update', newDeviceData)
                 .then(response => response.json())
                 .then(data => {
                     console.log(data)
                 })
                 .catch(error => console.log(error));
         } else {
-            FetchBackend('POST', 'device/update', newDeviceData)
+            FetchBackend('POST', 'device/add', newDeviceData)
                 .then(response => response.json())
                 .then(data => {
                     console.log(data)
@@ -111,21 +117,36 @@ function AddDeviceDialog({open, handleAddDialogClose, iDevice, getAllDeviceData}
                                 variant="outlined"
                                 label={"Name"}
                                 value={newDeviceData.title}
-                                onChange={onChange}
+                                onChange={(e) => {
+                                    setNewDeviceData(prevState => ({
+                                        ...prevState,
+                                        title: e.target.value
+                                    }));
+                                }}
                                 required
                             />
                             <TextField
                                 variant="outlined"
                                 label={"Price"}
                                 value={newDeviceData.price}
-                                onChange={onChange}
+                                onChange={(e) => {
+                                    setNewDeviceData(prevState => ({
+                                        ...prevState,
+                                        price: e.target.value
+                                    }));
+                                }}
                                 required
                                 slotProps={{ input: { inputMode: 'numeric', pattern: '[0-9]*', endAdornment: <EuroIcon/> }}}
                             />
                             <FormControl size="small">
                                 <StyledSelect
                                     value={newDeviceData.category}
-                                    onChange={onChange}
+                                    onChange={(e) => {
+                                        setNewDeviceData(prevState => ({
+                                            ...prevState,
+                                            category: e.target.value
+                                        }));
+                                    }}
                                 >
                                     <MenuItem value={"%"}><em>Category</em></MenuItem>
                                     <MenuItem value={"tools"}>Tools</MenuItem>
@@ -139,7 +160,12 @@ function AddDeviceDialog({open, handleAddDialogClose, iDevice, getAllDeviceData}
                                 multiline rows={5}
                                 label={"Description"}
                                 value={newDeviceData.description}
-                                onChange={onChange}/>
+                                onChange={(e) => {
+                                    setNewDeviceData(prevState => ({
+                                        ...prevState,
+                                        description: e.target.value
+                                    }));
+                                }}/>
                         </Grid>
                     </Box>
                     <Box
