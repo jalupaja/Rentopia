@@ -1,6 +1,8 @@
 package com.othr.rentopia.service;
 
 import java.util.List;
+
+import com.othr.rentopia.model.Device;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import jakarta.persistence.NoResultException;
@@ -24,17 +26,34 @@ public class FinanceServiceImpl implements FinanceService {
 
     @Override
     public List<Finance> getFinancesByAccount(Long accountId) {
-	List<Finance> finances = null;
+		List<Finance> finances = null;
 
-	String query = "SELECT f FROM Finance f WHERE f.accountId = :accountId";
-	try {
-	    finances = entityManager
-		    .createQuery(query, Finance.class)
-		    .setParameter("accountId", accountId)
-		    .getResultList();
-	} catch (NoResultException e) {
-	}
+		String query = "SELECT f FROM Finance f WHERE f.accountId = :accountId";
+		try {
+			finances = entityManager
+				.createQuery(query, Finance.class)
+				.setParameter("accountId", accountId)
+				.getResultList();
+		} catch (NoResultException e) {
+		}
 
-	return finances;
+		return finances;
     }
+
+	@Override
+	public List<Device> getRentHistory(Long accountId) {
+		List<Device> devices = null;
+
+		String query = "SELECT d FROM Device d INNER JOIN Finance f on f.deviceId = d.id and f.accountId = :accountId";
+		try {
+			devices = entityManager
+					.createQuery(query, Device.class)
+					.setParameter("accountId", accountId)
+					.getResultList();
+		} catch (NoResultException e) {
+
+		}
+
+		return devices;
+	}
 }

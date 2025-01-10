@@ -31,6 +31,9 @@ public class UserController {
     @Autowired
     private AccountService accountService;
 
+    @Autowired
+    private AccountServiceImpl customUserDetails;
+
     @PostMapping(value = "login", produces = "application/json")
     public @ResponseBody ResponseEntity<AuthResponse> processLoginRequest(@RequestBody String loginRequest) {
         JSONObject request = new JSONObject(loginRequest);
@@ -135,6 +138,33 @@ public class UserController {
         // todo:
 
         return true;
+    }
+
+    @PostMapping(path="user/update", produces = "application/json")
+    public @ResponseBody ResponseEntity<Account> UpdateUser(@RequestBody String account) {
+        JSONObject request = new JSONObject(account);
+
+        if(account != null) {
+            Account updAccount = new Account();
+            updAccount.setId(Long.valueOf((Integer) request.get("id")));
+            updAccount.setName((String) request.get("name"));
+            updAccount.setEmail((String) request.get("email"));
+            updAccount.setDescription((String) request.get("description"));
+            updAccount.setCompany((String) request.get("company"));
+
+            Location oldlocation = new Location();
+            oldlocation.setPostalCode((String) request.get("postCode"));
+            oldlocation.setCity((String) request.get("city"));
+            oldlocation.setStreet((String) request.get("street"));
+            oldlocation.setCountry((String) request.get("country"));
+            updAccount.setLocation(oldlocation);
+
+            updAccount = customUserDetails.updateAccount(updAccount);
+            return new ResponseEntity<>(updAccount, HttpStatus.OK);
+        }
+
+
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
     @PostMapping(path = "register", produces = "application/json")

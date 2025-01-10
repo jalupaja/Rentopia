@@ -1,5 +1,10 @@
 package com.othr.rentopia.controller;
 
+// import com.othr.rentopia.model.Account;
+import com.othr.rentopia.model.*;
+// import com.othr.rentopia.service.AccountService;
+import com.othr.rentopia.service.*;
+import org.json.JSONObject;
 import com.othr.rentopia.model.Device;
 import com.othr.rentopia.model.DeviceImage;
 import com.othr.rentopia.model.Bookmark;
@@ -12,6 +17,7 @@ import com.othr.rentopia.service.AccountService;
 import com.othr.rentopia.service.DeviceImageService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -27,11 +33,7 @@ import org.springframework.security.core.Authentication;
 
 import jakarta.persistence.PersistenceException;
 
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.UUID;
+import java.util.*;
 import java.io.File;
 import java.io.IOException;
 
@@ -55,9 +57,17 @@ public class DeviceController {
     @Autowired
     private DeviceImageService deviceImageService;
 
+    @Autowired
+    private FinanceService financeService;
+
     // save to Frontend...
     private static final String UPLOAD_DIR = System.getProperty("user.dir") + "/Frontend/public/images/";
     private static final String DEVICE_IMAGE_UPLOAD_DIR = UPLOAD_DIR + "devices/";
+
+    private Boolean checkAllowed(Device device) {
+	// TODO check NULL, if (! device.getHidden || device.owner == logged_in_acc)
+	return device != null;
+    }
 
     private Boolean checkDeviceAccess_R(Authentication authentication, Device device) {
         if (device == null)
@@ -197,31 +207,31 @@ public class DeviceController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<String> addDevice(Authentication authentication, @RequestBody Map<String, Object> data) {
-        // TODO untested
+	public ResponseEntity<List<Map<String, Object>>> addDevice(Authentication authentication, @RequestBody String device) {
         if (authentication == null)
             return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
 
-        try {
-            String title = (String) data.get("title");
-            String description = (String) data.get("description");
-            Double price = (Double) data.get("price");
-            boolean isPublic = (boolean) data.get("isPublic");
-            // TODO add categories
+		JSONObject request = new JSONObject(device);
+		JSONObject response = new JSONObject();
 
+        try {
             String email = (String) authentication.getPrincipal();
             Long ownerId = accountService.getId(email);
 
-            Device device = new Device();
-            device.setTitle(title);
-            device.setDescription(description);
-            device.setPrice(price);
-            device.setOwnerId(ownerId);
-            device.setLocation(accountService.getLocation(ownerId));
-            device.setIsPublic(isPublic);
-            deviceService.saveDevice(device);
+			Device newDevice = new Device();
+			newDevice.setTitle((String) request.get("title"));
+			newDevice.setDescription((String) request.get("description"));
+			newDevice.setPrice(priceToDouble(request.get("price")));
+			newDevice.setIsPublic((Boolean) request.get("isPublic"));
+			newDevice.setOwnerId(ownerId);
+			newDevice.setLocation(accountService.getLocation(ownerId));
+			//TODO: add Category
 
-            return new ResponseEntity<>(null, HttpStatus.OK);
+	    	deviceService.saveDevice(newDevice);
+
+	    	response.put("Device added successfully", true);
+	    	return getYourDevices(Long.valueOf((Integer) request.get("ownerId")));
+
         } catch (Exception e) {
             System.out.println("Error parsing values for device creation: " + e.getMessage());
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
@@ -229,12 +239,14 @@ public class DeviceController {
     }
 
     @PostMapping("/remove/{id}")
-    public ResponseEntity<String> removeDevice(Authentication authentication, @PathVariable("id") Long id) {
+	public ResponseEntity<List<Map<String, Object>>> removeDevice(Authentication authentication, @PathVariable("id") Long id) {
         if (!checkDeviceAccess_W(authentication, id))
             return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
 
+	    Device device = deviceService.getDevice(id);
+
         if (deviceService.removeDevice(id)) {
-            return new ResponseEntity<>(null, HttpStatus.OK);
+            return getYourDevices(device.getOwnerId());
         } else {
             System.out.println("Failed removing Device " + id);
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -260,17 +272,69 @@ public class DeviceController {
         return new ResponseEntity<>(deviceData, HttpStatus.OK);
     }
 
+	
+	@GetMapping("/all/{ownerId}")
+	public ResponseEntity<List<Map<String, Object>>> getYourDevices(@PathVariable("ownerId") Long ownerId) {
+		List<Map<String, Object>> deviceData = new ArrayList<>();
+		List<Device> devices = deviceService.getDevicesByOwner(ownerId);
+
+		for (Device device : devices) {
+			if (checkAllowed(device)) {
+				deviceData.add(parseDevice(device, ownerId));
+			}
+		}
+
+		return new ResponseEntity<>(deviceData, HttpStatus.OK);
+	}
+
+	@GetMapping("/bookmarks/all/{ownerId}")
+	public ResponseEntity<List<Map<String, Object>>> getBookmarks(@PathVariable("ownerId") Long ownerId) {
+		// TODO maybe move to AccountService. but need parseDeviceShort...
+		List<Map<String, Object>> deviceData = new ArrayList<>();
+
+		List<Device> devices = bookmarkService.getBookmarkedDevices(ownerId);
+		for (Device device : devices) {
+			if (checkAllowed(device)) {
+				deviceData.add(parseDeviceShort(device, ownerId));
+			}
+		}
+
+		return new ResponseEntity<>(deviceData, HttpStatus.OK);
+	}
+
+    @GetMapping("/rentHistory/all/{ownerId}")
+	public ResponseEntity<List<Map<String, Object>>> getRentHistory(@PathVariable("ownerId") Long ownerId) {
+		List<Map<String, Object>> deviceData = new ArrayList<>();
+
+		List<Device> devices = financeService.getRentHistory(ownerId);
+		for (Device device : devices) {
+			if (checkAllowed(device)) {
+				deviceData.add(parseDevice(device, ownerId));
+			}
+		}
+
+		return new ResponseEntity<>(deviceData, HttpStatus.OK);
+	}
+
     @PostMapping("/bookmarks/remove/{deviceId}")
-    public ResponseEntity<String> removeBookmark(Authentication authentication,
+	public ResponseEntity<List<Map<String, Object>>> removeBookmark(Authentication authentication,
             @PathVariable("deviceId") Long deviceId) {
         if (authentication == null)
             return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
 
+	List<Map<String, Object>> deviceData = new ArrayList<>();
         String email = (String) authentication.getPrincipal();
         Long ownerId = accountService.getId(email);
 
-        if (bookmarkService.removeBookmark(ownerId, deviceId)) {
-            return new ResponseEntity<>(null, HttpStatus.OK);
+		if (bookmarkService.removeBookmark(ownerId, deviceId)) {
+			List<Device> devices = bookmarkService.getBookmarkedDevices(ownerId);
+			for (Device device : devices) {
+				if (checkAllowed(device)) {
+					deviceData.add(parseDeviceShort(device, ownerId));
+				}
+			}
+
+			return new ResponseEntity<>(deviceData, HttpStatus.OK);
         } else {
             System.out.println("Failed removing Bookmark from " + ownerId + " for " + deviceId);
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
@@ -357,6 +421,52 @@ public class DeviceController {
         } catch (IOException e) {
             System.out.println("Error while uploading file!" + e.getMessage());
             return ResponseEntity.status(500).body("Error while uploading file!");
+		}
+	}
+
+	@PostMapping(path="update", produces = "application/json")
+	public ResponseEntity<List<Map<String, Object>>> updateDevice(@RequestBody String device) {
+		JSONObject request = new JSONObject(device);
+
+		if(device != null) {
+			Device updDevcie = new Device();
+			updDevcie.setTitle((String) request.get("title"));
+			updDevcie.setDescription((String) request.get("description"));
+			updDevcie.setPrice(priceToDouble(request.get("price")));
+			updDevcie.setOwnerId(Long.valueOf((Integer) request.get("ownerId")));
+			updDevcie.setId(Long.valueOf((Integer) request.get("id")));
+			updDevcie.setIsPublic((Boolean) request.get("isPublic"));
+			//TODO: add Category
+
+			JSONObject locationJSON = (JSONObject) request.get("location");
+
+			Location location = new Location();
+			location.setPostalCode((String) locationJSON.get("postalCode"));
+			location.setCity((String) locationJSON.get("city"));
+			location.setStreet((String) locationJSON.get("street"));
+			location.setCountry((String) locationJSON.get("country"));
+			updDevcie.setLocation(location);
+			updDevcie = deviceService.updateDevice(updDevcie);
+
+			return getYourDevices(Long.valueOf((Integer) request.get("ownerId")));
+		}
+
+		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+	}
+
+	private double priceToDouble(Object priceObj) {
+
+		if (priceObj instanceof String) {
+			return(Double.parseDouble((String) priceObj));
+		}
+		else if (priceObj instanceof Integer || priceObj instanceof Long) {
+			return((Number) priceObj).doubleValue();
+		}
+		else if (priceObj instanceof Float) {
+			return((Float) priceObj).doubleValue();
+		}
+		else {
+			return((Double) priceObj);
         }
     }
 }

@@ -38,4 +38,9 @@ public class Device {
 
     @Column(nullable = false)
     private Boolean isPublic = true;
+
+    /*
+        @OneToMany(mappedBy = "device")
+        private Set<Finance> finances = new HashSet<>();
+     */
 }

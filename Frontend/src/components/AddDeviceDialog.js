@@ -5,7 +5,7 @@ import {
     Dialog,
     DialogActions,
     DialogContent,
-    DialogTitle, FormControl, IconButton, MenuItem, Select, styled,
+    DialogTitle, FormControl, FormLabel, IconButton, MenuItem, Select, styled, Switch,
     TextField
 } from "@mui/material";
 import * as React from 'react';
@@ -13,6 +13,7 @@ import Grid from "@mui/material/Grid2";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EuroIcon from '@mui/icons-material/Euro';
 import {useState} from "react";
+import FetchBackend from "../helper/BackendHelper";
 
 const StyledSelect = styled(Select)(({ theme }) => ({
     '& .MuiOutlinedInput-notchedOutline': {
@@ -25,13 +26,24 @@ const StyledSelect = styled(Select)(({ theme }) => ({
     color: 'inherit',
 }))
 
-function AddDeviceDialog({open, handleAddDialogClose, iName="", iPrice=0, iCategory="%", iDescription=""}) {
+function AddDeviceDialog({open, handleAddDialogClose, iDevice, setDeviceList, authUser}) {
 
     const [images, setImages] = useState([]);
-    const [name, setName] = useState(iName);
-    const [description, setDescription] = useState(iDescription);
-    const [category, setCategory] = React.useState(iCategory);
-    const [price, setPrice] = useState(iPrice);
+    const initialValues = {
+        id: iDevice.id ? iDevice.id : null,
+        title: iDevice.title,
+        description: iDevice.description,
+        price: iDevice.price ? iDevice.price : 0.0,
+        category: iDevice.category ? iDevice.category : '%',
+        isPublic: iDevice.isPublic,
+        ownerId: authUser.id,
+        location: authUser.location,
+    };
+    const [newDeviceData, setNewDeviceData] = React.useState(initialValues);
+
+    const clearFields = () => {
+        setNewDeviceData({...initialValues});
+    }
 
     const handleFileChange = (event) => {
         const selectedFiles = Array.from(event.target.files);
@@ -47,38 +59,32 @@ function AddDeviceDialog({open, handleAddDialogClose, iName="", iPrice=0, iCateg
         setImages(images.filter(image => image.id !== id));
     };
 
-    const handleCategoryChange = (event) => {
-        setCategory(event.target.value);
-    }
-
-    const [errors, setErrors] = useState({
-        name: false,
-        price: false
-    });
-
-    const closeDialog = (event) => {
-        setCategory("%");
-        setName("");
-        setDescription("");
-        setPrice(0);
-        setImages([]);
+    const closeDialog = () => {
+        clearFields();
         handleAddDialogClose();
     }
 
     const handleSave = (event) => {
         event.preventDefault();
 
-        const newErrors = {
-            name: !name,
-            price: !price
-        };
+        setNewDeviceData(prevState => ({
+            ...prevState,
+            price: Math.round(prevState.price* 100) / 100
+        }));
 
-        setErrors(newErrors);
-
-        if (!Object.values(newErrors).includes(true)) {
-            console.log('Device successfully Added:', name, price, category, description);
-            closeDialog();
+        if(iDevice.id != null) {
+            FetchBackend('POST', 'device/update', newDeviceData)
+                .then(response => response.json())
+                .then(data => {data ? setDeviceList(data) : console.log(data) })
+                .catch(error => console.log(error));
+        } else {
+            FetchBackend('POST', 'device/add', newDeviceData)
+                .then(response => response.json())
+                .then(data => {data ? setDeviceList(data) : console.log(data) })
+                .catch(error => console.log(error));
         }
+
+        closeDialog();
     }
 
     return (
@@ -101,24 +107,38 @@ function AddDeviceDialog({open, handleAddDialogClose, iName="", iPrice=0, iCateg
                             <TextField
                                 variant="outlined"
                                 label={"Name"}
-                                value={name}
-                                onChange={(e) => setName(e.target.value)}
+                                value={newDeviceData.title}
+                                onChange={(e) => {
+                                    setNewDeviceData(prevState => ({
+                                        ...prevState,
+                                        title: e.target.value
+                                    }));
+                                }}
                                 required
-                                error={errors.name}
-                                helperText={errors.name ? 'Name is required' : ''}/>
+                            />
                             <TextField
                                 variant="outlined"
                                 label={"Price"}
-                                value={price}
-                                onChange={(e) => setPrice(e.target.value)}
+                                value={newDeviceData.price}
+                                onChange={(e) => {
+                                    setNewDeviceData(prevState => ({
+                                        ...prevState,
+                                        price: e.target.value
+                                    }));
+                                }}
                                 required
-                                error={errors.price}
-                                helperText={errors.price ? 'Price is required' : ''}
-                                slotProps={{ input: { inputMode: 'numeric', pattern: '[0-9]*', endAdornment: <EuroIcon/> }}}/>
-                            <FormControl size="small">
+                                slotProps={{ input: { inputMode: 'numeric', pattern: '[0-9]*', endAdornment: <EuroIcon/> }}}
+                            />
+                            <FormControl size="small" fullWidth>
+                                <FormLabel component="legend">Category</FormLabel>
                                 <StyledSelect
-                                    value={category}
-                                    onChange={handleCategoryChange}
+                                    value={newDeviceData.category}
+                                    onChange={(e) => {
+                                        setNewDeviceData(prevState => ({
+                                            ...prevState,
+                                            category: e.target.value
+                                        }));
+                                    }}
                                 >
                                     <MenuItem value={"%"}><em>Category</em></MenuItem>
                                     <MenuItem value={"tools"}>Tools</MenuItem>
@@ -126,13 +146,27 @@ function AddDeviceDialog({open, handleAddDialogClose, iName="", iPrice=0, iCateg
                                     <MenuItem value={"home"}>Home</MenuItem>
                                 </StyledSelect>
                             </FormControl>
+                            <FormControl fullWidth>
+                                <FormLabel component="legend">Is Public</FormLabel>
+                                <Switch checked={newDeviceData.isPublic} onChange={(e) => {
+                                    setNewDeviceData(prevState => ({
+                                        ...prevState,
+                                        isPublic: e.target.checked
+                                    }));
+                                }} />
+                            </FormControl>
                             <TextField
                                 fullWidth
                                 variant="outlined"
                                 multiline rows={5}
                                 label={"Description"}
-                                value={description}
-                                onChange={(e) => setDescription(e.target.value)}/>
+                                value={newDeviceData.description}
+                                onChange={(e) => {
+                                    setNewDeviceData(prevState => ({
+                                        ...prevState,
+                                        description: e.target.value
+                                    }));
+                                }}/>
                         </Grid>
                     </Box>
                     <Box

@@ -20,10 +20,10 @@ public class EmailService {
     private static final String IMAP_PORT = "993";
     private static final String SMTP_HOST = "smtp.gmail.com";
     private static final String SMTP_PORT = "587";
-    private static final String CLIENT_ID = DotenvHelper.get("OAuthClientId");
-    private static final String CLIENT_SECRET = DotenvHelper.get("OAuthClientSecret");
-    private static final String GmailUsername = DotenvHelper.get("GoogleEmail");
-    private static final String GmailPassword = DotenvHelper.get("GooglePassword");
+    private static final String CLIENT_ID = DotenvHelper.get("REACT_APP_OAuthClientId");
+    private static final String CLIENT_SECRET = DotenvHelper.get("REACT_APP_OAuthClientSecret");
+    private static final String GmailUsername = DotenvHelper.get("REACT_APP_GoogleEmail");
+    private static final String GmailPassword = DotenvHelper.get("REACT_APP_GooglePassword");
 
     private Session session;
 

@@ -14,7 +14,7 @@ import java.util.Collections;
 public class GoogleOAuthService {
 
     private GoogleIdTokenVerifier verifier;
-    private final String CLIENT_ID = DotenvHelper.get("OAuthClientId");
+    private final String CLIENT_ID = DotenvHelper.get("REACT_APP_OAuthClientId");
 
 
     public GoogleOAuthService() {

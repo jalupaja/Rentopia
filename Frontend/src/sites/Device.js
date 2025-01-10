@@ -1,8 +1,6 @@
 import {
-    AppBar,
     Box,
     Button,
-    styled,
     Typography, Grid, Grid2,
     Container,
     ImageList,

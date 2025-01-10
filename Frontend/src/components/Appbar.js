@@ -56,11 +56,14 @@ function Appbar({ showLogin = true, authUser = null, searchVisibility = 'hidden'
     };
     const [prevFilterOptions, setPrevFilterOptions] = React.useState(initialFilterOptions);
     const [filterOptions, setFilterOptions] = React.useState(initialFilterOptions);
-
+    const navigate = useNavigate();
+  
     let loginButton = <Button sx={{ visibility: 'hidden' }} />;
+    let profileButton = <IconButton sx={{visibility: 'hidden'}}></IconButton>;
     if (showLogin) {
         if (authUser === null) {
             loginButton = <Button component={Link} to={"/login"} variant="outlined" color="inherit">{t("sign_in")}</Button>;
+            profileButton = <div/>
         }
         else{
             loginButton = <MenuComponent authUser={authUser}/>;

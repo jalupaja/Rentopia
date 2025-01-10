@@ -21,4 +21,6 @@ public interface DeviceService {
 	List<Device> getDevicesSorted(Map<String, String> filterOptions);
 
 	boolean removeDevice(Long deviceId);
+
+	Device updateDevice(Device device);
 }
