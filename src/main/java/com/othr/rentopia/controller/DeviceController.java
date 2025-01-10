@@ -202,14 +202,14 @@ public class DeviceController {
             String email = (String) authentication.getPrincipal();
             Long ownerId = accountService.getId(email);
 
-		Device newDevice = new Device();
-		newDevice.setTitle((String) request.get("title"));
-		newDevice.setDescription((String) request.get("description"));
-		newDevice.setPrice(priceToDouble(request.get("price")));
-		newDevice.setIsPublic((Boolean) request.get("isPublic"));
-		newDevice.setOwnerId(ownerId");
-		newDevice.setLocation(accountService.getLocation(ownerId));
-		//TODO: add Category
+			Device newDevice = new Device();
+			newDevice.setTitle((String) request.get("title"));
+			newDevice.setDescription((String) request.get("description"));
+			newDevice.setPrice(priceToDouble(request.get("price")));
+			newDevice.setIsPublic((Boolean) request.get("isPublic"));
+			newDevice.setOwnerId(ownerId);
+			newDevice.setLocation(accountService.getLocation(ownerId));
+			//TODO: add Category
 
 	    	deviceService.saveDevice(newDevice);
 
@@ -264,7 +264,7 @@ public class DeviceController {
 
 		for (Device device : devices) {
 			if (checkAllowed(device)) {
-				deviceData.add(parseDevice(device));
+				deviceData.add(parseDevice(device, ownerId));
 			}
 		}
 
@@ -279,7 +279,7 @@ public class DeviceController {
 		List<Device> devices = bookmarkService.getBookmarkedDevices(ownerId);
 		for (Device device : devices) {
 			if (checkAllowed(device)) {
-				deviceData.add(parseDeviceShort(device));
+				deviceData.add(parseDeviceShort(device, ownerId));
 			}
 		}
 
@@ -293,7 +293,7 @@ public class DeviceController {
 		List<Device> devices = financeService.getRentHistory(ownerId);
 		for (Device device : devices) {
 			if (checkAllowed(device)) {
-				deviceData.add(parseDevice(device));
+				deviceData.add(parseDevice(device, ownerId));
 			}
 		}
 
@@ -314,7 +314,7 @@ public class DeviceController {
 			List<Device> devices = bookmarkService.getBookmarkedDevices(ownerId);
 			for (Device device : devices) {
 				if (checkAllowed(device)) {
-					deviceData.add(parseDeviceShort(device));
+					deviceData.add(parseDeviceShort(device, ownerId));
 				}
 			}
 

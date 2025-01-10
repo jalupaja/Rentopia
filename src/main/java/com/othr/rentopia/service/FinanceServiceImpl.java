@@ -44,7 +44,7 @@ public class FinanceServiceImpl implements FinanceService {
 	public List<Device> getRentHistory(Long accountId) {
 		List<Device> devices = null;
 
-		String query = "SELECT d FROM Device d INNER JOIN Finance f on f.device.id = d.id and f.accountId = :accountId";
+		String query = "SELECT d FROM Device d INNER JOIN Finance f on f.deviceId = d.id and f.accountId = :accountId";
 		try {
 			devices = entityManager
 					.createQuery(query, Device.class)

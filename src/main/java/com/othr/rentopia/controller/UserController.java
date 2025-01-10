@@ -31,6 +31,9 @@ public class UserController {
     @Autowired
     private AccountService accountService;
 
+    @Autowired
+    private AccountServiceImpl customUserDetails;
+
     @PostMapping(value = "login", produces = "application/json")
     public @ResponseBody ResponseEntity<AuthResponse> processLoginRequest(@RequestBody String loginRequest) {
         JSONObject request = new JSONObject(loginRequest);

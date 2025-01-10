@@ -1,7 +1,7 @@
 import {
     Box,
     Button,
-    Typography, Grid,
+    Typography, Grid, Grid2,
     Container,
     ImageList,
     Rating,
