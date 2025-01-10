@@ -26,55 +26,31 @@ import {useEffect} from "react";
 
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
     color: 'inherit',
+    backgroundColor: 'transparent',
     '& .MuiInputBase-input': {
         padding: theme.spacing(1, 1, 1, 0),
-        // vertical padding + font size from searchIcon
-        paddingLeft: `calc(1em + ${theme.spacing(4)})`,
         transition: theme.transitions.create('width'),
         width: '100%',
-        [theme.breakpoints.up('md')]: {
-            width: '20ch',
-        },
     },
     width: '100%',
 }));
 
-const SearchIconWrapper = styled('div')(({ theme }) => ({
-    padding: theme.spacing(0, 2),
-    height: '100%',
-    position: 'absolute',
-    pointerEvents: 'none',
+const SearchWrapper = styled(Box)(({ theme }) => ({
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'center',
-}));
-
-const Search = styled('div')(({ theme }) => ({
-    position: 'relative',
-    borderRadius: theme.shape.borderRadius,
-    border: `1px solid ${alpha(theme.palette.common.white, 0.5)}`,
-    backgroundColor: 'transparent',
-    '&:hover': {
-        borderColor: alpha(theme.palette.common.white, 0.75),
-    },
-    marginRight: theme.spacing(2),
-    marginLeft: 0,
+    border: '1px solid #ccc',
+    borderRadius: '4px',
     width: '100%',
-    [theme.breakpoints.up('sm')]: {
-        width: 'auto',
-    },
+    maxWidth: '400px',
+    marginLeft: '7%',
 }));
 
-const logo = {
-    imageUrl: '/pictures/RentopiaLogo64.jpg',
-};
-
-function Appbar({ showLogin = true, authUser = null, searchVisibility = 'hidden', setDevices}) {
+function Appbar({ showLogin = true, authUser = null, searchVisibility = 'hidden', setDevices, iPriceRange = [0,999]}) {
     const { t } = useTranslation("", { keyPrefix: "appbar" });
     const [openFilter, setOpenFilter] = React.useState(false);
     const initialFilterOptions = {
         title: "",
-        priceRange: [0, 9999],
+        priceRange: iPriceRange,
         postalCode: "",
         sortOption: "" //dateAsc, priceDesc, priceAsc
     };
@@ -151,28 +127,27 @@ function Appbar({ showLogin = true, authUser = null, searchVisibility = 'hidden'
                             />
                         </Link>
                     </Box>
-                    <Search sx={{ marginLeft: '7%', marginRight: 0, visibility: searchVisibility }}>
-                        <SearchIconWrapper>
-                            <SearchIcon />
-                        </SearchIconWrapper>
+                    <SearchWrapper sx={{ visibility: searchVisibility }}>
+                        <IconButton sx={{ padding: '0 8px' }} size="large" color="inherit" onClick={handleFilterOpen}>
+                            <TuneIcon />
+                        </IconButton>
                         <StyledInputBase
                             value={filterOptions.title}
                             onChange={(e) => {
-                                setFilterOptions(prevState => ({
+                                setFilterOptions((prevState) => ({
                                     ...prevState,
-                                    title: e.target.value
+                                    title: e.target.value,
                                 }));
                             }}
-                            placeholder={t('search')}
+                            placeholder="Search"
                             onKeyDown={(event) => {
-                                if (event.key === 'Enter')
-                                    handleSearch();
+                                if (event.key === 'Enter') handleSearch();
                             }}
                         />
-                    </Search>
-                    <IconButton sx={{visibility: searchVisibility }} size="large" color={"inherit"} onClick={handleFilterOpen}>
-                        <TuneIcon/>
-                    </IconButton>
+                        <IconButton sx={{ padding: '0 8px' }} size="large" color="inherit" onClick={handleSearch}>
+                            <SearchIcon />
+                        </IconButton>
+                    </SearchWrapper>
                     <Box sx={{ flexGrow: 1 }}></Box>
                   {loginButton}
                 </Toolbar>
@@ -209,9 +184,9 @@ function Appbar({ showLogin = true, authUser = null, searchVisibility = 'hidden'
                             }}
                             valueLabelDisplay="auto"
                             getAriaValueText={() => `${filterOptions.priceRange}€`}
-                            min={0}
-                            max={10000}
-                            step={10}
+                            min={iPriceRange[0]}
+                            max={iPriceRange[1]}
+                            step={1}
                         />
                     </Box>
                     <FormControl fullWidth margin="normal">
