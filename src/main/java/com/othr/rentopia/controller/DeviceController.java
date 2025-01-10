@@ -4,7 +4,6 @@ package com.othr.rentopia.controller;
 import com.othr.rentopia.model.*;
 // import com.othr.rentopia.service.AccountService;
 import com.othr.rentopia.service.*;
-import jdk.jfr.Category;
 import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -134,7 +133,7 @@ public class DeviceController {
 	}
 
 	@PostMapping("/add")
-	public @ResponseBody String addDevice(@RequestBody String device) {
+	public ResponseEntity<List<Map<String, Object>>> addDevice(@RequestBody String device) {
 		JSONObject request = new JSONObject(device);
 		JSONObject response = new JSONObject();
 
@@ -142,10 +141,9 @@ public class DeviceController {
 			Device newDevice = new Device();
 			newDevice.setTitle((String) request.get("title"));
 			newDevice.setDescription((String) request.get("description"));
-			newDevice.setPrice(Double.valueOf((String) request.get("price")));
+			newDevice.setPrice(priceToDouble(request.get("price")));
 			newDevice.setOwnerId(Long.valueOf((Integer) request.get("ownerId")));
-			//newDevice.setIsPublic((Boolean) request.get("isPublic"));
-			//TODO: add isPublic
+			newDevice.setIsPublic((Boolean) request.get("isPublic"));
 			//TODO: add Category
 
 			JSONObject locationJSON = (JSONObject) request.get("location");
@@ -160,23 +158,23 @@ public class DeviceController {
 			deviceService.saveDevice(newDevice);
 
 			response.put("Device added successfully", true);
-			return response.toString();
+			return getYourDevices(Long.valueOf((Integer) request.get("ownerId")));
 		}
 
 		response.put("That did not work sry!", true);
-		return response.toString();
+		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 	}
 
 	@PostMapping("/remove/{id}")
-	public ResponseEntity<String> removeDevice(@PathVariable("id") Long id) {
+	public ResponseEntity<List<Map<String, Object>>> removeDevice(@PathVariable("id") Long id) {
 		Device device = deviceService.getDevice(id);
 
 		if (checkAllowed(device)) {
 			deviceService.removeDevice(id);
+			return getYourDevices(device.getOwnerId());
 		} else {
 			return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
 		}
-		return new ResponseEntity<>(null, HttpStatus.NOT_IMPLEMENTED);
 	}
 
 	@GetMapping("/all/{ownerId}")
@@ -327,18 +325,17 @@ public class DeviceController {
 	}
 
 	@PostMapping(path="update", produces = "application/json")
-	public @ResponseBody ResponseEntity<Device> updateDevice(@RequestBody String device) {
+	public ResponseEntity<List<Map<String, Object>>> updateDevice(@RequestBody String device) {
 		JSONObject request = new JSONObject(device);
 
 		if(device != null) {
 			Device updDevcie = new Device();
 			updDevcie.setTitle((String) request.get("title"));
 			updDevcie.setDescription((String) request.get("description"));
-			updDevcie.setPrice(Double.valueOf((String) request.get("price")));
+			updDevcie.setPrice(priceToDouble(request.get("price")));
 			updDevcie.setOwnerId(Long.valueOf((Integer) request.get("ownerId")));
 			updDevcie.setId(Long.valueOf((Integer) request.get("id")));
-			//updDevcie.setIsPublic((Boolean) request.get("isPublic"));
-			//TODO: add isPublic
+			updDevcie.setIsPublic((Boolean) request.get("isPublic"));
 			//TODO: add Category
 
 			JSONObject locationJSON = (JSONObject) request.get("location");
@@ -351,9 +348,25 @@ public class DeviceController {
 			updDevcie.setLocation(location);
 			updDevcie = deviceService.updateDevice(updDevcie);
 
-			return new ResponseEntity<>(updDevcie, HttpStatus.OK);
+			return getYourDevices(Long.valueOf((Integer) request.get("ownerId")));
 		}
 
 		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+	}
+
+	private double priceToDouble(Object priceObj) {
+
+		if (priceObj instanceof String) {
+			return(Double.parseDouble((String) priceObj));
+		}
+		else if (priceObj instanceof Integer || priceObj instanceof Long) {
+			return((Number) priceObj).doubleValue();
+		}
+		else if (priceObj instanceof Float) {
+			return((Float) priceObj).doubleValue();
+		}
+		else {
+			return((Double) priceObj);
+		}
 	}
 }

@@ -81,8 +81,27 @@ function ProfileSite() {
                 .then(response => response.json())
                 .then(data => { setAuthUser(data); setOwnerId(data.id); })
                 .catch(error => console.log(error))
+        } else {
+            console.log("no JWT token");
+        }
+    }, []);
 
-            getAllDeviceData();
+    useEffect(() => {
+        if(authUser && JWTTokenExists()) {
+            setNewDevice({
+                id: null,
+                title: "",
+                description: "",
+                price: 0.0,
+                category: "",
+                ownerId: ownerId,
+                isPublic: true,
+                location: authUser.location,
+            });
+            FetchBackend('GET', 'device/all/' + ownerId, null)
+                .then(response => response.json())
+                .then(data => setDeviceList(data))
+                .catch(error => console.log(error))
 
             FetchBackend('GET', 'device/bookmarks/all/' + ownerId, null)
                 .then(response => response ? response.json() : console.log("error " + response))
@@ -93,29 +112,8 @@ function ProfileSite() {
                 .then(response => response.json())
                 .then(data => setHistoryList(data))
                 .catch(error => console.log(error))
-
-            if(authUser) {
-                setNewDevice({
-                    id: null,
-                    title: "",
-                    description: "",
-                    price: 0.0,
-                    category: "",
-                    ownerId: ownerId,
-                    location: authUser.location,
-                })
-            }
-        } else {
-            console.log("no JWT token");
         }
-    }, []);
-
-    const getAllDeviceData = () => {
-        FetchBackend('GET', 'device/all/' + ownerId, null)
-            .then(response => response.json())
-            .then(data => setDeviceList(data))
-            .catch(error => console.log(error))
-    }
+    }, [ownerId])
 
     const handleAddDialogOpen = (device) => {
         setClickedDevice(device)
@@ -141,7 +139,7 @@ function ProfileSite() {
     const handleRemoveBookmark = (id) => {
         FetchBackend('POST', 'device/bookmarks/remove/' + id, null)
             .then(response => response.json())
-            .then(data => { console.log(data); setBookmarkList(data) })
+            .then(data => { data ? setBookmarkList(data) : console.log(data) })
             .catch((error) => {
                 console.log(error);
             });
@@ -150,7 +148,7 @@ function ProfileSite() {
     const handleDeleteTool = (id) => {
         FetchBackend('POST', 'device/remove/' + id, null)
             .then(response => response.json())
-            .then(data => { console.log(data);})
+            .then(data => { data ? setDeviceList(data) : console.log("error " + data);})
             .catch((error) => {
                 console.log(error);
             });
@@ -293,7 +291,7 @@ function ProfileSite() {
                         <AddDeviceDialog open={openAddItem}
                                          handleAddDialogClose={handleAddDialogClose}
                                          iDevice={clickedDevice}
-                                         getAllDeviceData={getAllDeviceData}
+                                         setDeviceList={setDeviceList}
                                          authUser={authUser}
                         />
                     ) : ('')}

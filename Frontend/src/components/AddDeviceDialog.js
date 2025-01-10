@@ -5,7 +5,7 @@ import {
     Dialog,
     DialogActions,
     DialogContent,
-    DialogTitle, FormControl, IconButton, MenuItem, Select, styled,
+    DialogTitle, FormControl, FormLabel, IconButton, MenuItem, Select, styled, Switch,
     TextField
 } from "@mui/material";
 import * as React from 'react';
@@ -26,7 +26,7 @@ const StyledSelect = styled(Select)(({ theme }) => ({
     color: 'inherit',
 }))
 
-function AddDeviceDialog({open, handleAddDialogClose, iDevice, getAllDeviceData, authUser}) {
+function AddDeviceDialog({open, handleAddDialogClose, iDevice, setDeviceList, authUser}) {
 
     const [images, setImages] = useState([]);
     const initialValues = {
@@ -35,15 +35,11 @@ function AddDeviceDialog({open, handleAddDialogClose, iDevice, getAllDeviceData,
         description: iDevice.description,
         price: iDevice.price ? iDevice.price : 0.0,
         category: iDevice.category ? iDevice.category : '%',
+        isPublic: iDevice.isPublic,
         ownerId: authUser.id,
         location: authUser.location,
     };
     const [newDeviceData, setNewDeviceData] = React.useState(initialValues);
-
-    const onChange = (e) => {
-        const {name, value } = e.target;
-        setNewDeviceData(prevState => ({...prevState, [name]: value}));
-    }
 
     const clearFields = () => {
         setNewDeviceData({...initialValues});
@@ -63,35 +59,30 @@ function AddDeviceDialog({open, handleAddDialogClose, iDevice, getAllDeviceData,
         setImages(images.filter(image => image.id !== id));
     };
 
-    const closeDialog = (event) => {
+    const closeDialog = () => {
         clearFields();
         handleAddDialogClose();
     }
 
     const handleSave = (event) => {
         event.preventDefault();
-        console.log(newDeviceData);
+
         setNewDeviceData(prevState => ({
             ...prevState,
-            price: Math.round(prevState.price* 10) / 10
+            price: Math.round(prevState.price* 100) / 100
         }));
 
         if(iDevice.id != null) {
             FetchBackend('POST', 'device/update', newDeviceData)
                 .then(response => response.json())
-                .then(data => {
-                    console.log(data)
-                })
+                .then(data => {data ? setDeviceList(data) : console.log(data) })
                 .catch(error => console.log(error));
         } else {
             FetchBackend('POST', 'device/add', newDeviceData)
                 .then(response => response.json())
-                .then(data => {
-                    console.log(data)
-                })
+                .then(data => {data ? setDeviceList(data) : console.log(data) })
                 .catch(error => console.log(error));
         }
-        getAllDeviceData();
 
         closeDialog();
     }
@@ -138,7 +129,8 @@ function AddDeviceDialog({open, handleAddDialogClose, iDevice, getAllDeviceData,
                                 required
                                 slotProps={{ input: { inputMode: 'numeric', pattern: '[0-9]*', endAdornment: <EuroIcon/> }}}
                             />
-                            <FormControl size="small">
+                            <FormControl size="small" fullWidth>
+                                <FormLabel component="legend">Category</FormLabel>
                                 <StyledSelect
                                     value={newDeviceData.category}
                                     onChange={(e) => {
@@ -153,6 +145,15 @@ function AddDeviceDialog({open, handleAddDialogClose, iDevice, getAllDeviceData,
                                     <MenuItem value={"media"}>Media</MenuItem>
                                     <MenuItem value={"home"}>Home</MenuItem>
                                 </StyledSelect>
+                            </FormControl>
+                            <FormControl fullWidth>
+                                <FormLabel component="legend">Is Public</FormLabel>
+                                <Switch checked={newDeviceData.isPublic} onChange={(e) => {
+                                    setNewDeviceData(prevState => ({
+                                        ...prevState,
+                                        isPublic: e.target.checked
+                                    }));
+                                }} />
                             </FormControl>
                             <TextField
                                 fullWidth
