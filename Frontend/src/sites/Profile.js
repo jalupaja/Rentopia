@@ -1,5 +1,5 @@
 import Appbar from "../components/Appbar";
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import Footer from "../components/Footer";
 import {
     Avatar,
@@ -19,6 +19,7 @@ import HandymanIcon from '@mui/icons-material/Handyman';
 import AddDeviceDialog from "../components/AddDeviceDialog";
 import EditProfileDialog from "../components/EditProfileDialog";
 import PropTypes from "prop-types";
+import FetchBackend, {JWTTokenExists} from "../helper/BackendHelper";
 import { useTranslation } from "react-i18next";
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -64,18 +65,60 @@ function a11yProps(index) {
 
 function ProfileSite() {
 
-    const [authUser, setAuthUser] = useState(null);
+    const [authUser, setAuthUser] = useState(undefined);
+    const [ownerId, setOwnerId] = useState("");
     const [openAddItem, setOpenAddItem] = React.useState(false);
     const [openEditProfile, setOpenEditProfile] = React.useState(false);
-    const [oName, setOName] = React.useState("");
+    const [clickedDevice, setClickedDevice] = React.useState(null);
     const [tabValue, setTabValue] = React.useState(0);
     const [deviceList, setDeviceList] = React.useState([]);
     const [bookmarkList, setBookmarkList] = React.useState([]);
     const [historyList, setHistoryList] = React.useState([]);
+    const [newDevice, setNewDevice] = React.useState({});
     const { t } = useTranslation("", { keyPrefix: "profile" });
 
-    const handleAddDialogOpen = (name) => {
-        setOName(name);
+    useEffect(() => {
+        if (JWTTokenExists()) {
+            FetchBackend('GET', 'user/me', null)
+                .then(response => response.json())
+                .then(data => { setAuthUser(data); setOwnerId(data.id); })
+                .catch(error => console.log(error))
+        } else {
+            console.log("no JWT token");
+        }
+    }, []);
+
+    useEffect(() => {
+        if(authUser && JWTTokenExists()) {
+            setNewDevice({
+                id: null,
+                title: "",
+                description: "",
+                price: 0.0,
+                category: "",
+                ownerId: ownerId,
+                isPublic: true,
+                location: authUser.location,
+            });
+            FetchBackend('GET', 'device/all/' + ownerId, null)
+                .then(response => response.json())
+                .then(data => setDeviceList(data))
+                .catch(error => console.log(error))
+
+            FetchBackend('GET', 'device/bookmarks/all/' + ownerId, null)
+                .then(response => response ? response.json() : console.log("error " + response))
+                .then(data => setBookmarkList(data))
+                .catch(error => console.log(error))
+
+            FetchBackend('GET', 'device/rentHistory/all/' + ownerId, null)
+                .then(response => response.json())
+                .then(data => setHistoryList(data))
+                .catch(error => console.log(error))
+        }
+    }, [ownerId])
+
+    const handleAddDialogOpen = (device) => {
+        setClickedDevice(device)
         setOpenAddItem(true);
     }
 
@@ -96,19 +139,28 @@ function ProfileSite() {
     }
 
     const handleRemoveBookmark = (id) => {
-        setBookmarkList(bookmarkList.filter(bookmark => bookmark.id !== id));
-        //TODO: DB Remove Bookmark
+        FetchBackend('POST', 'device/bookmarks/remove/' + id, null)
+            .then(response => response.json())
+            .then(data => { data ? setBookmarkList(data) : console.log(data) })
+            .catch((error) => {
+                console.log(error);
+            });
     }
 
     const handleDeleteTool = (id) => {
-        setDeviceList(deviceList.filter(device => device.id !== id));
-        //TODO: DB Remove Tool
+        FetchBackend('POST', 'device/remove/' + id, null)
+            .then(response => response.json())
+            .then(data => { data ? setDeviceList(data) : console.log("error " + data);})
+            .catch((error) => {
+                console.log(error);
+            });
     }
 
     return (
         <React.Fragment>
             <Box sx={{ ...FrameStyle }}>
                 <Appbar authUser={authUser} />
+                {authUser ? (
                 <Box sx={{ width: '100%' }}>
                     <Grid container direction='row' columnSpacing={3} margin={'2% 10%'} sx={{ justifyContent: 'center' }}>
                         <Grid container columns={2} rowSpacing={2} direction='column' width={"49%"}>
@@ -123,12 +175,14 @@ function ProfileSite() {
                                         disabled
                                         defaultValue={t("name")}
                                         sx={{ alignSelf: 'center', margin: '24px 0 12px 0' }}
+                                        value={authUser.name}
                                     />
                                     <Input
                                         fullWidth
                                         disabled
-                                        defaultValue={t("prename")}
+                                        defaultValue={t("email")}
                                         sx={{ alignSelf: 'center', margin: '12px 0 12px 0' }}
+                                        value={authUser.email}
                                     />
                                 </Box>
                                 <Box sx={{ margin: ' 0 24px 24px 24px' }}>
@@ -136,13 +190,15 @@ function ProfileSite() {
                                         fullWidth
                                         disabled
                                         defaultValue={t("company")}
-                                        sx={{ alignSelf: 'center', margin: '24px 0 12px 0' }}
+                                        sx={{ alignSelf: 'center', margin: '24px 0 12px 0'}}
+                                        value={authUser.company}
                                     />
                                     <Input
                                         fullWidth
                                         disabled
-                                        defaultValue={t("email")}
+                                        defaultValue={t("country")}
                                         sx={{ alignSelf: 'center', margin: '12px 0 12px 0' }}
+                                        value={authUser.location.country}
                                     />
                                     <Button
                                         variant={"contained"}
@@ -174,32 +230,32 @@ function ProfileSite() {
                                 </Tabs>
                                 <CustomTabPanel value={tabValue} index={0}>
                                     <List sx={{ overflow: 'auto', height: '50vh', width: '90%' }}>
-                                        {Array.from({ length: 10 }).map((_, index) => (
+                                        {deviceList.map((device, index) => (
                                             //*Your Tools*//
                                             <div>
                                                 <DeviceListItem
-                                                    DeviceName={t("insert_device")}
-                                                    DeviceId={index}
-                                                    handleOpenDeviceEdit={() => handleAddDialogOpen(t("tool_nr") + index)}
-                                                    handleAddDialogClose={() => handleAddDialogClose(index)}
+                                                    DeviceName={device.title}
+                                                    DeviceId={device.id}
+                                                    handleOpenDeviceEdit={() => handleAddDialogOpen(device)}
+                                                    handleDeleteTool={() => handleDeleteTool(device.id)}
                                                     tabValue={tabValue}
                                                 />
                                             </div>))
                                         }
                                     </List>
-                                    <Fab color="primary" aria-label="add" style={fabStyle} onClick={() => handleAddDialogOpen(oName)}>
+                                    <Fab color="primary" aria-label="add" style={fabStyle} onClick={() => handleAddDialogOpen(newDevice)}>
                                         <AddIcon />
                                     </Fab>
                                 </CustomTabPanel>
                                 <CustomTabPanel value={tabValue} index={1}>
                                     <List sx={{ overflow: 'auto', height: '50vh', width: '90%' }}>
-                                        {Array.from({ length: 5 }).map((_, index) => (
+                                        {bookmarkList.map((device, index) => (
                                             //*Bookmarks*//
                                             <div>
                                                 <DeviceListItem
-                                                    DeviceName={t("insert_device")}
-                                                    DeviceId={index}
-                                                    handleRemoveBookmark={() => handleDeleteTool(index)}
+                                                    DeviceName={device.title}
+                                                    DeviceId={device.id}
+                                                    handleRemoveBookmark={() => handleRemoveBookmark(device.id)}
                                                     tabValue={tabValue}
                                                 />
                                             </div>))
@@ -211,12 +267,12 @@ function ProfileSite() {
                                 </CustomTabPanel>
                                 <CustomTabPanel value={tabValue} index={2}>
                                     <List sx={{ overflow: 'auto', height: '50vh', width: '90%' }}>
-                                        {Array.from({ length: 10 }).map((_, index) => (
+                                        {historyList.map((device, index) => (
                                             //*Rent Tools*//
                                             <div>
                                                 <DeviceListItem
-                                                    DeviceName={t("insert_device")}
-                                                    DeviceId={index}
+                                                    DeviceName={device.title}
+                                                    DeviceId={device.id}
                                                     tabValue={tabValue}
                                                 />
                                             </div>))
@@ -230,14 +286,26 @@ function ProfileSite() {
                         </Grid>
                     </Grid>
                 </Box>
+                ) : (<div>Loading...</div>)}
                 <Box flex={"auto"} />
                 <Footer />
                 <div>
                     {openAddItem ? (
-                        <AddDeviceDialog open={openAddItem} handleAddDialogClose={handleAddDialogClose} iName={oName} /> //TODO: pass device datatype
+                        <AddDeviceDialog open={openAddItem}
+                                         handleAddDialogClose={handleAddDialogClose}
+                                         iDevice={clickedDevice}
+                                         setDeviceList={setDeviceList}
+                                         authUser={authUser}
+                        />
                     ) : ('')}
                 </div>
-                <EditProfileDialog open={openEditProfile} handleEditDialogClose={handleEditDialogClose} />
+                {authUser ? (
+                    <EditProfileDialog open={openEditProfile}
+                                       userData={authUser}
+                                       setUserData={setAuthUser}
+                                       handleEditDialogClose={handleEditDialogClose}
+                    />
+                ) : ('')}
             </Box>
         </React.Fragment>
     )

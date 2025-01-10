@@ -27,5 +27,8 @@ public interface AccountService {
     public boolean emailExists(String email);
 
     public void removeAccount(Long accountId);
+
+    public Account updateAccount(Account account);
+
     public Account getAccountById(Long userId);
 }

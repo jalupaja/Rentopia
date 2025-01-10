@@ -18,4 +18,6 @@ public interface DeviceService {
 	List<Device> getAllDevices();
 
 	boolean removeDevice(Long deviceId);
+
+	Device updateDevice(Device device);
 }

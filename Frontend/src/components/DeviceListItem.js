@@ -2,7 +2,9 @@ import {Divider, IconButton, ListItem, ListItemAvatar, ListItemText} from "@mui/
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import BookmarkIcon from '@mui/icons-material/Bookmark';
+import ImageSearchIcon from '@mui/icons-material/ImageSearch';
 import * as React from "react";
+import {useNavigate} from "react-router-dom";
 
 function DeviceListItem({DeviceName="Test Tool",
                             DeviceId=null,
@@ -11,15 +13,14 @@ function DeviceListItem({DeviceName="Test Tool",
                             handleDeleteTool,
                             tabValue})
 {
-
-    const handleOpenDevice = () => {
-        //TODO: go to new Site
-    }
+    const navigate = useNavigate();
 
     return (
         <div>
-            <ListItem onClick={handleOpenDevice}>
-                <ListItemAvatar></ListItemAvatar>
+            <ListItem>
+                <IconButton edge="start" aria-label="device" onClick={() => navigate("/device/" + DeviceId)}>
+                    <ImageSearchIcon/>
+                </IconButton>
                 <ListItemText primary={DeviceName} />
                 {tabValue === 0 ? (
                     <div>

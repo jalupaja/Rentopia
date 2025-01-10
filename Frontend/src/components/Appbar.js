@@ -76,16 +76,17 @@ const logo = {
 function Appbar({ showLogin = true, authUser = null, searchVisibility = 'hidden' }) {
     const { t } = useTranslation("", { keyPrefix: "appbar" });
     const [category, setCategory] = React.useState("%");
-
     const handleCategoryChange = (event) => {
         setCategory(event.target.value);
     }
 
     const navigate = useNavigate();
     let loginButton = <Button sx={{ visibility: 'hidden' }} />;
+    let profileButton = <IconButton sx={{visibility: 'hidden'}}></IconButton>;
     if (showLogin) {
         if (authUser === null) {
             loginButton = <Button component={Link} to={"/login"} variant="outlined" color="inherit">{t("sign_in")}</Button>;
+            profileButton = <div/>
         }
         else{
             loginButton = <MenuComponent authUser={authUser}/>;
