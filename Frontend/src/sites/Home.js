@@ -25,14 +25,19 @@ function HomeSite() {
     const [page, setPage] = useState(1);
     const devicesPPage = 8;
     const { t } = useTranslation("", { keyPrefix: 'home' });
+    const [priceRange, setPriceRange] = React.useState([0, 9999]);
 
     let authUser = GetAuthUser();
 
-    useEffect(() => {
+   useEffect(() => {
         FetchBackend('GET', 'device/short/all', null)
             .then(response => response.json())
-            .then(data => setDevices(data))
-            .catch(error => console.log(error))
+            .then(data => {
+                setDevices(data);
+                const prices = data.map(device => device.price);
+                setPriceRange([0, Math.max(...prices) + 1]);
+            })
+            .catch(error => console.log(error));
     }, []);
 
     useEffect(() => {
@@ -42,7 +47,7 @@ function HomeSite() {
 
     return (
         <Box sx={{ ...FrameStyle }}>
-            <Appbar authUser={authUser} searchVisibility={'visible'} />
+            <Appbar authUser={authUser} searchVisibility={'visible'} setDevices={setDevices} iPriceRange={priceRange}/>
             <Box sx={{ flexGrow: 1 }} >
                 <DeviceGrid container spacing={{ xs: 4 }} justifyContent={'center'} >
                     {paginatedDevices.map((device, index) => (

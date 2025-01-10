@@ -4,6 +4,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import BookmarkIcon from '@mui/icons-material/Bookmark';
 import ImageSearchIcon from '@mui/icons-material/ImageSearch';
 import * as React from "react";
+import {Link} from "react-router-dom";
 import {useNavigate} from "react-router-dom";
 
 function DeviceListItem({DeviceName="Test Tool",

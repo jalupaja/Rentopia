@@ -176,6 +176,22 @@ public class DeviceController {
         }
     }
 
+    @GetMapping("/short/search")
+    public ResponseEntity<List<Map<String, Object>>> getDeviceShortSorted(
+            Authentication authentication, @RequestParam Map<String, String> filterOptions) {
+
+        List<Device> devices = deviceService.getDevicesSorted(filterOptions);
+        List<Map<String, Object>> deviceData = new ArrayList<>();
+
+        for (Device device : devices) {
+            if (checkDeviceAccess_R(authentication, device)) {
+                deviceData.add(parseDeviceShort(device, getCurrentId(authentication)));
+            }
+        }
+
+        return new ResponseEntity<>(deviceData, HttpStatus.OK);
+    }
+
     @GetMapping("/short/all")
     public ResponseEntity<List<Map<String, Object>>> getDevice(Authentication authentication) {
         List<Map<String, Object>> deviceData = new ArrayList<>();
