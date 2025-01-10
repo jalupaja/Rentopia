@@ -1,0 +1,108 @@
+{
+    "home": {},
+    "appbar": {
+        "logo": "Rentopia Logo",
+        "search": "nej…",
+        "location": "veng pagh De' Segh",
+        "all_categories": "Hoch Seghmey",
+        "tools": "mIw",
+        "media": "jIH",
+        "home": "juH",
+        "sign_in": "ngogh yInga'"
+    },
+    "device": {
+        "bookmarked": "luqonnIS",
+        "add_bookmark": "qonwI' chel",
+        "rent": "DaH tlhap",
+        "StartConversation" : "HablI'mo'"
+    },
+    "login": {
+        "error_password": "Qagh email pagh mu'wIj!",
+        "error_unknown": "qaS qagh. yIqaHqa'.",
+        "welcome": "Rentopia vItIv",
+        "email": "email",
+        "password": "mu'wIj",
+        "hide_password": "mu'wIj So'meH",
+        "display_password": "mu'wIj cha'",
+        "login": "nga'",
+        "create_account": "ghun Huch",
+        "forgot_password": "mu'wIj Dargh?"
+    },
+    "register": {
+        "error_identical": "mu'wIj buvHa'",
+        "succ_register": "ghun vISuqpu'",
+        "error_unknown": "qaS qagh. yIqaHqa'.",
+        "error_empty": " chenbe'laHbe'",
+        "private": "pegh",
+        "commercial": "Suy",
+        "company_name": "DIvI' pong",
+        "name": "pong",
+        "email": "email",
+        "password": "mu'wIj",
+        "text": "ghItlh",
+        "hide_password": "mu'wIj So'",
+        "display_password": "mu'wIj cha'",
+        "street": "He",
+        "postal_code": "nav Segh",
+        "city": "veng",
+        "country": "veng",
+        "create_account": "ghun Huch",
+        "login": "nga'"
+    },
+    "forgotpassword": {
+        "error_mail": "nav ngeHlaHbe'. yIqaHqa'.",
+        "succ_mail": "nav ngeHchu'. yInav yIlegh.",
+        "forgot_password": "mu'wIj Dargh?",
+        "write_mail": "mu'wIj chenmoHmeH email yIghItlh:",
+        "send_mail": "nav ngeH"
+    },
+    "profile": {
+        "user": "loDnal",
+        "name": "pong",
+        "prename": "pong botlh",
+        "company": "DIvI'",
+        "email": "email",
+        "edit_profile": "De' tIchoH",
+        "profile_tabs": "De' navmey",
+        "your_tools": "jIH luchlIj",
+        "bookmarks": "qonwI'",
+        "rent_history": "DaH tlhap lut",
+        "insert_device": "luch pong yIchel",
+        "tool_nr": "mIw mI'"
+    },
+    "helpcenter": {
+        "error_unavailable": "QaH ghom SamlaHbe'. yIqaHqa'.",
+        "status": "ghu'",
+        "status_open": "poS",
+        "status_closed": "SoQ",
+        "new_ticket": "chu' nav",
+        "submit_ticket" : "sengvam",
+        "delete_ticket" : "'e' yIHar",
+        "close_ticket" : "qo'",
+        "error_ticket_action" : "'ej ghu'vam yISambe'choHlu'",
+        "success_ticket_creation" : "yInmeH pe'vIl yInmoH",
+        "success_ticket_delete" : "yIntaHvIS ghotpu'",
+        "success_ticket_close" : "yIntaHvIS ghotpu'",
+        "owner" : "'oSrIq",
+        "category_general" : "Sa'",
+        "title_error_input" : "'ej chuQunghomlaw'",
+        "status_new" : "chu'"
+    },
+    "profile_menu": {
+        "admin_tickesystem": "ADM nav QuS",
+        "account_settings": "Huch choH",
+        "profile": "De'",
+        "ticketsystem": "QaH ghom",
+        "logout": "nge'",
+        "settings": "choHmey",
+        "chat" : "jaw"
+    },
+    "languageselector": {
+        "select_language": "Hol wIv",
+        "search": "nej…"
+    },
+    "chat" : {
+        "your_chats" : "layerteS",
+        "message_hint" : "QIH"
+    }
+}

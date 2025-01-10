@@ -1,0 +1,114 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Email</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f7fc;
+      margin: 0;
+      padding: 0;
+      color: #333;
+    }
+
+    .email-container {
+      width: 100%;
+      max-width: 600px;
+      margin: 0 auto;
+      background-color: #ffffff;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .email-header {
+      background-color: #0f477e;
+      padding: 20px;
+      color: white;
+      text-align: left;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .email-header a {
+      text-decoration: none;
+    }
+
+    .email-header img {
+      max-width: 150px;
+      display: inline-block;
+      border-radius: 50%;
+    }
+
+    .email-body {
+      padding: 20px;
+    }
+
+    .email-body h1 {
+      font-size: 24px;
+      margin-bottom: 10px;
+      color: #333;
+    }
+
+    .email-body p {
+      font-size: 16px;
+      line-height: 1.6;
+      color: #666;
+    }
+
+    .button {
+      display: inline-block;
+      background-color: #9c27b0;
+      color: white;
+      padding: 10px 20px;
+      text-decoration: none;
+      border-radius: 5px;
+      font-weight: bold;
+      margin-top: 20px;
+    }
+
+    .email-footer {
+      background-color: #eeeeee;
+      padding: 10px;
+      text-align: center;
+      font-size: 14px;
+      color: #888;
+    }
+
+    .email-footer a {
+      color: #283593;
+      text-decoration: none;
+    }
+
+    /* Responsive Styles */
+    @media (max-width: 600px) {
+      .email-container {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="email-container">
+    <div class="email-header">
+      <a href="http://localhost:3000">
+        <img src="https://raw.githubusercontent.com/jalupaja/Rentopia/refs/heads/master/Frontend/public/RentopiaLogo64.jpg" lt="Logo">
+      </a>
+      <h2 style="display: inline-block; margin-left: 15px;">{{SUBJECT}}</h2>
+    </div>
+
+    <div class="email-body">
+      {{BODY}}
+    </div>
+
+    <div class="email-footer">
+      <h2>Rentopia</h2>
+      <p><a href="http://localhost:3000">Help Center</a> | <a href="http://localhost:3000">Terms of Service</a></p>
+      <p>&copy; 2025 | Copyright DreamTeam inc.</p>
+    </div>
+  </div>
+</body>
+</html>

@@ -8,12 +8,18 @@
     "@mui/icons-material": "^6.1.7",
     "@mui/material": "^6.1.7",
     "@mui/styled-engine-sc": "^6.1.7",
+    "@react-oauth/google": "^0.12.1",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "dotenv": "^16.4.7",
+    "i18next": "^24.2.0",
+    "i18next-browser-languagedetector": "^8.0.2",
+    "i18next-http-backend": "^3.0.1",
     "js-cookie": "^3.0.5",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-i18next": "^15.4.0",
     "react-router-dom": "^6.28.0",
     "react-scripts": "^5.0.1",
     "styled-components": "^6.1.13",
@@ -24,12 +30,6 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
   },
   "browserslist": {
     "production": [

@@ -1,12 +1,15 @@
-import {AppBar, Box, FormControl, InputBase, Select, Toolbar, Button, MenuItem, IconButton} from "@mui/material";
+import { AppBar, Box, FormControl, InputBase, Select, Toolbar, Button, MenuItem, IconButton } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import LocationOnIcon from '@mui/icons-material/LocationOn';
-import {alpha, styled} from "@mui/material";
+import { alpha, styled } from "@mui/material";
 import * as React from 'react';
 import Logo from "../image/RentopiaLogo64.jpg";
-import {useNavigate} from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import {Logout} from "../helper/BackendHelper.js"
+import MenuComponent from "./MenuComponent.js";
+import LanguageSelector from "./LanguageSelector.js";
+import { useTranslation } from "react-i18next";
+import { Logout } from "../helper/BackendHelper.js"
 
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
     color: 'inherit',
@@ -66,68 +69,95 @@ const Search = styled('div')(({ theme }) => ({
     },
 }));
 
-function Appbar({showLogin = true, authUser = null, searchVisibility = 'hidden'}) {
+const logo = {
+    imageUrl: '/pictures/RentopiaLogo64.jpg',
+};
+
+function Appbar({ showLogin = true, authUser = null, searchVisibility = 'hidden' }) {
+    const { t } = useTranslation("", { keyPrefix: "appbar" });
     const [category, setCategory] = React.useState("%");
     const handleCategoryChange = (event) => {
         setCategory(event.target.value);
     }
 
     const navigate = useNavigate();
-    let loginButton = <Button sx={{visibility: 'hidden'}}/>;
+    let loginButton = <Button sx={{ visibility: 'hidden' }} />;
     let profileButton = <IconButton sx={{visibility: 'hidden'}}></IconButton>;
-    if(showLogin){
-        if(authUser === null){
-            loginButton = <Button onClick={()=>navigate("/login")} variant="outlined" color="inherit">Sign in</Button>;
+    if (showLogin) {
+        if (authUser === null) {
+            loginButton = <Button component={Link} to={"/login"} variant="outlined" color="inherit">{t("sign_in")}</Button>;
             profileButton = <div/>
         }
         else{
-            loginButton = <Button onClick={()=> {Logout();  window.location.reload();}} variant="outlined" color="inherit">Log out</Button>;
-            profileButton = <IconButton onClick={() => navigate("/profilePage")} size="large"><AccountCircleIcon fontSize="inherit"/></IconButton>
+            loginButton = <MenuComponent authUser={authUser}/>;
         }
     }
 
-return (
-    <Box sx={{ height: 'auto', width:'100%', display:'block' }}>
-        <AppBar position="static">
-            <Toolbar>
-                <Box sx={{height :'63px', width:'63px', borderRadius: 25, overflow: 'hidden', cursor: 'pointer'}}>
-
-                    <img src={Logo} onClick={()=>navigate("/")} alt={"Rentopia Logo"}/>
-                </Box>
-                <FormControl sx={{marginRight: 0, marginLeft: '7%', width: '150px', visibility: searchVisibility }} size="small">
-                    <StyledSelect
-                        value={category}
-                        onChange={handleCategoryChange}
+    return (
+        <Box sx={{ height: 'auto', width: '100%', display: 'block' }}>
+            <AppBar position="static">
+                <Toolbar>
+                    <LanguageSelector />
+                    <Box
+                        sx={{
+                            width: 63,
+                            height: 63,
+                            margin: 1,
+                            borderRadius: '50%',
+                            overflow: 'hidden',
+                            cursor: 'pointer',
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            flexShrink: 0,
+                        }}
                     >
-                        <MenuItem value={"%"}><em>All Categories</em></MenuItem>
-                        <MenuItem value={"tools"}>Tools</MenuItem>
-                        <MenuItem value={"media"}>Media</MenuItem>
-                        <MenuItem value={"home"}>Home</MenuItem>
-                    </StyledSelect>
-                </FormControl>
-                <Search sx={{ marginLeft: 0, marginRight: 0, visibility: searchVisibility }}>
-                    <SearchIconWrapper>
-                        <SearchIcon/>
-                    </SearchIconWrapper>
-                    <StyledInputBase
-                        placeholder="Search…"
-                    />
-                </Search>
-                <Search sx={{ marginLeft: 0, visibility: searchVisibility }} >
-                    <SearchIconWrapper>
-                        <LocationOnIcon/>
-                    </SearchIconWrapper>
-                    <StyledInputBase
-                        placeholder="City or Postal Code"
-                    />
-                </Search>
-                <Box sx={{flexGrow: 1}}></Box>
-                {profileButton}
-                {loginButton}
-            </Toolbar>
-        </AppBar>
-    </Box>
-)
+                        <Link to={"/"}>
+                            <img
+                                src={Logo}
+                                alt={t("logo")}
+                                style={{
+                                    width: '100%',
+                                    height: '100%',
+                                    objectFit: 'cover',
+                                    borderRadius: '50%',
+                                }}
+                            />
+                        </Link>
+                    </Box>
+                    <FormControl sx={{ marginRight: 0, marginLeft: '7%', width: '150px', visibility: searchVisibility }} size="small">
+                        <StyledSelect
+                            value={category}
+                            onChange={handleCategoryChange}
+                        >
+                            <MenuItem value={"%"}><em>{t("all_categories")}</em></MenuItem>
+                            <MenuItem value={"tools"}>{t("tools")}</MenuItem>
+                            <MenuItem value={"media"}>{t("media")}</MenuItem>
+                            <MenuItem value={"home"}>{t("home")}</MenuItem>
+                        </StyledSelect>
+                    </FormControl>
+                    <Search sx={{ marginLeft: 0, marginRight: 0, visibility: searchVisibility }}>
+                        <SearchIconWrapper>
+                            <SearchIcon />
+                        </SearchIconWrapper>
+                        <StyledInputBase
+                            placeholder={t('search')}
+                        />
+                    </Search>
+                    <Search sx={{ marginLeft: 0, visibility: searchVisibility }} >
+                        <SearchIconWrapper>
+                            <LocationOnIcon />
+                        </SearchIconWrapper>
+                        <StyledInputBase
+                            placeholder={t('location')}
+                        />
+                    </Search>
+                    <Box sx={{ flexGrow: 1 }}></Box>
+                  {loginButton}
+                </Toolbar>
+            </AppBar>
+        </Box >
+    )
 }
 
 export default Appbar;

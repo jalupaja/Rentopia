@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  backend:
+    image: rentopia-backend
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: backend
+    ports:
+      - "8080:8080"
+    networks:
+      - app-network
+
+  frontend:
+    image: rentopia-frontend
+    build:
+      context: ./Frontend
+      dockerfile: Dockerfile
+    container_name: frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

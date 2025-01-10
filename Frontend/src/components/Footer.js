@@ -9,7 +9,8 @@ function Footer(){
                 height: "auto",
                 paddingTop: "1rem",
                 paddingBottom: "0",
-                backgroundColor : "lightblue"
+                backgroundColor : "lightblue",
+                position : "relative",
             }}
         >
             <Container maxWidth="lg">

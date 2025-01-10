@@ -1,0 +1,108 @@
+{
+    "home": {},
+    "appbar": {
+        "logo": "Rentopia-Logo",
+        "search": "Suchen…",
+        "location": "Stadt oder Postleitzahl",
+        "all_categories": "Alle Kategorien",
+        "tools": "Werkzeuge",
+        "media": "Medien",
+        "home": "Zuhause",
+        "sign_in": "Anmelden"
+    },
+    "device": {
+        "bookmarked": "Gespeichert",
+        "add_bookmark": "Zu den Lesezeichen hinzufügen",
+        "rent": "Jetzt mieten",
+        "StartConversation" : "Konversation starten"
+    },
+    "login": {
+        "error_password": "Falsche E-Mail oder falsches Passwort!",
+        "error_unknown": "Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.",
+        "welcome": "Willkommen bei Rentopia",
+        "email": "E-Mail",
+        "password": "Passwort",
+        "hide_password": "Passwort ausblenden",
+        "display_password": "Passwort anzeigen",
+        "login": "Anmelden",
+        "create_account": "Konto erstellen",
+        "forgot_password": "Passwort vergessen?"
+    },
+    "register": {
+        "error_identical": "Passwörter stimmen nicht überein",
+        "succ_register": "Registrierung erfolgreich",
+        "error_unknown": "Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.",
+        "error_empty": " darf nicht leer sein",
+        "private": "privat",
+        "commercial": "gewerblich",
+        "company_name": "Firmenname",
+        "name": "Name",
+        "email": "E-Mail",
+        "password": "Passwort",
+        "text": "Text",
+        "hide_password": "Passwort ausblenden",
+        "display_password": "Passwort anzeigen",
+        "street": "Straße",
+        "postal_code": "Postleitzahl",
+        "city": "Stadt",
+        "country": "Land",
+        "create_account": "Konto erstellen",
+        "login": "Anmelden"
+    },
+    "forgotpassword": {
+        "error_mail": "Das Senden der E-Mail war nicht erfolgreich. Bitte versuchen Sie es erneut.",
+        "succ_mail": "E-Mail wurde erfolgreich gesendet. Bitte überprüfen Sie Ihre E-Mails.",
+        "forgot_password": "Passwort vergessen?",
+        "write_mail": "Geben Sie Ihre E-Mail-Adresse ein, um Ihr Passwort zurückzusetzen:",
+        "send_mail": "E-Mail senden"
+    },
+    "profile": {
+        "user": "Benutzer",
+        "name": "Name",
+        "prename": "Vorname",
+        "company": "Firma",
+        "email": "E-Mail",
+        "edit_profile": "Profil bearbeiten",
+        "profile_tabs": "Profil Tabs",
+        "your_tools": "Ihre Werkzeuge",
+        "bookmarks": "Lesezeichen",
+        "rent_history": "Mietverlauf",
+        "insert_device": "Gerätenamen hier eingeben",
+        "tool_nr": "Werkzeug Nr "
+    },
+    "helpcenter": {
+        "error_unavailable": "Das Help Center ist derzeit nicht verfügbar. Bitte versuchen Sie es erneut.",
+        "status": "Status",
+        "status_open": "Offen",
+        "status_closed": "Geschlossen",
+        "new_ticket": "Neues Ticket",
+        "submit_ticket" : "Ticket einreichen",
+        "delete_ticket" : "Ticket löschen",
+        "close_ticket" : "Ticket schließen",
+        "error_ticket_action" : "Ein Fehler ist aufgetreten, bitte erneut versuchen",
+        "success_ticket_creation" : "Ticketerstellung war erfolgreich",
+        "success_ticket_delete" : "Löschung des Tickets war erfolgreich",
+        "success_ticket_close" : "Schließung des Tickets war erfolgreich",
+        "owner" : "Inhaber",
+        "category_general" : "Allgemein",
+        "title_error_input" : "Titel darf nicht leer sein",
+        "status_new" : "Neu"
+    },
+    "profile_menu": {
+        "admin_tickesystem": "ADM-Ticketsystem",
+        "account_settings": "Kontoeinstellungen",
+        "profile": "Profil",
+        "ticketsystem": "Help Center",
+        "logout": "Abmelden",
+        "settings": "Einstellungen",
+        "chat" : "Chat"
+    },
+    "languageselector": {
+        "select_language": "Sprache auswählen",
+        "search": "Suchen…"
+    },
+    "chat" : {
+      "your_chats" : "Deine Chats",
+      "message_hint" : "Schreibe eine Nachricht"
+    }
+}

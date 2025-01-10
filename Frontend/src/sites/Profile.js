@@ -20,6 +20,7 @@ import AddDeviceDialog from "../components/AddDeviceDialog";
 import EditProfileDialog from "../components/EditProfileDialog";
 import PropTypes from "prop-types";
 import FetchBackend, {JWTTokenExists} from "../helper/BackendHelper";
+import { useTranslation } from "react-i18next";
 
 const Item = styled(Paper)(({ theme }) => ({
     padding: theme.spacing(1),
@@ -74,6 +75,7 @@ function ProfileSite() {
     const [bookmarkList, setBookmarkList] = React.useState([]);
     const [historyList, setHistoryList] = React.useState([]);
     const [newDevice, setNewDevice] = React.useState({});
+    const { t } = useTranslation("", { keyPrefix: "profile" });
 
     useEffect(() => {
         if (JWTTokenExists()) {
@@ -165,20 +167,20 @@ function ProfileSite() {
                             <Item sx={{ boxShadow: 3, display: 'flex', height: 'min-content', maxHeight: 'min-content' }}>
                                 <Avatar
                                     sx={{ width: 100, height: 100, margin: '24px' }}
-                                    alt="User"
+                                    alt={t("user")}
                                 />
                                 <Box>
                                     <Input
                                         fullWidth
                                         disabled
-                                        defaultValue="Name"
+                                        defaultValue={t("name")}
                                         sx={{ alignSelf: 'center', margin: '24px 0 12px 0' }}
                                         value={authUser.name}
                                     />
                                     <Input
                                         fullWidth
                                         disabled
-                                        defaultValue="Email"
+                                        defaultValue={t("email")}
                                         sx={{ alignSelf: 'center', margin: '12px 0 12px 0' }}
                                         value={authUser.email}
                                     />
@@ -187,21 +189,22 @@ function ProfileSite() {
                                     <Input
                                         fullWidth
                                         disabled
-                                        defaultValue="No Company Set"
+                                        defaultValue={t("company")}
                                         sx={{ alignSelf: 'center', margin: '24px 0 12px 0'}}
                                         value={authUser.company}
                                     />
                                     <Input
                                         fullWidth
                                         disabled
-                                        defaultValue="Country"
+                                        defaultValue={t("country")}
                                         sx={{ alignSelf: 'center', margin: '12px 0 12px 0' }}
                                         value={authUser.location.country}
                                     />
                                     <Button
                                         variant={"contained"}
                                         onClick={handleEditDialogOpen}
-                                        sx={{ float: "right" }}>Edit Profile
+                                        sx={{ float: "right" }}>
+                                        {t("edit_profile")}
                                     </Button>
                                 </Box>
                             </Item>
@@ -218,12 +221,12 @@ function ProfileSite() {
                             >
                                 <Tabs value={tabValue}
                                     onChange={handleTabChange}
-                                    aria-label="Profile Tabs"
+                                    aria-label={t("profile_tabs")}
                                     sx={{ width: '100%' }}
                                 >
-                                    <Tab icon={<HandymanIcon />} label="Your Tools" {...a11yProps(0)} />
-                                    <Tab icon={<BookmarksIcon />} label="Bookmarks"  {...a11yProps(1)} />
-                                    <Tab icon={<HistoryIcon />} label="Rent Histroy" {...a11yProps(1)} />
+                                    <Tab icon={<HandymanIcon />} label={t("your_tools")} {...a11yProps(0)} />
+                                    <Tab icon={<BookmarksIcon />} label={t("bookmarks")}  {...a11yProps(1)} />
+                                    <Tab icon={<HistoryIcon />} label={t("rent_history")} {...a11yProps(1)} />
                                 </Tabs>
                                 <CustomTabPanel value={tabValue} index={0}>
                                     <List sx={{ overflow: 'auto', height: '50vh', width: '90%' }}>

@@ -9,6 +9,8 @@ public interface DeviceService {
 
 	Device getDevice(Long deviceId);
 
+	Long getDeviceOwnerId(Long deviceId);
+
 	List<Device> getDevicesByOwner(Long ownerId);
 
 	List<Device> getDevicesByCategory(Long categoryId);

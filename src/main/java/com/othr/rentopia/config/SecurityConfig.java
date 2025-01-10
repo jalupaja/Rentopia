@@ -28,6 +28,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
 import static com.othr.rentopia.model.Account.Role.ADMIN;
+import static org.springframework.boot.autoconfigure.security.servlet.PathRequest.toH2Console;
 
 @Configuration
 @EnableWebSecurity
@@ -41,12 +42,15 @@ public class SecurityConfig {
 						//.requestMatchers("/api/orders", "/api/orders/**").hasAuthority(ADMIN)
 						.requestMatchers("/api/user/me").authenticated()
 						.requestMatchers("/api/**").permitAll()
+						.requestMatchers("/h2-console/**").permitAll()
 						//.requestMatchers("/", "/error", "/csrf", "/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs", "/v3/api-docs/**").permitAll()
 						.anyRequest().authenticated())
 				.addFilterBefore(new JwtTokenValidator(), UsernamePasswordAuthenticationFilter.class)
 				.sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.cors(cors -> cors.configurationSource(corsConfigurationSource()))
 				.csrf(AbstractHttpConfigurer::disable);
+
+		http.headers().frameOptions().disable();
 
 		return http.build();
     }

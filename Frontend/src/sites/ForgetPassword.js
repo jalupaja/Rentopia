@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import FetchBackend, { ReturnHomeWhenLoggedIn } from "../helper/BackendHelper.js";
 import Appbar from "../components/Appbar.js";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 function ForgetPasswordSite() {
     ReturnHomeWhenLoggedIn();
 
@@ -13,6 +14,7 @@ function ForgetPasswordSite() {
     const [openError, setOpenError] = useState(false);
 
     const [userEmail, setUserEmail] = React.useState("");
+    const { t } = useTranslation("", { keyPrefix: "forgotpassword" });
     const SendResetMail = () => {
         if (userEmail !== null && userEmail.length !== 0) {
             console.log(userEmail);
@@ -30,24 +32,24 @@ function ForgetPasswordSite() {
         <Box sx={{ ...FrameStyle }}>
             <Appbar />
             <Snackbar open={openError}>
-                <Alert severity="error">Sending Mail was not successful. Please try again.</Alert>
+                <Alert severity="error">{t("error_mail")}</Alert>
             </Snackbar>
             <Snackbar open={openSuccess}>
-                <Alert>Send mail succeeded. Please look at your mail.</Alert>
+                <Alert>{t("succ_mail")}</Alert>
             </Snackbar>
             <Stack sx={{ ...centeredDivStyle }}>
                 <Typography variant="button" gutterBottom variant="h6">
-                    Forget your password?
+                    {t("forgot_password")}
                 </Typography>
                 <Typography variant="button" gutterBottom variant="p">
-                    Type in your email for resetting your password:
+                    {t("write_mail")}
                 </Typography>
 
                 <TextField sx={{ ...InputFieldStyle }} onChange={(e) => setUserEmail(e.target.value)} id="emailTextfield" label="Email" variant="outlined" />
 
                 <Button variant="contained" onClick={() => SendResetMail()}
                     sx={{ ...InputFieldStyle }}>
-                    Send Email
+                    {t("send_mail")}
                 </Button>
             </Stack>
             <Box flex={"auto"} />
