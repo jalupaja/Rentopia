@@ -68,7 +68,8 @@
         "bookmarks": "Marcadores",
         "rent_history": "Historial de alquiler",
         "insert_device": "Inserte el nombre del dispositivo aquí",
-        "tool_nr": "Herramienta Nr "
+        "tool_nr": "Herramienta Nr ",
+        "country": "país"
     },
     "helpcenter": {
         "error_unavailable": "El centro de ayuda no está disponible actualmente. Por favor, inténtalo de nuevo.",

@@ -68,7 +68,8 @@
         "bookmarks": "Lesezeichen",
         "rent_history": "Mietverlauf",
         "insert_device": "Gerätenamen hier eingeben",
-        "tool_nr": "Werkzeug Nr "
+        "tool_nr": "Werkzeug Nr ",
+        "country": "Land"
     },
     "helpcenter": {
         "error_unavailable": "Das Help Center ist derzeit nicht verfügbar. Bitte versuchen Sie es erneut.",

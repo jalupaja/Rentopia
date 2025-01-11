@@ -68,7 +68,8 @@
         "bookmarks": "Favoris",
         "rent_history": "Historique des locations",
         "insert_device": "Entrez le nom de l'appareil ici",
-        "tool_nr": "Outil Nr "
+        "tool_nr": "Outil Nr ",
+        "country": "pays"
     },
     "helpcenter": {
         "error_unavailable": "Le centre d'aide est actuellement indisponible. Veuillez réessayer.",
