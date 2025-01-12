@@ -170,7 +170,7 @@ function AddDeviceDialog({open, handleAddDialogClose, iDevice, setDeviceList, au
                                 required
                                 slotProps={{ input: { inputMode: 'numeric', pattern: '[0-9]*', endAdornment: <EuroIcon/> }}}
                             />
-                            <FormControl size="small" fullWidth>
+                            {/*<FormControl size="small" fullWidth>
                                 <FormLabel component="legend">Category</FormLabel>
                                 <StyledSelect
                                     value={newDeviceData.category}
@@ -186,7 +186,7 @@ function AddDeviceDialog({open, handleAddDialogClose, iDevice, setDeviceList, au
                                     <MenuItem value={"media"}>Media</MenuItem>
                                     <MenuItem value={"home"}>Home</MenuItem>
                                 </StyledSelect>
-                            </FormControl>
+                            </FormControl>*/}
                             <FormControl fullWidth>
                                 <FormLabel component="legend">Is Public</FormLabel>
                                 <Switch checked={newDeviceData.isPublic} onChange={(e) => {

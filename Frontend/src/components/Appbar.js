@@ -11,18 +11,15 @@ import {
     Dialog, TextField, DialogTitle, DialogContent, InputLabel, Slider, DialogActions, Popover
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
-import LocationOnIcon from '@mui/icons-material/LocationOn';
 import { alpha, styled } from "@mui/material";
 import * as React from 'react';
 import Logo from "../image/RentopiaLogo64.jpg";
 import { useNavigate, Link } from "react-router-dom";
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import TuneIcon from '@mui/icons-material/Tune';
 import MenuComponent from "./MenuComponent.js";
 import LanguageSelector from "./LanguageSelector.js";
 import { useTranslation } from "react-i18next";
 import FetchBackend, { Logout } from "../helper/BackendHelper.js"
-import {useEffect} from "react";
 
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
     color: 'inherit',
