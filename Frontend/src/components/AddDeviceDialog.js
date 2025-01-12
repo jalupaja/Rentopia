@@ -13,7 +13,7 @@ import Grid from "@mui/material/Grid2";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EuroIcon from '@mui/icons-material/Euro';
 import {useState} from "react";
-import FetchBackend from "../helper/BackendHelper";
+import FetchBackend, {FetchBackendMultiPart} from "../helper/BackendHelper";
 
 const StyledSelect = styled(Select)(({ theme }) => ({
     '& .MuiOutlinedInput-notchedOutline': {
@@ -28,7 +28,7 @@ const StyledSelect = styled(Select)(({ theme }) => ({
 
 function AddDeviceDialog({open, handleAddDialogClose, iDevice, setDeviceList, authUser}) {
 
-    const [images, setImages] = useState([]);
+    const [images, setImages] = useState(iDevice.images ? iDevice.images : []);
     const initialValues = {
         id: iDevice.id ? iDevice.id : null,
         title: iDevice.title,
@@ -52,7 +52,32 @@ function AddDeviceDialog({open, handleAddDialogClose, iDevice, setDeviceList, au
             src: URL.createObjectURL(file),
             name: file.name,
         }));
+
         setImages([...images, ...newImages]);
+    };
+
+    const handleImageUpload = (deviceID) => {
+        const formData = new FormData();
+
+        images.forEach(image => {
+            // Convert the image object back to a File object if necessary
+            const file = new File([image.src], image.name); // Adjust if `image.src` isn't the Blob
+            formData.append('files', file); // Use 'files' to match @RequestParam("files")
+        });
+
+        try {
+            FetchBackendMultiPart('POST', `device/${deviceID}/image`, formData)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => console.log("Images uploaded successfully:", data))
+                .catch(error => console.error("Error uploading images:", error));
+        } catch (error) {
+            console.error("Unexpected error during upload:", error);
+        }
     };
 
     const handleDeleteImage = (id) => {
@@ -61,6 +86,7 @@ function AddDeviceDialog({open, handleAddDialogClose, iDevice, setDeviceList, au
 
     const closeDialog = () => {
         clearFields();
+        console.log(iDevice);
         handleAddDialogClose();
     }
 
@@ -77,11 +103,15 @@ function AddDeviceDialog({open, handleAddDialogClose, iDevice, setDeviceList, au
                 .then(response => response.json())
                 .then(data => {data ? setDeviceList(data) : console.log(data) })
                 .catch(error => console.log(error));
+
+
         } else {
             FetchBackend('POST', 'device/add', newDeviceData)
                 .then(response => response.json())
-                .then(data => {data ? setDeviceList(data) : console.log(data) })
+                .then(data => {setDeviceList(data); handleImageUpload(data[data.length - 1].id);})
                 .catch(error => console.log(error));
+
+
         }
 
         closeDialog();
@@ -182,13 +212,13 @@ function AddDeviceDialog({open, handleAddDialogClose, iDevice, setDeviceList, au
                         }}
                     >
                         {images.length > 0 ? (
-                            images.map(image => (
+                            images.map((image, index) => (
                                 <Card key={image.id} sx={{maxWidth: 100}}>
                                     <CardMedia
                                         component="img"
                                         alt={image.name}
                                         height="140"
-                                        image={image.src}
+                                        image={image.src ? image.src : "/images/devices/" + image}
                                         title={image.name}
                                     />
                                     <CardActions>

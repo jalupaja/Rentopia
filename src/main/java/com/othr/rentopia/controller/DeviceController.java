@@ -357,28 +357,17 @@ public class DeviceController {
         return new ResponseEntity<>(null, HttpStatus.OK);
     }
 
-    @PostMapping("{id}/image")
+    @PostMapping("/{id}/image")
     public ResponseEntity<String> uploadImage(
             Authentication authentication,
-            @RequestParam("file") MultipartFile file,
+            @RequestParam("files") List<MultipartFile> files,
             @PathVariable("id") Long deviceId) {
 
         if (!checkDeviceAccess_W(authentication, deviceId))
             return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
 
-        if (file.isEmpty())
+        if (files.isEmpty())
             return new ResponseEntity<>("No file uploaded.", HttpStatus.BAD_REQUEST);
-
-        String fileName;
-        String originalFileName = file.getOriginalFilename();
-        String fileExtension = originalFileName != null ? originalFileName.substring(originalFileName.lastIndexOf("."))
-                : "";
-
-        // check for allowed file extensions
-        String lowerExtension = fileExtension.toLowerCase();
-        if (!(lowerExtension.equals(".png") || lowerExtension.equals(".jpg") || lowerExtension.equals(".jpeg"))) {
-            return ResponseEntity.status(500).body("Error while uploading file!\nInvalid file extension");
-        }
 
         // check if dir exists
         File directory = new File(DEVICE_IMAGE_UPLOAD_DIR);
@@ -393,35 +382,50 @@ public class DeviceController {
         }
 
         try {
-            while (true) {
-
-                // Generate a random file name using UUID and keep the original file extension
-                fileName = UUID.randomUUID().toString() + fileExtension;
-
-                try {
-                    DeviceImage deviceImage = new DeviceImage();
-                    deviceImage.setName(fileName);
-                    deviceImage.setDeviceId(deviceId);
-
-                    deviceImageService.saveDeviceImage(deviceImage);
-                } catch (PersistenceException e) {
-                    // "random" UUID already exists
-                    continue;
+            for (MultipartFile file : files) {
+                if (file.isEmpty()) {
+                    return new ResponseEntity<>("One or more files are empty.", HttpStatus.BAD_REQUEST);
                 }
 
-                // file saved
-                break;
+                String originalFileName = file.getOriginalFilename();
+                String fileExtension = originalFileName != null ? originalFileName.substring(originalFileName.lastIndexOf("."))
+                        : "";
+
+                // Check for allowed file extensions
+                String lowerExtension = fileExtension.toLowerCase();
+                if (!(lowerExtension.equals(".png") || lowerExtension.equals(".jpg") || lowerExtension.equals(".jpeg"))) {
+                    return ResponseEntity.status(500).body("Invalid file extension. Only PNG, JPG, JPEG are allowed.");
+                }
+
+                // Generate a random file name using UUID and retain the original file extension
+                String fileName = "";
+                while (true) {
+                    try {
+
+                        // String fileName = UUID.randomUUID().toString() + fileExtension;
+                        fileName = "d"+deviceId+"-"+ (Math.random() * 50 + 1) + fileExtension;
+                        // Create a DeviceImage record (assuming the deviceImageService will handle DB persistence)
+                        DeviceImage deviceImage = new DeviceImage();
+                        deviceImage.setName(fileName);
+                        deviceImage.setDeviceId(deviceId);
+                        deviceImageService.saveDeviceImage(deviceImage);
+                    } catch (PersistenceException e) {
+                        // If a random UUID already exists, retry
+                        continue;
+                    }
+
+                    break;
+                }
+
+                File destinationFile = new File(DEVICE_IMAGE_UPLOAD_DIR + fileName);
+                file.transferTo(destinationFile);  // Save the file to disk
             }
 
-            File destinationFile = new File(DEVICE_IMAGE_UPLOAD_DIR + fileName);
-
-            file.transferTo(destinationFile);
-
-            return ResponseEntity.ok("File uploaded successfully.");
+            return ResponseEntity.ok("Files uploaded successfully.");
         } catch (IOException e) {
-            System.out.println("Error while uploading file!" + e.getMessage());
-            return ResponseEntity.status(500).body("Error while uploading file!");
-		}
+            System.out.println("Error while uploading file: " + e.getMessage());
+            return ResponseEntity.status(500).body("Error while uploading file.");
+        }
 	}
 
 	@PostMapping(path="update", produces = "application/json")

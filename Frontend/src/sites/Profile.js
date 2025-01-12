@@ -99,6 +99,7 @@ function ProfileSite() {
                 ownerId: ownerId,
                 isPublic: true,
                 location: authUser.location,
+                images: [],
             });
             FetchBackend('GET', 'device/all/' + ownerId, null)
                 .then(response => response.json())
@@ -232,7 +233,7 @@ function ProfileSite() {
                                     <List sx={{ overflow: 'auto', height: '50vh', width: '90%' }}>
                                         {deviceList.map((device, index) => (
                                             //*Your Tools*//
-                                            <div>
+                                            <div key={index}>
                                                 <DeviceListItem
                                                     DeviceName={device.title}
                                                     DeviceId={device.id}
@@ -251,7 +252,7 @@ function ProfileSite() {
                                     <List sx={{ overflow: 'auto', height: '50vh', width: '90%' }}>
                                         {bookmarkList.map((device, index) => (
                                             //*Bookmarks*//
-                                            <div>
+                                            <div key={index}>
                                                 <DeviceListItem
                                                     DeviceName={device.title}
                                                     DeviceId={device.id}
@@ -269,7 +270,7 @@ function ProfileSite() {
                                     <List sx={{ overflow: 'auto', height: '50vh', width: '90%' }}>
                                         {historyList.map((device, index) => (
                                             //*Rent Tools*//
-                                            <div>
+                                            <div key={index}>
                                                 <DeviceListItem
                                                     DeviceName={device.title}
                                                     DeviceId={device.id}
