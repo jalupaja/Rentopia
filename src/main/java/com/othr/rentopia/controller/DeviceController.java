@@ -417,9 +417,8 @@ public class DeviceController {
                 while (true) {
                     try {
 
-                        // String fileName = UUID.randomUUID().toString() + fileExtension;
-                        fileName = "d"+deviceId+"-"+ (Math.random() * 50 + 1) + fileExtension;
-                        // Create a DeviceImage record (assuming the deviceImageService will handle DB persistence)
+                        fileName = UUID.randomUUID().toString() + fileExtension;
+
                         DeviceImage deviceImage = new DeviceImage();
                         deviceImage.setName(fileName);
                         deviceImage.setDeviceId(deviceId);
