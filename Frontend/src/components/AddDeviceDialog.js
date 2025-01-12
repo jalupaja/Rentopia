@@ -49,11 +49,14 @@ function AddDeviceDialog({open, handleAddDialogClose, iDevice, setDeviceList, au
 
     const handleFileChange = (event) => {
         const selectedFiles = Array.from(event.target.files);
-        const newImages = selectedFiles.map(file => ({
-            id: URL.createObjectURL(file),
-            src: URL.createObjectURL(file),
-            name: file.name,
-        }));
+
+        const newImages = selectedFiles
+            .filter(file => file.name.endsWith(".png") || file.name.endsWith(".jpg") || file.name.endsWith(".jpeg"))
+            .map(file => ({
+                id: URL.createObjectURL(file),
+                src: URL.createObjectURL(file),
+                name: file.name,
+            }));
 
         setImages([...images, ...newImages]);
     };
