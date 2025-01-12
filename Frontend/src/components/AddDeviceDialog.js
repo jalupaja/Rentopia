@@ -71,15 +71,16 @@ function AddDeviceDialog({open, handleAddDialogClose, iDevice, setDeviceList, au
         });
 
         try {
-            FetchBackendMultiPart('POST', `device/${deviceID}/image`, formData)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-                    return response.json();
-                })
-                .then(data => console.log("Images uploaded successfully:", data))
-                .catch(error => console.error("Error uploading images:", error));
+            if (images.size > 0)
+                FetchBackendMultiPart('POST', `device/${deviceID}/image`, formData)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! status: ${response.status}`);
+                        }
+                        return response.json();
+                    })
+                    .then(data => console.log("Images uploaded successfully:", data))
+                    .catch(error => console.error("Error uploading images:", error));
         } catch (error) {
             console.error("Unexpected error during upload:", error);
         }
@@ -108,15 +109,17 @@ function AddDeviceDialog({open, handleAddDialogClose, iDevice, setDeviceList, au
             price: Math.round(prevState.price* 100) / 100
         }));
 
-        if(iDevice.id != null) {
-            FetchBackend('POST', 'device/update', newDeviceData)
-                .then(response => response.json())
-                .then(data => {data ? setDeviceList(data) : console.log(data) })
-                .catch(error => console.log(error));
+        if (iDevice.id != null) {
+            if (newDeviceData.size > 0)
+                FetchBackend('POST', 'device/update', newDeviceData)
+                    .then(response => response.json())
+                    .then(data => { data ? setDeviceList(data) : console.log(data) })
+                    .catch(error => console.log(error));
 
-            FetchBackend('DELETE', 'device/delete/image', deleteImages)
-                .then(response => response.json())
-                .catch(error => console.log(error));
+            if (deleteImages.size > 0)
+                FetchBackend('DELETE', 'device/delete/image', deleteImages)
+                    .then(response => response.json())
+                    .catch(error => console.log(error));
 
             handleImageUpload(iDevice.id);
 
