@@ -56,6 +56,7 @@ function AddDeviceDialog({open, handleAddDialogClose, iDevice, setDeviceList, au
                 id: URL.createObjectURL(file),
                 src: URL.createObjectURL(file),
                 name: file.name,
+                data: file,
             }));
 
         setImages([...images, ...newImages]);
@@ -65,9 +66,7 @@ function AddDeviceDialog({open, handleAddDialogClose, iDevice, setDeviceList, au
         const formData = new FormData();
 
         images.forEach(image => {
-            // Convert the image object back to a File object if necessary
-            const file = new File([image.src], image.name); // Adjust if `image.src` isn't the Blob
-            formData.append('files', file); // Use 'files' to match @RequestParam("files")
+            formData.append('files', image.data); // Use 'files' to match @RequestParam("files")
         });
 
         try {
