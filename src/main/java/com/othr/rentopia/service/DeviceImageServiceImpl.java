@@ -75,7 +75,7 @@ public class DeviceImageServiceImpl implements DeviceImageService {
                 .setParameter("deviceImage", deviceImage)
                 .executeUpdate();
 
-            // TODO delete actual file
+            // TODO delete actual file -> currently done when this is method is called
         } catch (PersistenceException e) {
             System.err.println("ERROR removing DeviceImage with the name " + deviceImage + ": " + e.getMessage());
         }
@@ -90,7 +90,7 @@ public class DeviceImageServiceImpl implements DeviceImageService {
                 .setParameter("deviceId", deviceId)
                 .executeUpdate();
 
-            // TODO delete actual file
+            // TODO delete actual file -> currently done when this is method is called
         } catch (PersistenceException e) {
             System.err.println("ERROR removing DeviceImages with the id " + deviceId + ": " + e.getMessage());
         }
