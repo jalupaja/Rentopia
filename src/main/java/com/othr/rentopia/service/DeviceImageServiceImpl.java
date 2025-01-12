@@ -9,7 +9,6 @@ import jakarta.persistence.PersistenceException;
 import org.springframework.stereotype.Service;
 
 import com.othr.rentopia.model.DeviceImage;
-import com.othr.rentopia.service.DeviceImageService;
 
 @Service
 public class DeviceImageServiceImpl implements DeviceImageService {
@@ -32,6 +31,20 @@ public class DeviceImageServiceImpl implements DeviceImageService {
                 .setParameter("deviceId", deviceId)
                 .setMaxResults(1)
                 .getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+
+    @Override
+    public Long getDeviceId(String fileName) {
+        String query = "SELECT c.deviceId FROM DeviceImage c WHERE c.name = :fileName";
+        try {
+            return entityManager
+                    .createQuery(query, Long.class)
+                    .setParameter("fileName", fileName)
+                    .setMaxResults(1)
+                    .getSingleResult();
         } catch (NoResultException e) {
             return null;
         }

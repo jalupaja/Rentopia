@@ -245,6 +245,21 @@ public class DeviceController {
 
 	    Device device = deviceService.getDevice(id);
 
+        try {
+            List<String> deviceImages = deviceImageService.getAllDeviceImages(id);
+            for(String deviceImage : deviceImages) {
+                File imageFile = new File(DEVICE_IMAGE_UPLOAD_DIR + deviceImage);
+                if(!imageFile.delete()) {
+                    System.out.println("Error deleting File: " + imageFile);
+                }
+            }
+
+            deviceImageService.removeAllDeviceImages(id);
+
+        } catch (Exception e) {
+            System.out.println("Error parsing values for device deletion: " + e.getMessage());
+        }
+
         if (deviceService.removeDevice(id)) {
             return getYourDevices(device.getOwnerId());
         } else {
@@ -427,6 +442,39 @@ public class DeviceController {
             return ResponseEntity.status(500).body("Error while uploading file.");
         }
 	}
+
+    @DeleteMapping("/delete/image")
+    public ResponseEntity<String> deleteImagesByFilenames(
+            Authentication authentication,
+            @RequestBody List<String> filenames) {
+
+        if (filenames == null || filenames.isEmpty()) {
+            return new ResponseEntity<>("No filenames provided.", HttpStatus.BAD_REQUEST);
+        }
+
+        try {
+            for (String filename : filenames) {
+
+                Long deviceId = deviceImageService.getDeviceId(filename);
+
+                if (!checkDeviceAccess_W(authentication, deviceId)) {
+                    return new ResponseEntity<>("Access denied to delete image: " + filename, HttpStatus.FORBIDDEN);
+                }
+
+                File imageFile = new File(DEVICE_IMAGE_UPLOAD_DIR + filename);
+                if (imageFile.exists() && !imageFile.delete()) {
+                    return new ResponseEntity<>("Failed to delete file: " + filename, HttpStatus.INTERNAL_SERVER_ERROR);
+                }
+
+                deviceImageService.removeDeviceImage(filename);
+            }
+
+            return ResponseEntity.ok("Images deleted successfully.");
+        } catch (Exception e) {
+            System.out.println("Error while deleting images: " + e.getMessage());
+            return ResponseEntity.status(500).body("Error while deleting images.");
+        }
+    }
 
 	@PostMapping(path="update", produces = "application/json")
 	public ResponseEntity<List<Map<String, Object>>> updateDevice(@RequestBody String device) {
