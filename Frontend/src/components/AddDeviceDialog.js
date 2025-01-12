@@ -71,7 +71,7 @@ function AddDeviceDialog({open, handleAddDialogClose, iDevice, setDeviceList, au
         });
 
         try {
-            if (images.size > 0)
+            if (images.length > 0)
                 FetchBackendMultiPart('POST', `device/${deviceID}/image`, formData)
                     .then(response => {
                         if (!response.ok) {
@@ -110,13 +110,12 @@ function AddDeviceDialog({open, handleAddDialogClose, iDevice, setDeviceList, au
         }));
 
         if (iDevice.id != null) {
-            if (newDeviceData.size > 0)
-                FetchBackend('POST', 'device/update', newDeviceData)
-                    .then(response => response.json())
-                    .then(data => { data ? setDeviceList(data) : console.log(data) })
-                    .catch(error => console.log(error));
+            FetchBackend('POST', 'device/update', newDeviceData)
+                .then(response => response.json())
+                .then(data => { data ? setDeviceList(data) : console.log(data) })
+                .catch(error => console.log(error));
 
-            if (deleteImages.size > 0)
+            if (deleteImages.length > 0)
                 FetchBackend('DELETE', 'device/delete/image', deleteImages)
                     .then(response => response.json())
                     .catch(error => console.log(error));
