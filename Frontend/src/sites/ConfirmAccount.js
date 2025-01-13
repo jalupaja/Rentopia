@@ -7,42 +7,83 @@ import FetchBackend, {JWT_TOKEN, LOGIN_TOKEN, ReturnHomeWhenLoggedIn} from "../h
 import {useTranslation} from "react-i18next";
 import {useNavigate} from "react-router-dom";
 import Cookies from "js-cookie";
+import ResponsePopup from "../components/ResponsePopup";
+import {useEffect} from "react";
 
 function ConfirmAccountSite(){
     ReturnHomeWhenLoggedIn();
-
     const navigation = useNavigate();
-    const loginToken = Cookies.get(LOGIN_TOKEN);
-    if(!loginToken){
-        console.log(loginToken);
-        navigation("/login");
-    }
+    useEffect(() => {
+        const loginToken = Cookies.get(LOGIN_TOKEN);
+        if(!loginToken){
+            navigation("/login");
+        }
+    }, []);
 
     const { t } = useTranslation("", { keyPrefix: "confirmAccount" });
 
     const [statusLabel, setStatusLabel] = React.useState(null);
     const [authCode, setAuthCode] = React.useState(null);
 
-    const confirm = () => {
+    const sendMailAgain = (e) => {
+        if(!Cookies.get(LOGIN_TOKEN)){
+            navigation("/login");
+        }
         const requestData = {
-            token : Cookies.get(LOGIN_TOKEN),
-            authCode : authCode
+          "token" : Cookies.get(LOGIN_TOKEN)
         };
-
-        FetchBackend("POST", "login/confirm", requestData)
+        FetchBackend("POST", "login/confirm/email", requestData)
             .then(response => response.json())
             .then(data => {
-                if(data.status){
-                    Cookies.set(JWT_TOKEN, data.jwt);
-                    navigation("/");
-                }else{
-                    console.log(data);
+                if(data.success){
+                    Cookies.set(LOGIN_TOKEN, data.token);
+                }
+                else{
+                    if(data.reason && data.reason === "no_token"){
+                        navigation("/login");
+                    }
+                    else{
+                        setStatusLabel(<ResponsePopup message={t("general_error")} reason="error"/>)
+                    }
                 }
             })
-            .catch((e) => {
-
-            })
+            .catch(e => setStatusLabel(<ResponsePopup message={t("general_error")} reason="error"/>));
     };
+    const handleInput = (e) => {
+        const onlyNums = e.target.value.replace(/[^0-9]/g, '');
+        setAuthCode(onlyNums);
+    }
+    const confirm = () => {
+        if(authCode && authCode.length > 0 ) {
+
+
+            const requestData = {
+                token: Cookies.get(LOGIN_TOKEN),
+                authCode: authCode
+            };
+
+            FetchBackend("POST", "login/confirm", requestData)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status) {
+                        Cookies.remove(LOGIN_TOKEN);
+                        Cookies.set(JWT_TOKEN, data.jwt);
+                        navigation("/");
+                    } else {
+                        let message = t("general_error");
+                        switch (data.message) {
+                            case "token_expired" :
+                                message = t("token_expired");
+                            case "token_invalid" :
+                                message = t("token_invalid");
+                            case "no_token" : navigation("/login");
+                        }
+                        setStatusLabel(<ResponsePopup message={message} reason="error"/>)
+                    }
+                })
+                .catch((e) => setStatusLabel(<ResponsePopup message={t("general_error")} reason="error"/>))
+        }
+        };
     return (
         <Box sx={{ ...FrameStyle }}>
             <Appbar showLogin={false}/>
@@ -56,7 +97,8 @@ function ConfirmAccountSite(){
                 </Typography>
 
                 <TextField sx={{ ...InputFieldStyle }}
-                           onChange={(e) => setAuthCode(e.target.value)}
+                           onChange={handleInput}
+                           value={authCode}
                            id="emailTextfield"
                            label="XXXXXX"
                            variant="outlined"
@@ -67,11 +109,8 @@ function ConfirmAccountSite(){
                         sx={{ ...InputFieldStyle }}>
                     {t("verify")}
                 </Button>
-                <Divider >{t("problems ?")}</Divider>
                 <Stack >
-                    {//todo align left
-                    }
-                    <Link href="./" >{t("send again")}</Link>
+                    <Link onClick={sendMailAgain}>{t("send again")}</Link>
                 </Stack>
             </Stack>
 

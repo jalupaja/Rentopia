@@ -20,6 +20,8 @@ public class TwoFATokenServiceImpl implements TwoFATokenService {
     @Override
     @Transactional
     public TwoFAToken createToken(Account user) {
+        removeTokenFromUser(user);
+
         TwoFAToken token = new TwoFAToken();
         token.setToken(UUID.randomUUID().toString());
         token.setAuthCode(new Random().nextInt(999999));
@@ -55,5 +57,13 @@ public class TwoFATokenServiceImpl implements TwoFATokenService {
             entityManager.createQuery(query)
                     .setParameter("tokenId", tokenId)
                     .executeUpdate();
+    }
+
+    @Transactional
+    public void removeTokenFromUser(Account user){
+        String query = "DELETE FROM TwoFAToken WHERE userEmail = :userMail";
+        entityManager.createQuery(query)
+                .setParameter("userMail", user.getEmail())
+                .executeUpdate();
     }
 }

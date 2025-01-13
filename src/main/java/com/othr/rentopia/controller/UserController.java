@@ -64,16 +64,7 @@ public class UserController {
         if (userDetails == null || !passwordEncoder.matches(password, userDetails.getPassword())) {
             return new ResponseEntity<>(response.toString(), HttpStatus.UNAUTHORIZED);
         } else {
-            Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null,
-                    userDetails.getAuthorities());
-
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-
-            TwoFAToken token = twoFATokenService.createToken(userDetails);
-            sendAuthCodeMail(userDetails, token);
-            response.put("loginToken", token.getToken());
-            response.put("success", true);
-            return new ResponseEntity<>(response.toString(), HttpStatus.OK);
+            return getStringResponseEntity(response, userDetails);
         }
     }
 
@@ -118,19 +109,7 @@ public class UserController {
 
         if ("".equals(account.getPassword())) {
             // Account existed (or was just created) and was created using Google Login (Password == "") -> login
-            Authentication authentication = new UsernamePasswordAuthenticationToken(account, null,
-                    account.getAuthorities());
-
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-
-            String token = JwtProvider.generateToken(authentication, account.getId());
-
-            TwoFAToken loginToken = twoFATokenService.createToken(account);
-            sendAuthCodeMail(account, loginToken);
-            response.put("loginToken", loginToken.getToken());
-            response.put("success", true);
-
-            return new ResponseEntity<>(response.toString(), HttpStatus.OK);
+            return getStringResponseEntity(response, account);
         } else {
             // Account exists but wasn't created using Google Login -> ERROR
             response.put("message", "Account wasn't created using Google");
@@ -138,15 +117,31 @@ public class UserController {
         }
     }
 
-    private void sendAuthCodeMail(Account account, TwoFAToken loginToken){
+    private ResponseEntity<String> getStringResponseEntity(JSONObject response, Account account) {
+        Authentication authentication = new UsernamePasswordAuthenticationToken(account, null,
+                account.getAuthorities());
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        TwoFAToken loginToken = sendAuthCode(account);
+        response.put("loginToken", loginToken.getToken());
+        response.put("success", true);
+
+        return new ResponseEntity<>(response.toString(), HttpStatus.OK);
+    }
+
+    private TwoFAToken sendAuthCode(Account account){
+        TwoFAToken loginToken = twoFATokenService.createToken(account);
         String subject = "Your authentication code for your Rentopia login";
         String body = "<h1>Hello, " + account.getName() + "!</h1>\n"
                 + "<p>This authenication code expires in 15 minutes</p>\n"
                 + "<p><b>"+String.format("%06d", loginToken.getAuthCode())+"</b></p>";
-        EmailService.Email mail = new EmailService.Email(DotenvHelper.get("GoogleEmail"), account.getEmail(), subject, body);
+        EmailService.Email mail = new EmailService.Email(EmailService.GmailUsername, account.getEmail(), subject, body);
         mail.loadTemplate(subject, body);
 
         emailService.sendEmail(mail);
+
+        return loginToken;
     }
 
     @PostMapping(path="login/confirm", produces="application/json")
@@ -156,29 +151,36 @@ public class UserController {
         authResponse.setStatus(false);
 
         String tokenValue = request.getString("token");
-        int authCode = request.getInt("authCode");
+        int authCode = request.optInt("authCode", -1);
+
+        if(authCode == -1 || tokenValue == null){
+            authResponse.setMessage("invalid_request");
+            return new ResponseEntity<>(authResponse, HttpStatus.OK);
+        }
 
         //validate token and code
         TwoFAToken token = twoFATokenService.getTokenByValue(tokenValue);
+        if(token == null){
+            authResponse.setMessage("no_token");
+            return new ResponseEntity<>(authResponse, HttpStatus.OK);
+        }
 
         if(token.getExpiration().isBefore(LocalDateTime.now())){
-            //todo
-            return new ResponseEntity<AuthResponse>(authResponse, HttpStatus.OK);
+            authResponse.setMessage("token_expired");
+            return new ResponseEntity<>(authResponse, HttpStatus.OK);
         }
 
         if(token.getAuthCode() != authCode){
-            //todo
-            return new ResponseEntity<AuthResponse>(authResponse, HttpStatus.OK);
+            authResponse.setMessage("token_invalid");
+            return new ResponseEntity<>(authResponse, HttpStatus.OK);
         }
 
         twoFATokenService.removeTokenById(token.getId());
-        //remove token
 
         //return jwt
         Account user = accountService.getAccountWithPassword(token.getUserEmail());
         if(user == null){
-            //todo
-            return new ResponseEntity<AuthResponse>(authResponse, HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         Authentication authentication = new UsernamePasswordAuthenticationToken(user, user.getPassword(),
@@ -191,9 +193,32 @@ public class UserController {
         authResponse.setMessage("Confirmed");
         authResponse.setJwt(jwt);
         authResponse.setStatus(true);
-        return new ResponseEntity<AuthResponse>(authResponse, HttpStatus.OK);
+        return new ResponseEntity<>(authResponse, HttpStatus.OK);
     }
 
+    @PostMapping(path="login/confirm/email", produces="application/json")
+    public @ResponseBody ResponseEntity<String>  SendAuthCodeEmail(@RequestBody String requestData){
+        JSONObject request = new JSONObject(requestData);
+        JSONObject response = new JSONObject();
+        response.put("success", false);
+
+        String tokenValue = request.optString("token", null);
+        if(tokenValue != null){
+            TwoFAToken token = twoFATokenService.getTokenByValue(tokenValue);
+            if (token == null) {
+                response.put("reason","no_token");
+                return new ResponseEntity<>(response.toString(), HttpStatus.OK);
+            }
+
+            Account user = accountService.getAccount(token.getUserEmail());
+            token = sendAuthCode(user);
+
+            response.put("success", true);
+            response.put("token", token.getToken());
+        }
+
+        return new ResponseEntity<>(response.toString(), HttpStatus.OK);
+    }
 
     @GetMapping(path="user/me", produces="application/json")
     public @ResponseBody ResponseEntity<Account> GetAuthUser(Authentication authentication){
@@ -235,7 +260,7 @@ public class UserController {
         String body = "<h1>Hello, " + user.getName() + "!</h1>\n"
                 + "<p>Click on this button to reset your password</p>\n"
                 + "<a href=\"http://localhost:3000/newPassword/" + token + "\" class=\"button\">Reset Password</a>\n";
-        EmailService.Email mail = new EmailService.Email(DotenvHelper.get("GoogleEmail"), user.getEmail(), subject, body);
+        EmailService.Email mail = new EmailService.Email(EmailService.GmailUsername, user.getEmail(), subject, body);
         mail.loadTemplate(subject, body);
 
         emailService.sendEmail(mail);
