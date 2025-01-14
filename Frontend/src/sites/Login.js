@@ -26,7 +26,6 @@ function LoginSite() {
 
     ReturnHomeWhenLoggedIn();
 
-
     const [showPassword, setShowPassword] = React.useState(false);
     const handleClickShowPassword = () => setShowPassword((show) => !show);
     const handleMouseDownPassword = (event) => {
@@ -40,6 +39,19 @@ function LoginSite() {
     //login
     const [userEmail, setUserEmail] = React.useState("");
     const [userPassword, setUserPassword] = React.useState("");
+
+    const handleLoginResponse = (response) => {
+        if(response.loginToken){
+            Cookies.set(LOGIN_TOKEN, response.loginToken);
+            navigation("/login/confirm");
+        } else if(response.jwt){
+            Cookies.set(JWT_TOKEN, response.jwt);
+            navigation("/");
+        }
+        else{
+            setRegisterStatusLabel(<ResponsePopup message={t("error_unknown")} reason={"error"} />);
+        }
+    };
     const SubmitLogin = () => {
         let loginData = {
             useremail: userEmail,
@@ -50,8 +62,7 @@ function LoginSite() {
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    Cookies.set(LOGIN_TOKEN, data.loginToken);
-                    navigation("/login/confirm");
+                    handleLoginResponse(data);
                 }
                 else {
                     setRegisterStatusLabel(<ResponsePopup message={t("error_password")} reason={"error"} />);
@@ -73,8 +84,7 @@ function LoginSite() {
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    Cookies.set(LOGIN_TOKEN, data.loginToken);
-                    navigation("/login/confirm");
+                    handleLoginResponse(data);
                 } else {
                     setRegisterStatusLabel(<ResponsePopup message={t("error_not_google")} reason={"error"} />);
                 }

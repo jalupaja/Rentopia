@@ -24,7 +24,8 @@ public class TwoFATokenServiceImpl implements TwoFATokenService {
 
         TwoFAToken token = new TwoFAToken();
         token.setToken(UUID.randomUUID().toString());
-        token.setAuthCode(new Random().nextInt(999999));
+        int authCode = new Random().nextInt(999999);
+        token.setAuthCode(String.format("%06d",authCode));
         token.setExpiration(LocalDateTime.now().plusMinutes(TwoFAToken.EXPIRATION));
         token.setUserEmail(user.getEmail());
 
