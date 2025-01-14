@@ -126,5 +126,15 @@
         "general_error" : "Ein Fehler ist aufgetreten, bitte erneut versuchen",
         "invalid_token" : "Ihr Token für das Ändern Ihres Passworts ist ungültig",
         "update_success" : "Änderung Ihres Passworts war erfolgreich"
+    },
+    "confirm_account" : {
+        "general_error" : "Ein Fehler ist aufgetreten, bitte erneut versuchen",
+        "token_expired" : "Ihr Authentifizierungscode ist abgelaufen",
+        "token_invalid" : "Ihr Authentifizierungscode ist ungültig",
+        "confirm title" : "Zwei-Faktor Authentifizierung",
+        "description" : "Wir haben Ihnen eine Mail mit einem Code an Ihre Email Adresse gesendet. Geben Sie den Code in das Feld ein, um Ihre Identität zu verifizieren",
+        "verify" : "verifizieren",
+        "send again" : "Keine Email bekommen? Erneut senden",
+        "email_sent_again" : "Eine Email mit einem neuen Code wurde gesendet"
     }
 }

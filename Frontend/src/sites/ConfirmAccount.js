@@ -20,7 +20,7 @@ function ConfirmAccountSite(){
         }
     }, []);
 
-    const { t } = useTranslation("", { keyPrefix: "confirmAccount" });
+    const { t } = useTranslation("", { keyPrefix: "confirm_account" });
 
     const [statusLabel, setStatusLabel] = React.useState(null);
     const [authCode, setAuthCode] = React.useState(null);
@@ -37,6 +37,7 @@ function ConfirmAccountSite(){
             .then(data => {
                 if(data.success){
                     Cookies.set(LOGIN_TOKEN, data.token);
+                    setStatusLabel(<ResponsePopup message={t("email_sent_again")} reason="success"/>)
                 }
                 else{
                     if(data.reason && data.reason === "no_token"){
@@ -86,14 +87,14 @@ function ConfirmAccountSite(){
         };
     return (
         <Box sx={{ ...FrameStyle }}>
-            <Appbar showLogin={false}/>
+            <Appbar showLogin={true}/>
             {statusLabel}
             <Stack sx={{ ...centeredDivStyle }}>
                 <Typography variant="button" gutterBottom variant="h6">
-                    {t("Two-factor authentication")}
+                    {t("confirm title")}
                 </Typography>
                 <Typography variant="button" gutterBottom variant="p">
-                    {t("Your received just an emailType in your authentication code from your email")}
+                    {t("description")}
                 </Typography>
 
                 <TextField sx={{ ...InputFieldStyle }}
