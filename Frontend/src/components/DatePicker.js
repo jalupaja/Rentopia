@@ -5,7 +5,7 @@ import {DateRangePicker} from "react-date-range";
 import { addDays, isWithinInterval, parseISO } from "date-fns";
 import {useState} from "react";
 
-function DatePicker({ bookedRanges, onSelect }){
+function DatePicker({ bookedRanges, setNewFinance, newFinance }) {
     const [state, setState] = useState({
         selection1: [{
             startDate: addDays(new Date(), 1),
@@ -21,6 +21,10 @@ function DatePicker({ bookedRanges, onSelect }){
             key: 'selection1'
         }]
     });
+
+    const handleDateChange = (e) => {
+        setNewFinance({newFinance: e.target.value});
+    }
 
     return (
         <Box sx={{position: "relative", justifySelf: 'center'}}>
@@ -45,8 +49,7 @@ function DatePicker({ bookedRanges, onSelect }){
                 editableDateInputs={false} // Disable manual date inputs
                 staticRanges={[]} // Remove default static ranges
                 inputRanges={[]} // Remove quick input ranges
-                onChange={() => {
-                }} // Ignore any changes
+                onChange={() => {handleDateChange()}} // Ignore any changes
             />
         </Box>
     )

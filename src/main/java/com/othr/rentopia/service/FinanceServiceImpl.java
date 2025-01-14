@@ -21,7 +21,7 @@ public class FinanceServiceImpl implements FinanceService {
     @Override
     @Transactional
     public void saveFinance(Finance finance) {
-	entityManager.persist(finance);
+		entityManager.persist(finance);
     }
 
     @Override

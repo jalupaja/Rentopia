@@ -290,7 +290,14 @@ function DeviceSite() {
                 </Box>
                 <Box flex={"auto"} />
                 <Footer />
-                <CheckoutDialog open={checkoutOpen} handleCheckoutClose={handleCheckoutClose}/>
+                {authUser ? (
+                    <CheckoutDialog
+                        open={checkoutOpen}
+                        handleCheckoutClose={handleCheckoutClose}
+                        device={device}
+                        authUser={authUser}
+                    />
+                ) : ('')}
             </Box>
         </React.Fragment>
     )
