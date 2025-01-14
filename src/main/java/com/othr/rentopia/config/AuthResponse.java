@@ -5,7 +5,7 @@ import java.io.Serializable;
 public class AuthResponse implements Serializable {
     private String message;
     private String Jwt;
-    private boolean Status;
+    private boolean success;
 
     public String getMessage() {
         return message;
@@ -23,11 +23,11 @@ public class AuthResponse implements Serializable {
         Jwt = jwt;
     }
 
-    public boolean getStatus() {
-        return Status;
+    public boolean getSuccess() {
+        return success;
     }
 
-    public void setStatus(boolean status) {
-        Status = status;
+    public void setSuccess(boolean success) {
+        this.success = success;
     }
 }

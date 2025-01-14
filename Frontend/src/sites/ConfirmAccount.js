@@ -66,7 +66,7 @@ function ConfirmAccountSite(){
             FetchBackend("POST", "login/confirm", requestData)
                 .then(response => response.json())
                 .then(data => {
-                    if (data.status) {
+                    if (data.success) {
                         Cookies.remove(LOGIN_TOKEN);
                         Cookies.set(JWT_TOKEN, data.jwt);
                         navigation("/");

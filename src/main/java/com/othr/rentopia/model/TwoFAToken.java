@@ -18,7 +18,7 @@ public class TwoFAToken {
     private String token;
 
     @Column
-    private int authCode;
+    private String authCode;
 
     @Column
     private String userEmail;
