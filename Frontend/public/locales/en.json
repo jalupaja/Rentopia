@@ -15,7 +15,8 @@
         "bookmarked": "Bookmarked",
         "add_bookmark": "Add to Bookmarks",
         "rent": "Rent Now",
-        "StartConversation" : "Start Conversation"
+        "StartConversation" : "Start Conversation",
+        "day": "Day"
     },
     "login": {
         "error_password": "Wrong email or password!",

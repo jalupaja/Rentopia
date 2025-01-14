@@ -14,7 +14,8 @@
         "bookmarked": "Gespeichert",
         "add_bookmark": "Zu den Lesezeichen hinzufügen",
         "rent": "Jetzt mieten",
-        "StartConversation" : "Konversation starten"
+        "StartConversation" : "Konversation starten",
+        "day": "Tag"
     },
     "login": {
         "error_password": "Falsche E-Mail oder falsches Passwort!",
