@@ -118,11 +118,6 @@ public class UserController {
     }
 
     private ResponseEntity<String> getStringResponseEntity(JSONObject response, Account account) {
-        Authentication authentication = new UsernamePasswordAuthenticationToken(account, null,
-                account.getAuthorities());
-
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
         TwoFAToken loginToken = sendAuthCode(account);
         response.put("loginToken", loginToken.getToken());
         response.put("success", true);
