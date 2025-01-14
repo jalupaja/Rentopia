@@ -3,40 +3,49 @@ import { Box, Typography, Stack, Button, TextField, Alert, Snackbar } from "@mui
 import * as React from "react";
 import { centeredDivStyle, FrameStyle, InputFieldStyle } from "./Register.js";
 import { useNavigate } from "react-router-dom";
-import FetchBackend, { ReturnHomeWhenLoggedIn } from "../helper/BackendHelper.js";
+import FetchBackend, {GetAuthUser, ReturnHomeWhenLoggedIn} from "../helper/BackendHelper.js";
 import Appbar from "../components/Appbar.js";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import ResponsePopup from "../components/ResponsePopup";
 function ForgetPasswordSite() {
-    ReturnHomeWhenLoggedIn();
+    const authUser = GetAuthUser();
 
-    const [openSuccess, setOpenSuccess] = useState(false);
-    const [openError, setOpenError] = useState(false);
-
+    const [statusLabel, setStatusLabel] = React.useState(null);
     const [userEmail, setUserEmail] = React.useState("");
+
     const { t } = useTranslation("", { keyPrefix: "forgotpassword" });
+
     const SendResetMail = () => {
         if (userEmail !== null && userEmail.length !== 0) {
-            console.log(userEmail);
             FetchBackend('POST', 'resetPasswordMail', { mail: userEmail })
                 .then(response => response.json())
-                .then(success => {
-                    if (success) {
-                        setOpenSuccess(true);
+                .then(data => {
+                    const status = data.success ? "success" : "error";
+                    let message = null;
+                    if(data.success){
+                        message = t("succ_mail");
                     }
+                    else{
+                        if(data.reason === "no_existent_user"){
+                            message = t("no_existent_user");
+                        }
+                        else{
+                            message = t("error_mail");
+                        }
+                    }
+                    setStatusLabel(<ResponsePopup message={message} reason={status} />);
                 })
-                .catch((error) => setOpenError(true))
+                .catch((error) => {
+                    const message = t("error_mail");
+                    setStatusLabel(<ResponsePopup message={message} reason={"error"} />);
+                });
         }
     }
     return (
         <Box sx={{ ...FrameStyle }}>
-            <Appbar />
-            <Snackbar open={openError}>
-                <Alert severity="error">{t("error_mail")}</Alert>
-            </Snackbar>
-            <Snackbar open={openSuccess}>
-                <Alert>{t("succ_mail")}</Alert>
-            </Snackbar>
+            <Appbar authUser={authUser}/>
+            {statusLabel}
             <Stack sx={{ ...centeredDivStyle }}>
                 <Typography variant="button" gutterBottom variant="h6">
                     {t("forgot_password")}

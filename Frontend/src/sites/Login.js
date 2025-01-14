@@ -108,7 +108,7 @@ function LoginSite() {
                     <OutlinedInput
                         value={userPassword} onChange={(event) => setUserPassword(event.target.value)}
                         id="outlined-adornment-password"
-                        type={showPassword ? 'text' : t("password")}
+                        type={showPassword ? 'text' : "password"}
                         endAdornment={
                             <InputAdornment position="end">
                                 <IconButton

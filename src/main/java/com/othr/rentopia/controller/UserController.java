@@ -1,23 +1,28 @@
 package com.othr.rentopia.controller;
 
+import com.othr.rentopia.api.EmailService;
 import com.othr.rentopia.config.AuthResponse;
+import com.othr.rentopia.config.DotenvHelper;
 import com.othr.rentopia.config.JwtProvider;
 import com.othr.rentopia.model.Account;
 import com.othr.rentopia.model.Location;
+import com.othr.rentopia.model.ResetPasswordToken;
 import com.othr.rentopia.service.AccountService;
-import com.othr.rentopia.service.AccountServiceImpl;
 import com.othr.rentopia.api.GoogleOAuthService;
+import com.othr.rentopia.service.AccountServiceImpl;
+import com.othr.rentopia.service.ResetPasswordService;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 @RestController()
 @RequestMapping("api")
@@ -30,6 +35,12 @@ public class UserController {
 
     @Autowired
     private AccountService accountService;
+
+    @Autowired
+    private ResetPasswordService resetPasswordService;
+
+    @Autowired
+    private EmailService emailService;
 
     @Autowired
     private AccountServiceImpl customUserDetails;
@@ -130,14 +141,48 @@ public class UserController {
         String email = (String) authentication.getPrincipal();
 
         Account account = accountService.getAccount(email);
+        account.setPassword(null);
         return new ResponseEntity<>(account, HttpStatus.OK);
     }
 
     @PostMapping(path = "resetPasswordMail", produces = "application/json")
-    public @ResponseBody boolean SendResetPasswordMail(@RequestBody String userMail) {
-        // todo:
+    public @ResponseBody ResponseEntity<String> SendResetPasswordMail(@RequestBody String userMail) {
+        JSONObject request = new JSONObject(userMail);
+        JSONObject response = new JSONObject();
+        response.put("success", false);
 
-        return true;
+        Account user = accountService.getAccount(request.getString("mail"));
+        if(user == null){
+            response.put("reason", "no_existent_user");
+            return new ResponseEntity<>(response.toString(), HttpStatus.OK);
+        }
+
+        resetPasswordService.removeTokenIfExists(user.getEmail());
+
+        String token = UUID.randomUUID().toString();
+        ResetPasswordToken newToken = new ResetPasswordToken();
+        newToken.setToken(token);
+        newToken.setUserEmail(user.getEmail());
+        newToken.setExpiration(LocalDateTime.now().plusMinutes(ResetPasswordToken.EXPIRATION));
+
+        try{
+            resetPasswordService.saveToken(newToken);
+        } catch(Exception e){
+            System.out.println("Storing resetpasswordtoken threw exception: "+e.getMessage());
+            return new ResponseEntity<>(response.toString(), HttpStatus.OK);
+        }
+
+        String subject = "Reset your password of your Rentopia Account";
+        String body = "<h1>Hello, " + user.getName() + "!</h1>\n"
+                + "<p>Click on this button to reset your password</p>\n"
+                + "<a href=\"http://localhost:3000/newPassword/" + token + "\" class=\"button\">Reset Password</a>\n";
+        EmailService.Email mail = new EmailService.Email(DotenvHelper.get("GoogleEmail"), user.getEmail(), subject, body);
+        mail.loadTemplate(subject, body);
+
+        emailService.sendEmail(mail);
+
+        response.put("success", true);
+        return new ResponseEntity<>(response.toString(), HttpStatus.OK);
     }
 
     @PostMapping(path="user/update", produces = "application/json")
@@ -214,5 +259,79 @@ public class UserController {
         authResponse.setMessage("Registration successful");
         authResponse.setJwt(token);
         return new ResponseEntity<AuthResponse>(authResponse, HttpStatus.OK);
+    }
+
+    @PostMapping(path = "user/password")
+    public @ResponseBody ResponseEntity<String> UpdatePassword(@RequestBody String newPasswordInfo){
+        JSONObject request = new JSONObject(newPasswordInfo);
+        JSONObject response = new JSONObject();
+        response.put("success", false);
+
+        String token = request.getString("token");
+        String newPassword = request.getString("password");
+
+        //check if token is valid
+        ResetPasswordToken userToken = resetPasswordService.getTokenByValue(token);
+        if(userToken == null || userToken.getExpiration().isBefore(LocalDateTime.now())){
+            response.put("reason", "invalid_token");
+            return new ResponseEntity<>(response.toString(), HttpStatus.OK);
+        }
+
+        //get user from token
+        Account user = accountService.getAccountWithPassword(userToken.getUserEmail());
+
+        if(!setUpdatedPassword(user, newPassword)){
+            return new ResponseEntity<>(response.toString(), HttpStatus.OK);
+        }
+
+        try{
+            resetPasswordService.removeTokenIfExists(user.getEmail());
+        } catch(Exception e){
+            System.out.println("Removing consumed token after updating password threw exception : "+ e.getMessage());
+        }
+
+        response.put("success", true);
+        return new ResponseEntity<>(response.toString(), HttpStatus.OK);
+    }
+
+    @PostMapping(path = "user/changePassword")
+    public @ResponseBody ResponseEntity<String> changePassword(@RequestBody String newPasswordInfo,
+                                                               Authentication authentication) {
+        JSONObject request = new JSONObject(newPasswordInfo);
+        JSONObject response = new JSONObject();
+        response.put("success", false);
+
+        String oldPassword = request.getString("oldPassword");
+        String newPassword = request.getString("newPassword");
+
+        if(!authentication.isAuthenticated()){
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
+        String principalEmail = (String) authentication.getPrincipal();
+        Account account = accountService.getAccount(principalEmail);
+
+        if(!passwordEncoder.matches(oldPassword, account.getPassword())){
+            response.put("reason", "password_invalid");
+            return new ResponseEntity<>(response.toString(), HttpStatus.OK);
+        }
+
+        boolean success = setUpdatedPassword(account, newPassword);
+
+        response.put("success", success);
+        return new ResponseEntity<>(response.toString(), HttpStatus.OK);
+    }
+
+    private boolean setUpdatedPassword(Account user, String newPassword){
+        user.setPassword(passwordEncoder.encode(newPassword));
+
+        try{
+            accountService.saveAccount(user);
+        } catch(Exception e){
+            System.out.println("Changing PAssword threw Exception: "+e.getMessage());
+            return false;
+        }
+
+        return true;
     }
 }
