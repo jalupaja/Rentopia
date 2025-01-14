@@ -16,6 +16,7 @@ import { useEffect, useState } from "react";
 import Appbar from "../components/Appbar.js";
 import { useTranslation } from "react-i18next";
 import {StartChatFromDevice} from "../helper/ChatHelper";
+import DatePicker from "../components/DatePicker";
 
 const boxStyle = {
     mt: 4,
@@ -50,6 +51,10 @@ function DeviceSite() {
         "amountRatings": 0,
     });
     const [deviceImageIndex, setDeviceImageIndex] = useState(0);
+    const bookedRanges = [
+        { start: "2025-01-10", end: "2025-01-15" },
+        { start: "2025-01-20", end: "2025-01-25" },
+    ];
 
     useEffect(() => {
         if (JWTTokenExists()) {
@@ -70,6 +75,13 @@ function DeviceSite() {
             .catch(error => console.log(error))
 
     }, []);
+
+    /*useEffect(() => {
+        FetchBackend('GET', 'device/bookedDates' + deviceId, null)
+        .then(response => response.json())
+        .then(data => setDevice(data))
+        .catch(error => console.log(error))
+    }, []);*/
 
     // navigate back to Home if the device is hidden or invalid
     if (device === null) {
@@ -209,14 +221,14 @@ function DeviceSite() {
                                                 </Button>
                                             </Grid2>
                                             <Grid2 container size={12} sx={{marginBottom : "1%"}}>
-                                                <Grid2 size={6}>
+                                                <Grid2 size={6} sx={{paddingRight: "1%"}}>
                                                     <Button
                                                         variant="contained" color="primary" sx={{marginRight : "1%"}}
                                                         onClick={btnBookmark} fullWidth>
                                                         {device.isBookmarked ? (t("bookmarked")) : t("add_bookmark")}
                                                     </Button>
                                                 </Grid2>
-                                                <Grid2 size={6}>
+                                                <Grid2 size={6} sx={{paddingLeft: "1%"}}>
                                                     <Button variant="contained" onClick={handleConversationStart} fullWidth>
                                                         {t("StartConversation")}
                                                     </Button>
@@ -240,6 +252,8 @@ function DeviceSite() {
                                             </Typography>
                                         </Box>
 
+                                        {/*Calendar*/}
+                                        <DatePicker bookedRanges={bookedRanges}/>
                                     </Box>
                                 </Grid>
                             </Grid>
@@ -258,7 +272,6 @@ function DeviceSite() {
                             </Box>
                         </Grid>
                     </Grid>
-
                 </Container>
             </Box>
             <Box flex={"auto"} />
