@@ -5,6 +5,7 @@ import FetchBackend from "../helper/BackendHelper.js";
 import ResponsePopup from "./ResponsePopup.js";
 import {useEffect} from "react";
 import {useTranslation} from "react-i18next";
+import ProfileOverview from "./ProfileOverview";
 
 function TicketDetail({ticketInfo, handleChange, handleTicketAction, adm = false}){
     const { t } = useTranslation("", { keyPrefix: "helpcenter" });
@@ -164,17 +165,22 @@ function TicketDetail({ticketInfo, handleChange, handleTicketAction, adm = false
                     label="Category"
                 >
                     <MenuItem value={"general"}>{t("category_general")}</MenuItem>
+                    <MenuItem value={"delete_account"}>{t("category_delete_account")}</MenuItem>
                 </Select>
             </FormControl>
-            <TextField
-                fullWidth
-                name="details" value={ticketInfo.details} onChange={handleChange}
-                label="Details"
-                multiline rows={6}
-                disabled={editable} margin="normal"
-            />
             {
-                adm ?
+                ticketInfo.category === "general" && (
+                    <TextField
+                        fullWidth
+                        name="details" value={ticketInfo.details} onChange={handleChange}
+                        label="Details"
+                        multiline rows={6}
+                        disabled={editable} margin="normal"
+                    />
+                )
+            }
+            {
+                adm && ticketInfo.category === "general" ?
                     <Box >
                         <Divider/>
                         <TextField
@@ -188,6 +194,11 @@ function TicketDetail({ticketInfo, handleChange, handleTicketAction, adm = false
                 :
                 <Box/>
             }
+            {
+                (adm && ticketInfo.category === "delete_account") && (
+                    <ProfileOverview user={ticketInfo.owner}/>
+                )
+            }
             <Grid2 container sx={{marginTop : "1%"}}>
                 <Button variant="contained" sx={{marginRight : "1%"}}
                     style={{display: ticketInfo.status==="new" ? "inherit": "none"}}
@@ -195,12 +206,12 @@ function TicketDetail({ticketInfo, handleChange, handleTicketAction, adm = false
                     {t("submit_ticket")}
                 </Button>
                 <Button variant="contained" sx={{marginRight : "1%"}} onClick={handleDeleteTicket}>
-                    {t("submit_ticket")}
+                    {t("delete_ticket")}
                 </Button>
                 <Button variant="contained" sx={{marginRight : "1%", color: "secondary"}}
                         style={{display: adm ? "inherit": "none"}}
                         onClick={handleCloseTicket}>
-                    {t("submit_ticket")}
+                    { ticketInfo.category === "general" ? t("close_ticket") : t("delete_user")}
                 </Button>
             </Grid2>
         </Box>

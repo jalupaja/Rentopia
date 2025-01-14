@@ -116,13 +116,6 @@ function MenuComponent({ authUser }) {
         </MenuItem>
         {adminPanel}
         <Divider />
-
-        <MenuItem onClick={handleClose}>
-            <ListItemIcon>
-                <Settings fontSize="small" />
-            </ListItemIcon>
-            {t("settings")}
-        </MenuItem>
         <MenuItem onClick={() => {Logout();  window.location.reload();}}>
             <ListItemIcon>
                 <LogoutIcon/>

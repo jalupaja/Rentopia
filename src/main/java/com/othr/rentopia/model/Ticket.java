@@ -28,16 +28,13 @@ public class Ticket {
     @Column(nullable = false)
     private LocalDateTime timestamp = LocalDateTime.now();
 
-    @Column
-    private Long targetDeviceId; //meaning depends on category
-
     @Column(length = 1024)
     private String details;
 
     @Column(length = 1024)
     private String adminResponse;
     public enum Category {
-        general, owndevices, renteddevices
+        general, delete_account
     }
 
     public enum Status {

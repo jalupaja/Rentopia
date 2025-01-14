@@ -236,8 +236,11 @@ public class UserController {
     @GetMapping(path="user/me", produces="application/json")
     public @ResponseBody ResponseEntity<Account> GetAuthUser(Authentication authentication){
         String email = (String) authentication.getPrincipal();
-
         Account account = accountService.getAccount(email);
+        if(account == null){
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+
         account.setPassword(null);
         return new ResponseEntity<>(account, HttpStatus.OK);
     }

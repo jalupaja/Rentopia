@@ -58,7 +58,7 @@ public class TicketController {
             try{
                 ticketService.updateTicket(ticket);
             } catch(Exception e){
-                System.out.println("Updating ticket threw excption : "+ e.getMessage());
+                System.out.println("Updating ticket threw exception : "+ e.getMessage());
                 return response.toString();
             }
         }
@@ -71,28 +71,17 @@ public class TicketController {
     public ResponseEntity<String> createTicket(@RequestBody String ticketInfo) throws Exception {
         JSONObject request = new JSONObject(ticketInfo);
 
-        Ticket newTicket = new Ticket();
-
         if(!request.isNull("id")){
-            throw new Exception("Ticket alraedy exists");
+            throw new Exception("Ticket already exists");
             //todo ?
         }
 
-        //todo replace with helper method
-        newTicket.setStatus(Ticket.Status.OPEN);
-        newTicket.setTitle((String)request.get("title"));
-        newTicket.setDetails((String)request.get("details"));
-        JSONObject owner = (JSONObject) request.get("owner");
-        Integer ownerId = (Integer) owner.get("id");
-
-        Account user = accountService.getAccountById(ownerId.longValue());
-        if(user == null){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        Ticket newTicket = ParseJsonToTicket(request);
+        if(newTicket == null){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        newTicket.setOwner(user);
 
-        String category = (String) request.get("category");
-        newTicket.setCategory(Ticket.Category.valueOf(category.toLowerCase()));
+        newTicket.setStatus(Ticket.Status.OPEN);
 
         try{
             ticketService.saveTicket(newTicket);
@@ -129,10 +118,12 @@ public class TicketController {
     private Ticket ParseJsonToTicket(JSONObject json){
         Ticket newTicket = new Ticket();
 
-        newTicket.setId(getLongFromJSON(json, "id"));
+        Long id = getLongFromJSON(json, "id");
+        if(id != -1){
+            newTicket.setId(id);
+        }
         newTicket.setTitle(getStringFromJSON(json,"title"));
         newTicket.setDetails(getStringFromJSON(json,"details"));
-        newTicket.setTargetDeviceId(getLongFromJSON(json, "targetDevice"));
         newTicket.setAdminResponse(getStringFromJSON(json, "adminResponse"));
 
         JSONObject owner = (JSONObject) json.get("owner");
@@ -144,7 +135,9 @@ public class TicketController {
         newTicket.setOwner(user);
 
         String status = getStringFromJSON(json, "status");
-        newTicket.setStatus(Ticket.Status.valueOf(status.toUpperCase()));
+        if(status != null && status.isEmpty()){
+            newTicket.setStatus(Ticket.Status.valueOf(status.toUpperCase()));
+        }
 
         String category = (String) json.get("category");
         newTicket.setCategory(Ticket.Category.valueOf(category.toLowerCase()));

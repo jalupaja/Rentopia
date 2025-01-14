@@ -23,6 +23,7 @@ import PropTypes from "prop-types";
 import FetchBackend, {JWTTokenExists} from "../helper/BackendHelper";
 import { useTranslation } from "react-i18next";
 import {ReturnHomeWhenLoggedOut} from "../helper/BackendHelper";
+import ProfileOverview from "../components/ProfileOverview";
 
 const Item = styled(Paper)(({ theme }) => ({
     padding: theme.spacing(1),
@@ -169,44 +170,7 @@ function ProfileSite() {
                     <Grid container direction='row' columnSpacing={3} margin={'2% 10%'} sx={{ justifyContent: 'center' }}>
                         <Grid container columns={2} rowSpacing={2} direction='column' width={"49%"}>
                             <Item sx={{ boxShadow: 3, display: 'flex', flexDirection : "column", height: 'min-content', maxHeight: 'min-content' }}>
-                                <Box sx={{display : "flex", flexDirection : "row"}}>
-                                    <Avatar
-                                        sx={{ width: 100, height: 100, margin: '24px' }}
-                                        alt={t("user")}
-                                    />
-                                    <Box>
-                                        <Input
-                                            fullWidth
-                                            disabled
-                                            defaultValue={t("name")}
-                                            sx={{ alignSelf: 'center', margin: '24px 0 12px 0' }}
-                                            value={authUser.name}
-                                        />
-                                        <Input
-                                            fullWidth
-                                            disabled
-                                            defaultValue={t("email")}
-                                            sx={{ alignSelf: 'center', margin: '12px 0 12px 0' }}
-                                            value={authUser.email}
-                                        />
-                                    </Box>
-                                    <Box sx={{ margin: ' 0 24px 24px 24px', justifyContent : "flex-end" }}>
-                                        <Input
-                                            fullWidth
-                                            disabled
-                                            defaultValue={t("company")}
-                                            sx={{ alignSelf: 'center', margin: '24px 0 12px 0'}}
-                                            value={authUser.company}
-                                        />
-                                        <Input
-                                            fullWidth
-                                            disabled
-                                            defaultValue={t("country")}
-                                            sx={{ alignSelf: 'center', margin: '12px 0 12px 0' }}
-                                            value={authUser.location.country}
-                                        />
-                                    </Box>
-                                </Box>
+                                <ProfileOverview user={authUser}/>
                                 <Box sx={{display : "flex", justifyContent : "flex-start"}}>
                                     <Button
                                         variant={"contained"}
