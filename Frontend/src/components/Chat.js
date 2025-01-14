@@ -51,13 +51,16 @@ function ChatComponent({chat = null, authUser = null}){
                 .catch(e => console.log(e));
     };
 
-    setInterval(() => fetchMessages(chat), 5000);
+    useEffect(() => {
+        const intervalId = setInterval(() => fetchMessages(chat), 5000);
+        return () => clearInterval(intervalId);
+    }, []);
 
     useEffect(() => {
         fetchMessages(chat);
     }, [chat, authUser]);
     return(
-        <Box >
+        <Box sx={{height : "100%", display : "flex", flexDirection : "column"}} >
             <Typography variant="h3" >
                 {getOtherUser(chat, authUser).name}
             </Typography>
@@ -66,6 +69,7 @@ function ChatComponent({chat = null, authUser = null}){
                 height : "400px",
                 display :"flex",
                 flexDirection: "column-reverse",
+                flex : 1,
                 backgroundColor : "#ebebeb"
             }}>
                     {

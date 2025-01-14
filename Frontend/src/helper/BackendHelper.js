@@ -3,6 +3,7 @@ import {json, useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
 
 export const JWT_TOKEN = "jwtToken";
+export const LOGIN_TOKEN = "loginToken";
 
 export function JWTTokenExists(){
     let cookie = Cookie.get(JWT_TOKEN);

@@ -22,7 +22,7 @@ public class EmailService {
     private static final String SMTP_PORT = "587";
     private static final String CLIENT_ID = DotenvHelper.get("REACT_APP_OAuthClientId");
     private static final String CLIENT_SECRET = DotenvHelper.get("REACT_APP_OAuthClientSecret");
-    private static final String GmailUsername = DotenvHelper.get("REACT_APP_GoogleEmail");
+    public static final String GmailUsername = DotenvHelper.get("REACT_APP_GoogleEmail");
     private static final String GmailPassword = DotenvHelper.get("REACT_APP_GooglePassword");
 
     private Session session;

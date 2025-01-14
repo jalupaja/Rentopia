@@ -126,5 +126,15 @@
         "general_error" : "'ej ghu'vam yISambe'choHlu'.",
         "invalid_token" : "Hegh qo' HochDaq lengmeH mIw wIlo'",
         "update_success" : "ghojmeylIj bIvo'chugh, vaj yInlIj ngo'"
+    },
+    "confirm_account": {
+        "general_error": "Qagh luqaS, yIghoSqa'",
+        "token_expired": "ghItlhwI'ghomwIj poH rIn",
+        "token_invalid": "ghItlhwI'ghomwIj luj",
+        "confirm title": "cha'DIch ngoq",
+        "description": "SoHvaD De' QIn wIngeHpu'. ghItlhwI'ghomwIj yIlo'. ghItlhwI'ghomwIj yIlo' 'ej SoH ngoQ yI'ang.",
+        "verify": "ngoq yIlo'",
+        "send again": "QIn DaghItlhpu'be'? yIngeHqa'",
+        "email_sent_again": "QIn ghItlhwI'ghomwIj wIngeHqa'"
     }
 }

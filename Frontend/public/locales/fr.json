@@ -126,5 +126,15 @@
         "general_error" : "Une erreur s'est produite, veuillez réessayer",
         "invalid_token" : "Impossible de mettre à jour le mot de passe en raison d'un jeton non valide",
         "update_success" : "La mise à jour de votre mot de passe a réussi"
+    },
+    "confirm_account" : {
+        "general_error" : "Une erreur s'est produite, veuillez réessayer",
+        "token_expired" : "Votre code d'authentification a expiré",
+        "token_invalid" : "Votre code d'authentification est invalide",
+        "confirm title" : "Authentification à deux facteurs",
+        "description" : "Nous venons de vous envoyer un message à votre adresse e-mail avec votre code d'authentification. Entrez le code dans le formulaire ci-dessus pour vérifier votre identité.",
+        "verify" : "vérifier",
+        "send again" : "Vous n'avez pas reçu d'e-mail ? Envoyer à nouveau",
+        "email_sent_again" : "Un e-mail avec un code d'authentification a été envoyé à nouveau"
     }
 }

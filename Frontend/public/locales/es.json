@@ -126,5 +126,15 @@
         "general_error" : "Ocurrió un error, por favor inténtalo nuevamente",
         "invalid_token" : "No se puede actualizar la contraseña debido a un token no válido",
         "update_success" : "La actualización de su contraseña fue exitosa"
+    },
+    "confirm_account" : {
+        "general_error" : "Ocurrió un error, por favor intente de nuevo",
+        "token_expired" : "Su código de autenticación ha expirado",
+        "token_invalid" : "Su código de autenticación es inválido",
+        "confirm title" : "Autenticación de dos factores",
+        "description" : "Acabamos de enviarle un mensaje a su dirección de correo electrónico con su código de autenticación. Ingrese el código en el formulario para verificar su identidad.",
+        "verify" : "verificar",
+        "send again" : "¿No recibió un correo electrónico? Enviar de nuevo",
+        "email_sent_again" : "Se envió nuevamente un correo electrónico con un código de autenticación"
     }
 }

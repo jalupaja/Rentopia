@@ -128,5 +128,15 @@
         "general_error" : "An error occurred, please try again",
         "invalid_token" : "Cannot update password due to invalid token",
         "update_success" : "Updating your password was successful"
+    },
+    "confirm_account" : {
+        "general_error" : "An error occurred, please try again",
+        "token_expired" : "Your authentication code is expired",
+        "token_invalid" : "Your authentication code is invalid",
+        "confirm title" : "Two-Factor authentication",
+        "description" : "We just sent you a message to your email address with your authentication code. Enter the code in the form above to verify your identity.",
+        "verify" : "verify",
+        "send again" : "Didn't receive an email? Send again",
+        "email_sent_again" : "An email with an authentication code was sent again"
     }
 }
