@@ -238,7 +238,7 @@ public class UserController {
         String email = (String) authentication.getPrincipal();
         Account account = accountService.getAccount(email);
         if(account == null){
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
         account.setPassword(null);
