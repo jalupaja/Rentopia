@@ -64,10 +64,7 @@ function DeviceSite() {
     const handleCheckoutClose = () => {
         setCheckoutOpen(false);
     };
-    const bookedRanges = [
-        { start: "2025-01-10", end: "2025-01-15" },
-        { start: "2025-01-20", end: "2025-01-25" },
-    ];
+    const [bookedDates, setBookedDates] = useState([]);
 
     useEffect(() => {
         if (JWTTokenExists()) {
@@ -89,12 +86,12 @@ function DeviceSite() {
 
     }, []);
 
-    /*useEffect(() => {
-        FetchBackend('GET', 'device/bookedDates' + deviceId, null)
+    useEffect(() => {
+        FetchBackend('GET', 'device/bookedDates/' + deviceId, null)
         .then(response => response.json())
-        .then(data => setDevice(data))
+        .then(data => setBookedDates(data))
         .catch(error => console.log(error))
-    }, []);*/
+    }, []);
 
     // navigate back to Home if the device is hidden or invalid
     if (device === null) {
@@ -267,7 +264,7 @@ function DeviceSite() {
                                             </Box>
 
                                             {/*Calendar*/}
-                                            <DatePicker bookedRanges={bookedRanges}/>
+                                            <DatePicker bookedRanges={bookedDates}/>
                                         </Box>
                                     </Grid>
                                 </Grid>
@@ -279,7 +276,7 @@ function DeviceSite() {
                                     <Typography variant="h5" gutterBottom>
                                         {device.title}
                                     </Typography>
-                                    <Typography variant="body1" paragraph sx={{ whiteSpace: 'pre-line' }}>
+                                    <Typography variant="body1" sx={{ whiteSpace: 'pre-line' }}>
                                         {device.description}
                                     </Typography>
 

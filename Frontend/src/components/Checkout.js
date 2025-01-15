@@ -5,35 +5,35 @@ import {
     DialogContent,
     DialogTitle,
     Button,
-    Box, Typography
+    Box,
+    Typography,
 } from "@mui/material";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import DatePicker from "./DatePicker";
 import FetchBackend from "../helper/BackendHelper";
 import { differenceInDays } from "date-fns";
 
-
 function CheckoutDialog({ open, handleCheckoutClose, device, authUser }) {
     const [step, setStep] = useState(1);
-    const defaultStartDate = "2025-01-10";
-    const defaultEndDate = "2025-01-11";
+
+    const [bookedRanges] = useState([
+        { startDate: "2025-01-10", endDate: "2025-01-11" },
+        { startDate: "2025-01-15", endDate: "2025-01-20" },
+    ]);
+
     const calculateDateDifference = (startDate, endDate) => {
         return differenceInDays(new Date(endDate), new Date(startDate));
     };
+
     const [newFinance, setNewFinance] = useState({
         accountId: authUser ? authUser.id : null,
         deviceId: device ? device.id : null,
-        amount: device
-            ? (calculateDateDifference(defaultStartDate, defaultEndDate) * parseFloat(device.price))
-                .toFixed(2)
-                .toString()
-            : "01.00",
+        amount: "0.00",
         processed: false,
-        startDate: defaultStartDate,
-        endDate: defaultEndDate,
+        startDate: null,
+        endDate: null,
     });
 
-    // Recalculate amount on date change
     const updateDates = (startDate, endDate) => {
         const days = calculateDateDifference(startDate, endDate);
         const updatedAmount = (days * parseFloat(device.price)).toFixed(2).toString();
@@ -47,15 +47,13 @@ function CheckoutDialog({ open, handleCheckoutClose, device, authUser }) {
 
     const handleNext = () => {
         setStep(2);
-        updateDates("2025-01-10", "2025-01-11")
     };
 
     const handleBack = () => {
         setStep(1);
-    }
+    };
 
     const handleTransaction = () => {
-        console.log("Post finance" + authUser);
         if (authUser) {
             FetchBackend("POST", "finance/add", newFinance)
                 .then((res) => res.json())
@@ -81,16 +79,14 @@ function CheckoutDialog({ open, handleCheckoutClose, device, authUser }) {
                 {step === 1 && (
                     <Box display="flex" justifyContent="center" alignItems="center">
                         <DatePicker
-                            startDate={newFinance.startDate}
-                            endDate={newFinance.endDate}
-                            onChange={(startDate, endDate) => updateDates(startDate, endDate)}
+                            bookedRanges={bookedRanges}
+                            updateDates={updateDates}
                         />
                     </Box>
                 )}
 
                 {step === 2 && (
                     <Box display="flex" justifyContent="space-between" alignItems="flex-start" padding={2}>
-                        {/* Order Details Section */}
                         <Box>
                             <Typography variant="h6">Order Details</Typography>
                             <Typography variant="body1" gutterBottom>
@@ -110,7 +106,6 @@ function CheckoutDialog({ open, handleCheckoutClose, device, authUser }) {
                             </Typography>
                         </Box>
 
-                        {/* PayPal Integration */}
                         <Box sx={{ display: "flex", alignItems: "center", marginTop: "auto", marginBottom: "0px" }}>
                             <PayPalScriptProvider
                                 options={{
@@ -126,7 +121,7 @@ function CheckoutDialog({ open, handleCheckoutClose, device, authUser }) {
                                             purchase_units: [
                                                 {
                                                     amount: {
-                                                        value: newFinance.amount, // Set the correct price here
+                                                        value: newFinance.amount,
                                                     },
                                                 },
                                             ],
@@ -146,7 +141,6 @@ function CheckoutDialog({ open, handleCheckoutClose, device, authUser }) {
             </DialogContent>
 
             <DialogActions>
-                {/* Cancel Button */}
                 <Button
                     onClick={() => {
                         handleCheckoutClose();
@@ -157,7 +151,6 @@ function CheckoutDialog({ open, handleCheckoutClose, device, authUser }) {
                     Cancel
                 </Button>
 
-                {/* Navigation Buttons */}
                 {step === 1 && (
                     <Button onClick={handleNext} variant="contained">
                         Continue

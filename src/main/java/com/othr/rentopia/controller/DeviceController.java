@@ -454,6 +454,22 @@ public class DeviceController {
 		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 	}
 
+    @GetMapping(path = "/bookedDates/{deviceId}")
+    public ResponseEntity<List<Map<String, Object>>> getBookedDates(@PathVariable("deviceId") Long deviceId) {
+        List<Map<String, Object>> bookedDates = new ArrayList<>();
+
+        List<Finance> finances = financeService.getBookedDates(deviceId);
+        for (Finance finance : finances) {
+            Map<String, Object> dateMap = new HashMap<>();
+            dateMap.put("startDate", finance.getStartDate());
+            dateMap.put("endDate", finance.getEndDate());
+            dateMap.put("key", "selection");
+            bookedDates.add(dateMap);
+        }
+
+        return new ResponseEntity<>(bookedDates, HttpStatus.OK);
+    }
+
 	private double priceToDouble(Object priceObj) {
 
 		if (priceObj instanceof String) {

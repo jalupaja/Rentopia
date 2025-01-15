@@ -56,4 +56,21 @@ public class FinanceServiceImpl implements FinanceService {
 
 		return devices;
 	}
+
+	@Override
+	public List<Finance> getBookedDates(Long deviceId) {
+		List<Finance> bookedDates = null;
+
+		String query = "SELECT f From Finance f where f.deviceId = :deviceId";
+		try {
+			bookedDates = entityManager
+					.createQuery(query, Finance.class)
+					.setParameter("deviceId", deviceId)
+					.getResultList();
+		} catch (NoResultException e) {
+
+		}
+
+		return bookedDates;
+	}
 }
