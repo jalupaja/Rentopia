@@ -1,7 +1,6 @@
 package com.othr.rentopia.controller;
 
 import com.othr.rentopia.model.Account;
-import com.othr.rentopia.model.Device;
 import com.othr.rentopia.model.Ticket;
 import com.othr.rentopia.service.AccountServiceImpl;
 import com.othr.rentopia.service.TicketServiceImpl;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @RestController()
 @RequestMapping("api/ticket")
@@ -45,7 +43,7 @@ public class TicketController {
     }
 
     @PostMapping("{ticketId}")
-    public String updateTicket(@RequestBody String ticketInfo){
+    public String closeTicket(@RequestBody String ticketInfo){
         JSONObject response = new JSONObject();
         response.put("success", false);
 
@@ -55,8 +53,20 @@ public class TicketController {
         }
 
         if(ticket.getId() != null && ticket.getId() >= 0){
+
+            ticket.setStatus(Ticket.Status.CLOSED);
             try{
-                ticketService.updateTicket(ticket);
+
+                if(ticket.getCategory().equals(Ticket.Category.delete_account)){
+                    Long userID = ticket.getOwner().getId();
+                    ticket.setOwner(null);
+                    ticketService.updateTicket(ticket);
+                    accountService.removeAccount(userID);
+                }
+                else{
+                    ticketService.updateTicket(ticket);
+                }
+
             } catch(Exception e){
                 System.out.println("Updating ticket threw exception : "+ e.getMessage());
                 return response.toString();

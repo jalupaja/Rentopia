@@ -4,6 +4,16 @@ import {useTranslation} from "react-i18next";
 
 function ProfileOverview({user = {}}){
     const { t } = useTranslation("", { keyPrefix: "profile" });
+
+    console.log(user.name);
+    if(!user.name){
+        user = {
+            name : "",
+            email : "",
+            location : {country : ""},
+            company : ""
+        }
+    }
     return (
         <Box sx={{display : "flex", flexDirection : "row"}}>
             <Avatar

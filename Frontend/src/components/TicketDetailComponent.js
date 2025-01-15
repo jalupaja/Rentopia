@@ -149,7 +149,7 @@ function TicketDetail({ticketInfo, handleChange, handleTicketAction, adm = false
                 Ticket {ticketInfo.id ? "#"+ticketInfo.id : ""}
             </Typography>
             <Typography variant="button" gutterBottom variant="h5">
-                {t("owner")}: {ticketInfo.owner.name}
+                {t("owner")}: {ticketInfo.owner ? ticketInfo.owner.name : "-"}
             </Typography>
             <Typography variant="button" gutterBottom variant="h5">
                 {t("status")}: {ticketInfo.status}
