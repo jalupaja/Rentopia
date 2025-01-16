@@ -178,7 +178,7 @@ function DeviceSite() {
 
                                         {/* Device Rating */}
                                         <Box display="flex" alignItems="center" mb={2}>
-                                            <Tooltip title={device.rating} arrow>
+                                          <Tooltip title={device.rating.toFixed(1)} arrow>
                                                 <div>
                                                     <Rating
                                                         value={device.rating}
@@ -190,7 +190,7 @@ function DeviceSite() {
                                             </Tooltip>
 
                                             <Typography variant="body2" sx={{ ml: 1 }}>
-                                                ({device.amountRatings.toFixed(1)})
+                                                ({device.amountRatings})
                                             </Typography>
                                         </Box>
 
