@@ -47,7 +47,7 @@
         "street": "Street",
         "postal_code": "Postal code",
         "city": "City",
-        "country": "City",
+        "country": "Country",
         "create_account": "Create Account",
         "login": "Login"
     },

@@ -351,13 +351,8 @@ public class UserController {
 
         authResponse.setSuccess(true);
 
-        Authentication authentication = new UsernamePasswordAuthenticationToken(newAccount, null,
-                newAccount.getAuthorities());
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        String token = JwtProvider.generateToken(authentication, newAccount.getId());
 
         authResponse.setMessage("Registration successful");
-        authResponse.setJwt(token);
         return new ResponseEntity<AuthResponse>(authResponse, HttpStatus.OK);
     }
 

@@ -11,7 +11,8 @@ import {
     IconButton,
     InputAdornment,
     Stack,
-    TextField, Typography, RadioGroup, Radio, FormControlLabel, Grid2
+    TextField, Typography, RadioGroup, Radio, FormControlLabel, Grid2,
+    FormHelperText
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import Appbar from "../components/Appbar.js";
@@ -122,28 +123,25 @@ function RegisterSite() {
     const [userInfo, setUserInfo] = React.useState(defaultUserInfo);
     const postSubmitValidation = (userInfo) => {
         //all necessary values nonempty
+        let error = false;
         for (let attribute in userInfo) {
             if (attribute === "company" && userInfo["usage"].value === "private") {
-
                 continue;
             }
 
             if (!userInfo[attribute].value) {
-                return false;
+                setError(attribute,attribute + t("error_empty"));
+                error = true;
             }
+        }
+
+        if(error){
+            return false;
         }
 
         //passwords identical
         if (userInfo.password1.value !== userInfo.password2.value) {
-            setUserInfo({
-                ...userInfo,
-                ["password2"]: {
-                    ...userInfo["password2"],
-                    errorMessage: t("error_identical"),
-                    error: true
-                }
-            });
-
+            setError("password2", t("error_identical"));
             return false;
         }
         return true;
@@ -161,16 +159,16 @@ function RegisterSite() {
             FetchBackend('POST', 'register', registerData)
                 .then(response => response.json())
                 .then(data => {
-                    if (data.status) {
+                    if (data.success) {
                         setRegisterStatusLabel(<ResponsePopup reason={"success"} message={t("succ_register")} />);
-                        Cookies.set(JWT_TOKEN, data.jwt);
-                        navigation("/");
+                        navigation("/login");
                     }
                     else {
                         setRegisterStatusLabel(<ResponsePopup reason={"error"} message={data.message} />);
                     }
                 })
                 .catch((error) => {
+                    console.log(error);
                     setRegisterStatusLabel(<ResponsePopup message={t("error_unknown")} reason={"error"} />);
                 });
         };
@@ -195,6 +193,18 @@ function RegisterSite() {
             }
         });
     };
+    const setError = (attributeName, errorMessage) => {
+        setUserInfo(prevState =>{
+            return {
+                ...prevState,
+                [attributeName]: {
+                    ...prevState[attributeName],
+                    errorMessage: errorMessage,
+                    error: true
+                }
+            }
+        });
+    }
 
     const [registerStatusLabel, setRegisterStatusLabel] = React.useState(null);
     return (
@@ -210,6 +220,7 @@ function RegisterSite() {
                     name="usage" value={userInfo.usage.value}>
                     <FormControlLabel value="private" control={<Radio />} label={t("private")} required />
                     <FormControlLabel value="commercial" control={<Radio />} label={t("commercial")} required />
+                    <FormHelperText error={userInfo.usage.error} open={userInfo.usage.error}>{userInfo.usage.errorMessage}</FormHelperText>
                 </RadioGroup>
                 <TextField required sx={{ ...InputFieldStyle, display: userInfo.usage.value === "commercial" ? "inherit" : "none" }}
                     id="companyTextField" label={t("company_name")}
