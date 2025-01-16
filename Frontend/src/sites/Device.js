@@ -16,9 +16,10 @@ import { useEffect, useState } from "react";
 import * as React from "react";
 import Appbar from "../components/Appbar.js";
 import { useTranslation } from "react-i18next";
-import {StartChatFromDevice} from "../helper/ChatHelper";
-import DatePicker from "../components/DatePicker";
 import CheckoutDialog from "../components/Checkout";
+import { DateRangePicker } from 'react-date-range';
+import 'react-date-range/dist/styles.css'; // main style file
+import 'react-date-range/dist/theme/default.css'; // theme css file
 
 const boxStyle = {
     mt: 4,
@@ -65,6 +66,11 @@ function DeviceSite() {
         setCheckoutOpen(false);
     };
     const [bookedDates, setBookedDates] = useState([]);
+    const selectionRange = {
+        startDate: new Date(),
+        endDate: new Date(),
+        key: 'selection',
+    }
 
     useEffect(() => {
         if (JWTTokenExists()) {
@@ -264,7 +270,25 @@ function DeviceSite() {
                                             </Box>
 
                                             {/*Calendar*/}
-                                            <DatePicker bookedRanges={bookedDates}/>
+                                            <Box sx={{ position: "relative", justifySelf: "center" }}>
+                                                <style>
+                                                    {`
+                                                        .rdrDefinedRangesWrapper {
+                                                            display: none;
+                                                        }
+                                                        .rdrDateDisplayWrapper {
+                                                            display: none;
+                                                        }
+                                                        .rdrMonth {
+                                                            pointer-events: none;
+                                                        }
+                                                    `}
+                                                </style>
+                                                <DateRangePicker
+                                                    ranges={[selectionRange]}
+                                                    disabledDates={bookedDates}
+                                                />
+                                            </Box>
                                         </Box>
                                     </Grid>
                                 </Grid>
@@ -293,6 +317,7 @@ function DeviceSite() {
                         handleCheckoutClose={handleCheckoutClose}
                         device={device}
                         authUser={authUser}
+                        bookedRanges={bookedDates}
                     />
                 ) : ('')}
             </Box>

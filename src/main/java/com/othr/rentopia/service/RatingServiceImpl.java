@@ -59,11 +59,10 @@ public class RatingServiceImpl implements RatingService {
 		String query = "SELECT r.rating FROM Rating r WHERE deviceId = :deviceId";
 
 		try {
-			List<Integer> ratings = entityManager
-				.createQuery(query, Integer.class)
-				.setParameter("deviceId", deviceId)
-				.getResultList();
-			return ratings;
+            return entityManager
+                .createQuery(query, Integer.class)
+                .setParameter("deviceId", deviceId)
+                .getResultList();
 		} catch (NoResultException e) {
 			return null;
 		}

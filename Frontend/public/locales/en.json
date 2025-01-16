@@ -71,7 +71,8 @@
         "bookmarks": "Bookmarks",
         "rent_history": "Rent History",
         "insert_device": "Insert Device Name here",
-        "tool_nr": "Tool Nr "
+        "tool_nr": "Tool Nr ",
+        "country": "Country"
     },
     "helpcenter": {
         "error_unavailable": "Help Center is currently not available. Please try again",
