@@ -99,7 +99,7 @@ public class DeviceController {
         Long principalId = accountService.getId(principalEmail);
 
         // if device does not exist or if current logged in person is not its owner
-        if (device_ownerId == null || device_ownerId != principalId || !accountService.isAdmin(principalId))
+        if (device_ownerId == null || (device_ownerId != principalId && !accountService.isAdmin(principalId)))
             return false;
 
         return true;
