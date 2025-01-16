@@ -457,31 +457,4 @@ public class DebugController {
 
         emailService.sendEmail(mail);
     }
-
-    @GetMapping(value = "update")
-    public void onDevUpdate() {
-        // TODO move to DeviceController
-        Long deviceId = 1L; // TODO change
-
-        List<Bookmark> bookmarks = bookmarkService.getUserBookmarksByDevice(deviceId);
-
-        Device device;
-        Account user;
-        for (Bookmark b : bookmarks) {
-            device = deviceService.getDevice(b.getDeviceId());
-            user = accountService.getAccount(b.getOwnerId());
-
-            String subject = "🚀 Your Bookmarked Device Just Got Better! Check Out the Latest Update!";
-            String body = "<h1>Good news, " + user.getName() + "!</h1>\n"
-                + "<p>One of your bookmarked devices has just been updated! 🎉</p>\n"
-                + "<p><strong>Device:</strong> " + device.getTitle() + "</p>\n"
-                + "<p>We think you'll love these new improvements! Click the button below to see all the details and make the most of the update.</p>\n"
-                + "<a href=\"http://localhost:3000/device/" + device.getId() + "\" class=\"button\">View Update</a>\n";
-
-            EmailService.Email mail = new EmailService.Email(null, user.getEmail(), null, null);
-            mail.loadTemplate(subject, body);
-
-            emailService.sendEmail(mail);
-        }
-    }
 }
