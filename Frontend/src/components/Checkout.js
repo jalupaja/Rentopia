@@ -9,17 +9,14 @@ import {
     Typography,
 } from "@mui/material";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
-import DatePicker from "./DatePicker";
 import FetchBackend from "../helper/BackendHelper";
-import { differenceInDays } from "date-fns";
+import {differenceInDays, format} from "date-fns";
+import 'react-date-range/dist/styles.css'; // main style file
+import 'react-date-range/dist/theme/default.css'; // theme css file
+import { DateRangePicker } from 'react-date-range';
 
-function CheckoutDialog({ open, handleCheckoutClose, device, authUser }) {
+function CheckoutDialog({ open, handleCheckoutClose, device, authUser, bookedRanges = [] }) {
     const [step, setStep] = useState(1);
-
-    const [bookedRanges] = useState([
-        { startDate: "2025-01-10", endDate: "2025-01-11" },
-        { startDate: "2025-01-15", endDate: "2025-01-20" },
-    ]);
 
     const calculateDateDifference = (startDate, endDate) => {
         return differenceInDays(new Date(endDate), new Date(startDate));
@@ -34,7 +31,14 @@ function CheckoutDialog({ open, handleCheckoutClose, device, authUser }) {
         endDate: null,
     });
 
-    const updateDates = (startDate, endDate) => {
+    const selectionRange = {
+        startDate: newFinance.startDate || new Date(),
+        endDate: newFinance.endDate || new Date(),
+        key: 'selection',
+    };
+
+    const updateDates = (ranges) => {
+        const { startDate, endDate } = ranges.selection; // Access the selection range
         const days = calculateDateDifference(startDate, endDate);
         const updatedAmount = (days * parseFloat(device.price)).toFixed(2).toString();
         setNewFinance((prev) => ({
@@ -44,6 +48,7 @@ function CheckoutDialog({ open, handleCheckoutClose, device, authUser }) {
             amount: updatedAmount,
         }));
     };
+
 
     const handleNext = () => {
         setStep(2);
@@ -78,17 +83,33 @@ function CheckoutDialog({ open, handleCheckoutClose, device, authUser }) {
             <DialogContent>
                 {step === 1 && (
                     <Box display="flex" justifyContent="center" alignItems="center">
-                        <DatePicker
-                            bookedRanges={bookedRanges}
-                            updateDates={updateDates}
-                        />
+                        <Box sx={{ position: "relative", justifySelf: "center" }}>
+                            <style>
+                                {`
+                                    .rdrDefinedRangesWrapper {
+                                        display: none;
+                                    }
+                                    .rdrDateDisplayWrapper {
+                                        display: none;
+                                    }
+                                    .rdrMonth {
+                                    }
+                                `}
+                            </style>
+                            <DateRangePicker
+                                ranges={[selectionRange]}
+                                onChange={updateDates} // This will pass the `ranges` object
+                                disabledDates={bookedRanges}
+                                minDate={new Date()}
+                            />
+                        </Box>
                     </Box>
                 )}
 
                 {step === 2 && (
                     <Box display="flex" justifyContent="space-between" alignItems="flex-start" padding={2}>
                         <Box>
-                            <Typography variant="h6">Order Details</Typography>
+                            <Typography variant="h5">Order Details</Typography>
                             <Typography variant="body1" gutterBottom>
                                 Product: {device.title}
                             </Typography>
@@ -102,7 +123,7 @@ function CheckoutDialog({ open, handleCheckoutClose, device, authUser }) {
                                 Total Price: {newFinance.amount} €
                             </Typography>
                             <Typography variant="body1">
-                                Date Range: {newFinance.startDate} -> {newFinance.endDate}
+                                Date Range: {newFinance.startDate ? format(newFinance.startDate, 'yyyy-MM-dd') : 'N/A'} -> {newFinance.endDate ? format(newFinance.endDate, 'yyyy-MM-dd') : 'N/A'}
                             </Typography>
                         </Box>
 

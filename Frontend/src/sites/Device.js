@@ -270,23 +270,24 @@ function DeviceSite() {
                                             </Box>
 
                                             {/*Calendar*/}
-                                            <Box sx={{ position: "relative", justifySelf: "center" }}>
+                                            <Box className="disable-month-pointer" sx={{ position: "relative", justifySelf: "center" }}>
                                                 <style>
                                                     {`
-                                                        .rdrDefinedRangesWrapper {
-                                                            display: none;
-                                                        }
-                                                        .rdrDateDisplayWrapper {
-                                                            display: none;
-                                                        }
-                                                        .rdrMonth {
+                                                        .disable-month-pointer .rdrMonth {
                                                             pointer-events: none;
+                                                        }
+                                                        .disable-month-pointer .rdrDefinedRangesWrapper {
+                                                            display: none;
+                                                        }
+                                                        .disable-month-pointer .rdrDateDisplayWrapper {
+                                                            display: none;
                                                         }
                                                     `}
                                                 </style>
                                                 <DateRangePicker
                                                     ranges={[selectionRange]}
                                                     disabledDates={bookedDates}
+                                                    minDate={new Date()}
                                                 />
                                             </Box>
                                         </Box>
