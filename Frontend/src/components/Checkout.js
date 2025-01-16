@@ -9,7 +9,7 @@ import {
     Typography,
 } from "@mui/material";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
-import FetchBackend from "../helper/BackendHelper";
+import FetchBackend, {JWTTokenExists} from "../helper/BackendHelper";
 import {differenceInDays, format} from "date-fns";
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
@@ -17,6 +17,8 @@ import { DateRangePicker } from 'react-date-range';
 
 function CheckoutDialog({ open, handleCheckoutClose, device, authUser, bookedRanges = [] }) {
     const [step, setStep] = useState(1);
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
 
     const calculateDateDifference = (startDate, endDate) => {
         return differenceInDays(new Date(endDate), new Date(startDate));
@@ -29,6 +31,7 @@ function CheckoutDialog({ open, handleCheckoutClose, device, authUser, bookedRan
         processed: false,
         startDate: null,
         endDate: null,
+        dateDiff: null,
     });
 
     const selectionRange = {
@@ -38,20 +41,25 @@ function CheckoutDialog({ open, handleCheckoutClose, device, authUser, bookedRan
     };
 
     const updateDates = (ranges) => {
-        const { startDate, endDate } = ranges.selection; // Access the selection range
-        const days = calculateDateDifference(startDate, endDate);
+        const { startDate, endDate } = ranges.selection;
+        const days = (startDate === endDate ? 1 : calculateDateDifference(startDate, endDate))
         const updatedAmount = (days * parseFloat(device.price)).toFixed(2).toString();
         setNewFinance((prev) => ({
             ...prev,
             startDate,
             endDate,
             amount: updatedAmount,
+            dateDiff: days,
         }));
     };
 
 
     const handleNext = () => {
-        setStep(2);
+        if(newFinance.dateDiff != null) {
+            setStep(2);
+        } else {
+            window.alert("Please Select a Date!");
+        }
     };
 
     const handleBack = () => {
@@ -59,9 +67,9 @@ function CheckoutDialog({ open, handleCheckoutClose, device, authUser, bookedRan
     };
 
     const handleTransaction = () => {
-        if (authUser) {
-            FetchBackend("POST", "finance/add", newFinance)
-                .then((res) => res.json())
+        if (JWTTokenExists()) {
+            FetchBackend('POST', 'finance/add', newFinance)
+                .then(res => res.json())
                 .then((data) => console.log(data))
                 .catch((err) => console.log(err));
         }
@@ -98,9 +106,9 @@ function CheckoutDialog({ open, handleCheckoutClose, device, authUser, bookedRan
                             </style>
                             <DateRangePicker
                                 ranges={[selectionRange]}
-                                onChange={updateDates} // This will pass the `ranges` object
+                                onChange={updateDates}
                                 disabledDates={bookedRanges}
-                                minDate={new Date()}
+                                minDate={tomorrow}
                             />
                         </Box>
                     </Box>
@@ -117,7 +125,7 @@ function CheckoutDialog({ open, handleCheckoutClose, device, authUser, bookedRan
                                 Price (per day): {device.price} €
                             </Typography>
                             <Typography variant="body1" gutterBottom>
-                                Total Days: {calculateDateDifference(newFinance.startDate, newFinance.endDate)}
+                                Total Days: {newFinance.dateDiff}
                             </Typography>
                             <Typography variant="body1">
                                 Total Price: {newFinance.amount} €
