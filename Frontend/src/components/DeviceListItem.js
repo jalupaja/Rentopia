@@ -19,10 +19,10 @@ function DeviceListItem({DeviceName="Test Tool",
     const navigate = useNavigate();
     const [rating, setRating] = React.useState(0);
 
-    const handleSaveRating = () => {
-        FetchBackend('POST', 'rating/rate/' + DeviceId, rating)
-            .catch((error) => {console.log(error)})
-    }
+    const handleSaveRating = (newRating) => {
+        FetchBackend('POST', 'rating/rate/' + DeviceId, newRating)
+            .catch((error) => console.log(error));
+    };
 
     useEffect(() => {
         FetchBackend('GET', 'rating/' + DeviceId, null)
@@ -60,7 +60,8 @@ function DeviceListItem({DeviceName="Test Tool",
                         name="simple-controlled"
                         value={rating}
                         onChange={(event, newValue) => {
-                            handleSaveRating(); setRating(newValue);
+                            setRating(newValue);
+                            handleSaveRating(newValue);
                         }}
                     />
                 ))}
