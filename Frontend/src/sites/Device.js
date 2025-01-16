@@ -8,7 +8,9 @@ import {
     Avatar,
     ImageListItem,
     Tooltip,
+    Fab,
 } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
 import { useNavigate, useParams } from "react-router-dom";
 import Footer from "../components/Footer.js";
 import FetchBackend, { JWTTokenExists } from "../helper/BackendHelper.js";
@@ -93,6 +95,18 @@ function DeviceSite() {
             }
             setDevice({ ...device, isBookmarked: !device.isBookmarked });
         }
+    }
+
+
+    const btnDel = () => {
+        FetchBackend('POST', 'device/remove/' + device.id, null)
+            .then(response => response.json())
+            .then(data => { data ? setDeviceList(data) : console.log("error " + data);})
+            .catch((error) => {
+                console.log(error);
+            });
+
+            navigate(`/`);
     }
 
     const navigation = useNavigate();
@@ -255,13 +269,30 @@ function DeviceSite() {
                                     {device.description}
                                 </Typography>
 
-                            </Box>
+                             </Box>
                         </Grid>
                     </Grid>
 
                 </Container>
             </Box>
             <Box flex={"auto"} />
+            {authUser && authUser.role === "ADMIN" && (
+              <Fab
+                onClick={() => btnDel()}
+                sx={{
+                    position: 'fixed',
+                    bottom: 16,
+                    right: 16,
+                    backgroundColor: 'red',
+                    boxShadow: 5,
+                    '&:hover': {
+                        backgroundColor: 'darkred',
+                    },
+                }}
+                >
+                <DeleteIcon />
+              </Fab>
+            )}
             <Footer />
         </Box>
     );
