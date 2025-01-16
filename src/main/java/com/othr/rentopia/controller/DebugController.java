@@ -118,8 +118,7 @@ public class DebugController {
             u4.setLocation(l4);
             accountService.saveAccount(u4);
 
-            String[] titles = { "Screw Drivers", "Laptop", "Portable Speaker", "3D Printer", "Projector",
-                                "Drones with Camera",
+            String[] titles = { "Screw Drivers", "Laptop", "Portable Speaker", "3D Printer", "Projector", "Drones with Camera",
                                 "GoPro Camera", "Electric Guitar", "Laser Cutter", "Smartphone", "Tablet", "Smartwatch",
                                 "Bluetooth Headphones", "Digital Camera", "VR Headset", "Gaming Console", "Microwave Oven",
                                 "Electric Scooter", "Hoverboard", "Air Purifier", "Coffee Maker", "Electric Kettle", "Smart Home Hub",
@@ -154,18 +153,14 @@ public class DebugController {
                 "Halten Sie Ihr Zuhause sauber mit einem tragbaren Staubsauger. \nKompakt, leistungsstark und praktisch. \nJetzt mieten und Sauberkeit genießen!"
             };
 
-            double[] prices = {
-                0.0, 0.0, 15.99, 45.00, 0.0, 30.50, 0.0, 80.25, 55.99, 0.0,
-                25.00, 70.00, 0.0, 10.99, 60.00, 0.0, 50.00, 95.00, 0.0, 40.00,
-                20.00, 0.0, 85.99, 75.50, 0.0, 65.00, 0.0
-            };
+            double[] prices = {2.50, 5.00, 3.00, 15.00, 10.00, 25.00, 20.00, 8.00, 30.00, 7.00, 5.00, 4.00, 3.50, 7.50, 15.00, 6.00, 2.00, 10.00, 6.00, 4.00, 2.50, 1.50, 3.00, 20.00, 2.00, 5.00};
 
             Long ownerId = u4.getId();
             Location location = u4.getLocation();
             for (int i = 1; i <= 25; i++) {
                 String title = titles[i - 1];
                 String description = descriptions[i - 1];
-                Double price = prices[i % prices.length];
+                Double price = prices[i];
                 boolean isPublic = (i < 5) ? false : true;
 
                 Device device = new Device();
