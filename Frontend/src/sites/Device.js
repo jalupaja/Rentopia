@@ -190,7 +190,7 @@ function DeviceSite() {
                                             </Tooltip>
 
                                             <Typography variant="body2" sx={{ ml: 1 }}>
-                                                ({device.amountRatings})
+                                                ({device.amountRatings.toFixed(1)})
                                             </Typography>
                                         </Box>
 
