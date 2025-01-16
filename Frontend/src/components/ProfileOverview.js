@@ -5,7 +5,6 @@ import {useTranslation} from "react-i18next";
 function ProfileOverview({user = {}}){
     const { t } = useTranslation("", { keyPrefix: "profile" });
 
-    console.log(user.name);
     if(!user.name){
         user = {
             name : "",

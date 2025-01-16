@@ -65,6 +65,7 @@
         "prename": "Prename",
         "company": "Company",
         "email": "Email",
+        "country" : "Country",
         "edit_profile": "Edit Profile",
         "profile_tabs": "Profile Tabs",
         "your_tools": "Your Tools",
@@ -102,7 +103,9 @@
         "owner" : "Owner",
         "category_general" : "general",
         "title_error_input" : "Title must not be empty",
-        "status_new" : "New"
+        "status_new" : "New",
+        "category_delete_account" : "Request deletion of your account",
+        "delete_user" : "Delete account of user"
     },
     "profile_menu": {
         "admin_tickesystem": "ADM Ticket System",

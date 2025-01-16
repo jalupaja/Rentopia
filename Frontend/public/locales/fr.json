@@ -100,7 +100,9 @@
         "owner" : "Propriétaire",
         "category_general" : "général",
         "title_error_input" : "Le titre ne doit pas être vide",
-        "status_new" : "Nouveau"
+        "status_new" : "Nouveau",
+        "category_delete_account" : "Demander la suppression de votre compte",
+        "delete_user" : "Supprimer le compte de l'utilisateur"
     },
     "profile_menu": {
         "admin_tickesystem": "Système de tickets ADM",

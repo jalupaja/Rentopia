@@ -209,7 +209,7 @@ function TicketDetail({ticketInfo, handleChange, handleTicketAction, adm = false
                     {t("delete_ticket")}
                 </Button>
                 <Button variant="contained" sx={{marginRight : "1%", color: "secondary"}}
-                        style={{display: adm ? "inherit": "none"}}
+                        style={{display: (adm && ticketInfo.status!=="CLOSED") ? "inherit": "none"}}
                         onClick={handleCloseTicket}>
                     { ticketInfo.category === "general" ? t("close_ticket") : t("delete_user")}
                 </Button>

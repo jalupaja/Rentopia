@@ -100,7 +100,9 @@
         "owner" : "Inhaber",
         "category_general" : "Allgemein",
         "title_error_input" : "Titel darf nicht leer sein",
-        "status_new" : "Neu"
+        "status_new" : "Neu",
+        "category_delete_account" : "Anfrage für Account Löschung",
+        "delete_user" : "Lösche User Account"
     },
     "profile_menu": {
         "admin_tickesystem": "ADM-Ticketsystem",
