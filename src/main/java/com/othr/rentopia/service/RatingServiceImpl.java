@@ -20,14 +20,14 @@ public class RatingServiceImpl implements RatingService {
     @Override
     @Transactional
     public void saveRating(Rating rating) {
-	// INSERT or UPDATE
-	entityManager.merge(rating);
+		// INSERT or UPDATE
+		entityManager.merge(rating);
     }
 
     @Override
     @Transactional
     public boolean removeRating(Long ownerId, Long deviceId) {
-	String query = "DELETE FROM Rating WHERE ownerId = :ownerId AND deviceId = :deviceId";
+	String query = "DELETE FROM Rating r WHERE r.accountId = :ownerId AND deviceId = :deviceId";
 	try {
 	    entityManager.createQuery(query)
 		.setParameter("ownerId", ownerId)
@@ -42,7 +42,7 @@ public class RatingServiceImpl implements RatingService {
 
     @Override
     public boolean hasRating(Long ownerId, Long deviceId) {
-	String query = "SELECT r FROM Rating r WHERE ownerId = :ownerId AND deviceId = :deviceId";
+	String query = "SELECT r FROM Rating r WHERE r.accountId = :ownerId AND deviceId = :deviceId";
 	try {
 	    entityManager.createQuery(query)
 		.setParameter("ownerId", ownerId)
@@ -56,16 +56,32 @@ public class RatingServiceImpl implements RatingService {
 
     @Override
     public List<Integer> getRatings(Long deviceId) {
-	String query = "SELECT r.rating FROM Rating r WHERE deviceId = :deviceId";
+		String query = "SELECT r.rating FROM Rating r WHERE deviceId = :deviceId";
 
-	try {
-	    List<Integer> ratings = entityManager
-		    .createQuery(query, Integer.class)
-		    .setParameter("deviceId", deviceId)
-		    .getResultList();
-	    return ratings;
-	} catch (NoResultException e) {
-	    return null;
-	}
+		try {
+			List<Integer> ratings = entityManager
+				.createQuery(query, Integer.class)
+				.setParameter("deviceId", deviceId)
+				.getResultList();
+			return ratings;
+		} catch (NoResultException e) {
+			return null;
+		}
     }
+
+	@Override
+	public Integer getRating(Long ownerId, Long deviceId) {
+		String query = "SELECT r.rating FROM Rating r WHERE r.accountId = :ownerId AND deviceId = :deviceId";
+
+		try {
+            return entityManager
+                    .createQuery(query, Integer.class)
+                    .setParameter("deviceId", deviceId)
+                    .setParameter("ownerId", ownerId)
+                    .getSingleResult();
+
+		} catch (NoResultException e) {
+			return null;
+		}
+	}
 }
