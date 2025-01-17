@@ -73,7 +73,7 @@
         "rent_history": "Rent History",
         "insert_device": "Insert Device Name here",
         "tool_nr": "Tool Nr ",
-        "country": "Country"
+        "country": "Country",
         "general_error" : "An error occurred, please try again.",
         "passwords_dont_match" : "Passwords do not match",
         "input_empty" : "Input fields cannot be empty",
