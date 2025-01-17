@@ -20,7 +20,6 @@ export function GetAuthUser(){
         if(JWTTokenExists()){
             FetchBackend('GET', 'user/me',null)
                 .then(response => {
-                    console.log(response);
                     if(response.ok){
                         return  response.json();
                     }
