@@ -10,5 +10,6 @@ public interface RatingService {
     public boolean removeRating(Long accountId, Long deviceId);
     public boolean hasRating(Long accountId, Long deviceId);
     public List<Integer> getRatings(Long deviceId);
+    public Integer getRating(Long accountId, Long deviceId);
 }
 

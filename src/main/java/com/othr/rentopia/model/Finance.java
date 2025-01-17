@@ -26,4 +26,10 @@ public class Finance {
 
     @Column(nullable = false)
     private Boolean processed = false;
+
+    @Column
+    private LocalDateTime startDate;
+
+    @Column
+    private LocalDateTime endDate;
 }

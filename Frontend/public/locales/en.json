@@ -15,7 +15,8 @@
         "bookmarked": "Bookmarked",
         "add_bookmark": "Add to Bookmarks",
         "rent": "Rent Now",
-        "StartConversation" : "Start Conversation"
+        "StartConversation" : "Start Conversation",
+        "day": "Day"
     },
     "login": {
         "error_password": "Wrong email or password!",
@@ -72,6 +73,7 @@
         "rent_history": "Rent History",
         "insert_device": "Insert Device Name here",
         "tool_nr": "Tool Nr ",
+        "country": "Country"
         "general_error" : "An error occurred, please try again.",
         "passwords_dont_match" : "Passwords do not match",
         "input_empty" : "Input fields cannot be empty",
