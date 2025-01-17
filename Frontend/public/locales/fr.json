@@ -54,7 +54,8 @@
         "succ_mail": "E-mail envoyé avec succès. Veuillez vérifier votre boîte mail.",
         "forgot_password": "Mot de passe oublié?",
         "write_mail": "Entrez votre e-mail pour réinitialiser votre mot de passe:",
-        "send_mail": "Envoyer un e-mail"
+        "send_mail": "Envoyer un e-mail",
+        "no_existent_user" : "L'utilisateur avec cet email n'existe pas"
     },
     "profile": {
         "user": "Utilisateur",
@@ -68,7 +69,20 @@
         "bookmarks": "Favoris",
         "rent_history": "Historique des locations",
         "insert_device": "Entrez le nom de l'appareil ici",
-        "tool_nr": "Outil Nr "
+        "tool_nr": "Outil Nr ",
+        "general_error" : "Une erreur s'est produite, veuillez réessayer.",
+        "passwords_dont_match" : "Les mots de passe ne correspondent pas",
+        "input_empty" : "Les champs de saisie ne peuvent pas être vides",
+        "change_password_success" : "Le changement du mot de passe a réussi",
+        "password_invalid" : "Votre ancien mot de passe n'est pas correct",
+        "old_password" : "ancien mot de passe",
+        "new_password" : "nouveau mot de passe",
+        "confirm_password" : "Confirmez le mot de passe",
+        "forgot_password" : "Mot de passe oublié ?",
+        "change_password" : "Changer le mot de passe",
+        "password_dialog_title" : "Changez votre mot de passe",
+        "change" : "Change",
+        "cancel" : "Annuler"
     },
     "helpcenter": {
         "error_unavailable": "Le centre d'aide est actuellement indisponible. Veuillez réessayer.",
@@ -104,5 +118,23 @@
     "chat" : {
         "your_chats" : "Tes Chats",
         "message_hint" : "Tapez un message"
+    },
+    "new_password" : {
+        "title_new_password" : "Tapez votre nouveau mot de passe",
+        "password" : "mot de passe",
+        "reset_password" : "Mettre à jour le mot de passe",
+        "general_error" : "Une erreur s'est produite, veuillez réessayer",
+        "invalid_token" : "Impossible de mettre à jour le mot de passe en raison d'un jeton non valide",
+        "update_success" : "La mise à jour de votre mot de passe a réussi"
+    },
+    "confirm_account" : {
+        "general_error" : "Une erreur s'est produite, veuillez réessayer",
+        "token_expired" : "Votre code d'authentification a expiré",
+        "token_invalid" : "Votre code d'authentification est invalide",
+        "confirm title" : "Authentification à deux facteurs",
+        "description" : "Nous venons de vous envoyer un message à votre adresse e-mail avec votre code d'authentification. Entrez le code dans le formulaire ci-dessus pour vérifier votre identité.",
+        "verify" : "vérifier",
+        "send again" : "Vous n'avez pas reçu d'e-mail ? Envoyer à nouveau",
+        "email_sent_again" : "Un e-mail avec un code d'authentification a été envoyé à nouveau"
     }
 }

@@ -12,7 +12,7 @@ import Footer from "../components/Footer.js";
 import { centeredDivStyle, FrameStyle, InputFieldStyle } from "./Register.js"
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import * as React from "react";
-import FetchBackend, { JWT_TOKEN, ReturnHomeWhenLoggedIn } from "../helper/BackendHelper.js";
+import FetchBackend, {JWT_TOKEN, LOGIN_TOKEN, ReturnHomeWhenLoggedIn} from "../helper/BackendHelper.js";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import Appbar from "../components/Appbar.js";
@@ -25,7 +25,6 @@ function LoginSite() {
     const navigation = useNavigate();
 
     ReturnHomeWhenLoggedIn();
-
 
     const [showPassword, setShowPassword] = React.useState(false);
     const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -40,6 +39,19 @@ function LoginSite() {
     //login
     const [userEmail, setUserEmail] = React.useState("");
     const [userPassword, setUserPassword] = React.useState("");
+
+    const handleLoginResponse = (response) => {
+        if(response.loginToken){
+            Cookies.set(LOGIN_TOKEN, response.loginToken);
+            navigation("/login/confirm");
+        } else if(response.jwt){
+            Cookies.set(JWT_TOKEN, response.jwt);
+            navigation("/");
+        }
+        else{
+            setRegisterStatusLabel(<ResponsePopup message={t("error_unknown")} reason={"error"} />);
+        }
+    };
     const SubmitLogin = () => {
         let loginData = {
             useremail: userEmail,
@@ -49,9 +61,8 @@ function LoginSite() {
         FetchBackend('POST', 'login', loginData)
             .then(response => response.json())
             .then(data => {
-                if (data.status) {
-                    Cookies.set(JWT_TOKEN, data.jwt);
-                    navigation("/");
+                if (data.success) {
+                    handleLoginResponse(data);
                 }
                 else {
                     setRegisterStatusLabel(<ResponsePopup message={t("error_password")} reason={"error"} />);
@@ -72,9 +83,8 @@ function LoginSite() {
         FetchBackend('POST', 'loginOAuth', loginData)
             .then(response => response.json())
             .then(data => {
-                if (data.status) {
-                    Cookies.set(JWT_TOKEN, data.jwt);
-                    navigation("/");
+                if (data.success) {
+                    handleLoginResponse(data);
                 } else {
                     setRegisterStatusLabel(<ResponsePopup message={t("error_not_google")} reason={"error"} />);
                 }
@@ -108,7 +118,7 @@ function LoginSite() {
                     <OutlinedInput
                         value={userPassword} onChange={(event) => setUserPassword(event.target.value)}
                         id="outlined-adornment-password"
-                        type={showPassword ? 'text' : t("password")}
+                        type={showPassword ? 'text' : "password"}
                         endAdornment={
                             <InputAdornment position="end">
                                 <IconButton

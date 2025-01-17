@@ -57,7 +57,11 @@ function ChatSite(){
         fetchChats();
     }, [authUser]);
 
-    setInterval(fetchChats, 5000);
+    useEffect(() => {
+        const intervalId = setInterval(fetchChats, 5000);
+        return () => clearInterval(intervalId);
+    }, []);
+
     return(
         <Box sx = {{ ...FrameStyle}}>
             <Appbar authUser={authUser}/>

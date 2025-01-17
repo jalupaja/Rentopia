@@ -8,7 +8,9 @@ import {
     Avatar,
     ImageListItem,
     Tooltip,
+    Fab,
 } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
 import { useNavigate, useParams } from "react-router-dom";
 import Footer from "../components/Footer.js";
 import FetchBackend, { JWTTokenExists } from "../helper/BackendHelper.js";
@@ -136,6 +138,18 @@ function DeviceSite() {
         }
     }
 
+
+    const btnDel = () => {
+        FetchBackend('POST', 'device/remove/' + device.id, null)
+            .then(response => response.json())
+            .then(data => { data ? setDeviceList(data) : console.log("error " + data);})
+            .catch((error) => {
+                console.log(error);
+            });
+
+            navigate(`/`);
+    }
+
     const navigation = useNavigate();
     const handleConversationStart = (e) => {
         const chatData = {
@@ -218,18 +232,18 @@ function DeviceSite() {
                                                 {device.title}
                                             </Typography>
 
-                                            {/* Device Rating */}
-                                            <Box display="flex" alignItems="center" mb={2}>
-                                                <Tooltip title={device.rating} arrow>
-                                                    <div>
-                                                        <Rating
-                                                            value={device.rating}
-                                                            precision={0.5}
-                                                            readOnly
-                                                            on
-                                                        />
-                                                    </div>
-                                                </Tooltip>
+                                        {/* Device Rating */}
+                                        <Box display="flex" alignItems="center" mb={2}>
+                                          <Tooltip title={device.rating.toFixed(1)} arrow>
+                                                <div>
+                                                    <Rating
+                                                        value={device.rating}
+                                                        precision={0.5}
+                                                        readOnly
+                                                        on
+                                                    />
+                                                </div>
+                                            </Tooltip>
 
                                                 <Typography variant="body2" sx={{ ml: 1 }}>
                                                     ({device.amountRatings})
@@ -317,26 +331,42 @@ function DeviceSite() {
                                     <Typography variant="body1" sx={{ whiteSpace: 'pre-line' }}>
                                         {device.description}
                                     </Typography>
-
                                 </Box>
                             </Grid>
                         </Grid>
                     </Container>
                 </Box>
                 <Box flex={"auto"} />
+                {authUser && authUser.role === "ADMIN" && (
+                  <Fab
+                    onClick={() => btnDel()}
+                    sx={{
+                        position: 'fixed',
+                        bottom: 16,
+                        right: 16,
+                        backgroundColor: 'red',
+                        boxShadow: 5,
+                        '&:hover': {
+                            backgroundColor: 'darkred',
+                        },
+                    }}
+                    >
+                    <DeleteIcon />
+                  </Fab>
+                )}
                 <Footer />
                 {authUser ? (
-                    <CheckoutDialog
-                        open={checkoutOpen}
-                        handleCheckoutClose={handleCheckoutClose}
-                        device={device}
-                        authUser={authUser}
-                        bookedRanges={bookedDates}
-                    />
-                ) : ('')}
+                        <CheckoutDialog
+                            open={checkoutOpen}
+                            handleCheckoutClose={handleCheckoutClose}
+                            device={device}
+                            authUser={authUser}
+                            bookedRanges={bookedDates}
+                        />
+                    ) : ('')}
             </Box>
-        </React.Fragment>
-    )
+            </React.Fragment>
+        );
 }
 
 export default DeviceSite;

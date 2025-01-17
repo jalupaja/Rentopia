@@ -66,7 +66,6 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
                     .createQuery(query, Account.class)
                     .setParameter("email", email)
                     .getSingleResult();
-            account.setPassword(null);
         } catch (NoResultException e) {
 			System.out.println("Selecting user threw exception: " + e.getMessage());
         }
