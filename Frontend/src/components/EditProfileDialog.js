@@ -87,7 +87,7 @@ function EditProfileDialog({open, userData, setUserData, handleEditDialogClose})
                             src={avatar}
                             sx={{ width: 100, height: 100 }}
                         />
-                        <IconButton component="label" sx={{alignSelf: 'flex-end'}}>
+                        {/*<IconButton component="label" sx={{alignSelf: 'flex-end'}}>
                             <UploadIcon />
                             <input
                                 type="file"
@@ -101,7 +101,7 @@ function EditProfileDialog({open, userData, setUserData, handleEditDialogClose})
                             onClick={handleDeleteAvatar}
                         >
                             <DeleteIcon/>
-                        </IconButton>
+                        </IconButton>*/}
                     </Box>
                     <Box display="flex" justifyContent={"space-between"}>
                         <TextField
