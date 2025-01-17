@@ -141,8 +141,7 @@ function CheckoutDialog({ open, handleCheckoutClose, device, authUser, bookedRan
                         <Box sx={{ display: "flex", alignItems: "center", marginTop: "auto", marginBottom: "0px" }}>
                             <PayPalScriptProvider
                                 options={{
-                                    "client-id":
-                                        "AWmGdlDiePv7XLRgvZx5toU4QYFvXJJyIl_GYm1Kcl3k8i9vYDURK8flhLWBrex4NLNFjVN5aixmy9Ca" /* TODO: fix env call */,
+                                    "client-id": process.env.REACT_APP_PP_ClientId,
                                 }}
                             >
                                 <PayPalButtons
