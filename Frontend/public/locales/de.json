@@ -71,6 +71,7 @@
         "rent_history": "Mietverlauf",
         "insert_device": "Gerätenamen hier eingeben",
         "tool_nr": "Werkzeug Nr ",
+        "country": "Land",
         "general_error" : "Ein Fehler ist aufgetreten, bitte erneut versuchen",
         "passwords_dont_match" : "Passwords sind nicht identisch",
         "input_empty" : "Eingabefelder dürfen nicht leer sein",

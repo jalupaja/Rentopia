@@ -13,7 +13,7 @@ import Grid from "@mui/material/Grid2";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EuroIcon from '@mui/icons-material/Euro';
 import {useState} from "react";
-import FetchBackend from "../helper/BackendHelper";
+import FetchBackend, {FetchBackendMultiPart} from "../helper/BackendHelper";
 
 const StyledSelect = styled(Select)(({ theme }) => ({
     '& .MuiOutlinedInput-notchedOutline': {
@@ -28,6 +28,8 @@ const StyledSelect = styled(Select)(({ theme }) => ({
 
 function AddDeviceDialog({open, handleAddDialogClose, iDevice, setDeviceList, authUser}) {
 
+    const [oldImages, setOldImages] = useState(iDevice.images ? iDevice.images : []);
+    const [deleteImages, setDeleteImages] = useState([]);
     const [images, setImages] = useState([]);
     const initialValues = {
         id: iDevice.id ? iDevice.id : null,
@@ -47,20 +49,54 @@ function AddDeviceDialog({open, handleAddDialogClose, iDevice, setDeviceList, au
 
     const handleFileChange = (event) => {
         const selectedFiles = Array.from(event.target.files);
-        const newImages = selectedFiles.map(file => ({
-            id: URL.createObjectURL(file),
-            src: URL.createObjectURL(file),
-            name: file.name,
-        }));
+
+        const newImages = selectedFiles
+            .filter(file => file.name.endsWith(".png") || file.name.endsWith(".jpg") || file.name.endsWith(".jpeg"))
+            .map(file => ({
+                id: URL.createObjectURL(file),
+                src: URL.createObjectURL(file),
+                name: file.name,
+                data: file,
+            }));
+
         setImages([...images, ...newImages]);
+    };
+
+    const handleImageUpload = (deviceID) => {
+        const formData = new FormData();
+
+        images.forEach(image => {
+            formData.append('files', image.data); // Use 'files' to match @RequestParam("files")
+        });
+
+        try {
+            if (images.length > 0)
+                FetchBackendMultiPart('POST', `device/${deviceID}/image`, formData)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! status: ${response.status}`);
+                        }
+                        return response.json();
+                    })
+                    .then(data => console.log("Images uploaded successfully:", data))
+                    .catch(error => console.error("Error uploading images:", error));
+        } catch (error) {
+            console.error("Unexpected error during upload:", error);
+        }
     };
 
     const handleDeleteImage = (id) => {
         setImages(images.filter(image => image.id !== id));
     };
 
+    const handleDeleteOldImage = (name) => {
+        setOldImages(oldImages.filter(image => image !== name));
+        setDeleteImages([...deleteImages, name]);
+    }
+
     const closeDialog = () => {
         clearFields();
+        console.log(iDevice);
         handleAddDialogClose();
     }
 
@@ -72,15 +108,24 @@ function AddDeviceDialog({open, handleAddDialogClose, iDevice, setDeviceList, au
             price: Math.round(prevState.price* 100) / 100
         }));
 
-        if(iDevice.id != null) {
+        if (iDevice.id != null) {
             FetchBackend('POST', 'device/update', newDeviceData)
                 .then(response => response.json())
-                .then(data => {data ? setDeviceList(data) : console.log(data) })
+                .then(data => { data ? setDeviceList(data) : console.log(data) })
                 .catch(error => console.log(error));
+
+            if (deleteImages.length > 0)
+                FetchBackend('DELETE', 'device/delete/image', deleteImages)
+                    .then(response => response.json())
+                    .catch(error => console.log(error));
+
+            handleImageUpload(iDevice.id);
+
+
         } else {
             FetchBackend('POST', 'device/add', newDeviceData)
                 .then(response => response.json())
-                .then(data => {data ? setDeviceList(data) : console.log(data) })
+                .then(data => {setDeviceList(data); handleImageUpload(data[data.length - 1].id);})
                 .catch(error => console.log(error));
         }
 
@@ -129,7 +174,7 @@ function AddDeviceDialog({open, handleAddDialogClose, iDevice, setDeviceList, au
                                 required
                                 slotProps={{ input: { inputMode: 'numeric', pattern: '[0-9]*', endAdornment: <EuroIcon/> }}}
                             />
-                            <FormControl size="small" fullWidth>
+                            {/*<FormControl size="small" fullWidth>
                                 <FormLabel component="legend">Category</FormLabel>
                                 <StyledSelect
                                     value={newDeviceData.category}
@@ -145,7 +190,7 @@ function AddDeviceDialog({open, handleAddDialogClose, iDevice, setDeviceList, au
                                     <MenuItem value={"media"}>Media</MenuItem>
                                     <MenuItem value={"home"}>Home</MenuItem>
                                 </StyledSelect>
-                            </FormControl>
+                            </FormControl>*/}
                             <FormControl fullWidth>
                                 <FormLabel component="legend">Is Public</FormLabel>
                                 <Switch checked={newDeviceData.isPublic} onChange={(e) => {
@@ -181,27 +226,7 @@ function AddDeviceDialog({open, handleAddDialogClose, iDevice, setDeviceList, au
                             borderRadius: '8px',
                         }}
                     >
-                        {images.length > 0 ? (
-                            images.map(image => (
-                                <Card key={image.id} sx={{maxWidth: 100}}>
-                                    <CardMedia
-                                        component="img"
-                                        alt={image.name}
-                                        height="140"
-                                        image={image.src}
-                                        title={image.name}
-                                    />
-                                    <CardActions>
-                                        <IconButton
-                                            color="error"
-                                            onClick={() => handleDeleteImage(image.id)}
-                                        >
-                                            <DeleteIcon/>
-                                        </IconButton>
-                                    </CardActions>
-                                </Card>
-                            ))
-                        ) : (
+                        {(images.length === 0 && oldImages.length === 0) ? (
                             <Box sx={{
                                 display: 'flex',
                                 justifyContent: 'center',
@@ -210,6 +235,47 @@ function AddDeviceDialog({open, handleAddDialogClose, iDevice, setDeviceList, au
                                 height: '100%'
                             }}>
                                 <span>No images uploaded</span>
+                            </Box>
+                        ) : (
+                            <Box sx={{ display: 'flex'}}>
+                                {images.map((image, index) => (
+                                    <Card key={image.id} sx={{maxWidth: 100, marginRight: '5px'}}>
+                                        <CardMedia
+                                            component="img"
+                                            alt={image.name}
+                                            height="140"
+                                            image={image.src}
+                                            title={image.name}
+                                        />
+                                        <CardActions>
+                                            <IconButton
+                                                color="error"
+                                                onClick={() => handleDeleteImage(image.id)}
+                                            >
+                                                <DeleteIcon/>
+                                            </IconButton>
+                                        </CardActions>
+                                    </Card>
+                                ))}
+                                {oldImages.map((image, index) => (
+                                    <Card key={image.id} sx={{maxWidth: 100, marginRight: '5px'}}>
+                                        <CardMedia
+                                            component="img"
+                                            alt={image.name}
+                                            height="140"
+                                            image={"/images/devices/" + image}
+                                            title={image.name}
+                                        />
+                                        <CardActions>
+                                            <IconButton
+                                                color="error"
+                                                onClick={() => handleDeleteOldImage(image)}
+                                            >
+                                                <DeleteIcon/>
+                                            </IconButton>
+                                        </CardActions>
+                                    </Card>
+                                ))}
                             </Box>
                         )}
                     </Box>

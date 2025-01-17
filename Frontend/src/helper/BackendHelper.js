@@ -69,4 +69,25 @@ function FetchBackend(httpMethod, uri, json){
     return fetch('http://127.0.0.1:8080/api/'+uri, requestOptions);
 }
 
+export function FetchBackendMultiPart(httpMethod, uri, formData) {
+    const requestOptions = {
+        method: httpMethod,
+        headers: {
+            credentials: 'include',
+        },
+        body: formData,
+    };
+
+    if (JWTTokenExists()) {
+        requestOptions.headers.Authorization = "Bearer " + Cookie.get(JWT_TOKEN);
+    }
+
+    console.log("Request Options:", requestOptions);
+    for (let pair of formData.entries()) {
+        console.log(pair[0], pair[1]); // Log key-value pairs for debugging
+    }
+
+    return fetch(`http://127.0.0.1:8080/api/${uri}`, requestOptions);
+}
+
 export default FetchBackend;

@@ -174,7 +174,7 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
 
     @Override
     public boolean emailExists(String email) {
-        String query = "SELECT a.Id FROM Account a WHERE a.email = :email";
+        String query = "SELECT a.id FROM Account a WHERE a.email = :email";
         try {
             entityManager
                     .createQuery(query, Long.class)
@@ -259,6 +259,6 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
 			System.err.println("ERROR Update Account with ID " + account.getId() + ": " + e.getMessage());
 		}
 
-		return getAccount(account.getEmail());
+		return getAccountById(account.getId());
 	}
 }

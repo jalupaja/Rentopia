@@ -9,7 +9,6 @@ import jakarta.persistence.PersistenceException;
 import org.springframework.stereotype.Service;
 
 import com.othr.rentopia.model.DeviceImage;
-import com.othr.rentopia.service.DeviceImageService;
 
 @Service
 public class DeviceImageServiceImpl implements DeviceImageService {
@@ -38,6 +37,20 @@ public class DeviceImageServiceImpl implements DeviceImageService {
     }
 
     @Override
+    public Long getDeviceId(String fileName) {
+        String query = "SELECT c.deviceId FROM DeviceImage c WHERE c.name = :fileName";
+        try {
+            return entityManager
+                    .createQuery(query, Long.class)
+                    .setParameter("fileName", fileName)
+                    .setMaxResults(1)
+                    .getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+
+    @Override
     public List<String> getAllDeviceImages(Long deviceId) {
         List<String> deviceImages = null;
 
@@ -53,20 +66,21 @@ public class DeviceImageServiceImpl implements DeviceImageService {
         return deviceImages;
     }
 
+    @Transactional
     @Override
     public void removeDeviceImage(String deviceImage) {
-        String query = "DELETE FROM DeviceImage WHERE name = :deviceImage";
+        String query = "DELETE FROM DeviceImage c WHERE c.name = :fileName";
+
         try {
             entityManager
                 .createQuery(query)
-                .setParameter("deviceImage", deviceImage)
+                .setParameter("fileName", deviceImage)
                 .executeUpdate();
-
-            // TODO delete actual file
         } catch (PersistenceException e) {
             System.err.println("ERROR removing DeviceImage with the name " + deviceImage + ": " + e.getMessage());
         }
     }
+
 
     @Override
     public void removeAllDeviceImages(Long deviceId) {
@@ -77,7 +91,7 @@ public class DeviceImageServiceImpl implements DeviceImageService {
                 .setParameter("deviceId", deviceId)
                 .executeUpdate();
 
-            // TODO delete actual file
+            // TODO delete actual file -> currently done when this is method is called
         } catch (PersistenceException e) {
             System.err.println("ERROR removing DeviceImages with the id " + deviceId + ": " + e.getMessage());
         }

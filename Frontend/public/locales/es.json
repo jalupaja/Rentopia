@@ -70,6 +70,7 @@
         "rent_history": "Historial de alquiler",
         "insert_device": "Inserte el nombre del dispositivo aquí",
         "tool_nr": "Herramienta Nr ",
+        "country": "país",
         "general_error" : "Ocurrió un error, por favor inténtalo nuevamente.",
         "passwords_dont_match" : "Las contraseñas no coinciden",
         "input_empty" : "Los campos de entrada no pueden estar vacíos",

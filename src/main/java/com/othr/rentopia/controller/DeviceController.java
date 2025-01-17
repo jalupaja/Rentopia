@@ -99,7 +99,8 @@ public class DeviceController {
         Long principalId = accountService.getId(principalEmail);
 
         // if device does not exist or if current logged in person is not its owner
-        if (device_ownerId == null || (device_ownerId != principalId && !accountService.isAdmin(principalId)))
+        //TODO: If smth doesnt work remove !account.... and Test again pls
+        if (device_ownerId == null || (device_ownerId != principalId && !accountService.isAdmin(principalId))) 
             return false;
 
         return true;
@@ -249,6 +250,21 @@ public class DeviceController {
 
 	    Device device = deviceService.getDevice(id);
 
+        try {
+            List<String> deviceImages = deviceImageService.getAllDeviceImages(id);
+            for(String deviceImage : deviceImages) {
+                File imageFile = new File(DEVICE_IMAGE_UPLOAD_DIR + deviceImage);
+                if(!imageFile.delete()) {
+                    System.out.println("Error deleting File: " + imageFile);
+                }
+            }
+
+            deviceImageService.removeAllDeviceImages(id);
+
+        } catch (Exception e) {
+            System.out.println("Error parsing values for device deletion: " + e.getMessage());
+        }
+
         if (deviceService.removeDevice(id)) {
             return getYourDevices(device.getOwnerId());
         } else {
@@ -361,28 +377,17 @@ public class DeviceController {
         return new ResponseEntity<>(null, HttpStatus.OK);
     }
 
-    @PostMapping("{id}/image")
+    @PostMapping("/{id}/image")
     public ResponseEntity<String> uploadImage(
             Authentication authentication,
-            @RequestParam("file") MultipartFile file,
+            @RequestParam("files") List<MultipartFile> files,
             @PathVariable("id") Long deviceId) {
 
         if (!checkDeviceAccess_W(authentication, deviceId))
             return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
 
-        if (file.isEmpty())
+        if (files.isEmpty())
             return new ResponseEntity<>("No file uploaded.", HttpStatus.BAD_REQUEST);
-
-        String fileName;
-        String originalFileName = file.getOriginalFilename();
-        String fileExtension = originalFileName != null ? originalFileName.substring(originalFileName.lastIndexOf("."))
-                : "";
-
-        // check for allowed file extensions
-        String lowerExtension = fileExtension.toLowerCase();
-        if (!(lowerExtension.equals(".png") || lowerExtension.equals(".jpg") || lowerExtension.equals(".jpeg"))) {
-            return ResponseEntity.status(500).body("Error while uploading file!\nInvalid file extension");
-        }
 
         // check if dir exists
         File directory = new File(DEVICE_IMAGE_UPLOAD_DIR);
@@ -397,36 +402,83 @@ public class DeviceController {
         }
 
         try {
-            while (true) {
-
-                // Generate a random file name using UUID and keep the original file extension
-                fileName = UUID.randomUUID().toString() + fileExtension;
-
-                try {
-                    DeviceImage deviceImage = new DeviceImage();
-                    deviceImage.setName(fileName);
-                    deviceImage.setDeviceId(deviceId);
-
-                    deviceImageService.saveDeviceImage(deviceImage);
-                } catch (PersistenceException e) {
-                    // "random" UUID already exists
-                    continue;
+            for (MultipartFile file : files) {
+                if (file.isEmpty()) {
+                    return new ResponseEntity<>("One or more files are empty.", HttpStatus.BAD_REQUEST);
                 }
 
-                // file saved
-                break;
+                String originalFileName = file.getOriginalFilename();
+                String fileExtension = originalFileName != null ? originalFileName.substring(originalFileName.lastIndexOf("."))
+                        : "";
+
+                // Check for allowed file extensions
+                String lowerExtension = fileExtension.toLowerCase();
+                if (!(lowerExtension.equals(".png") || lowerExtension.equals(".jpg") || lowerExtension.equals(".jpeg"))) {
+                    return ResponseEntity.status(500).body("Invalid file extension. Only PNG, JPG, JPEG are allowed.");
+                }
+
+                // Generate a random file name using UUID and retain the original file extension
+                String fileName = "";
+                while (true) {
+                    try {
+
+                        fileName = UUID.randomUUID().toString() + fileExtension;
+
+                        DeviceImage deviceImage = new DeviceImage();
+                        deviceImage.setName(fileName);
+                        deviceImage.setDeviceId(deviceId);
+                        deviceImageService.saveDeviceImage(deviceImage);
+                    } catch (PersistenceException e) {
+                        // If a random UUID already exists, retry
+                        continue;
+                    }
+
+                    break;
+                }
+
+                File destinationFile = new File(DEVICE_IMAGE_UPLOAD_DIR + fileName);
+                file.transferTo(destinationFile);  // Save the file to disk
             }
 
-            File destinationFile = new File(DEVICE_IMAGE_UPLOAD_DIR + fileName);
-
-            file.transferTo(destinationFile);
-
-            return ResponseEntity.ok("File uploaded successfully.");
+            return ResponseEntity.ok("Files uploaded successfully.");
         } catch (IOException e) {
-            System.out.println("Error while uploading file!" + e.getMessage());
-            return ResponseEntity.status(500).body("Error while uploading file!");
-		}
+            System.out.println("Error while uploading file: " + e.getMessage());
+            return ResponseEntity.status(500).body("Error while uploading file.");
+        }
 	}
+
+    @DeleteMapping("/delete/image")
+    public ResponseEntity<String> deleteImagesByFilenames(
+            Authentication authentication,
+            @RequestBody List<String> filenames) {
+
+        if (filenames == null || filenames.isEmpty()) {
+            return new ResponseEntity<>("No filenames provided.", HttpStatus.BAD_REQUEST);
+        }
+
+        try {
+            for (String filename : filenames) {
+
+                Long deviceId = deviceImageService.getDeviceId(filename);
+
+                if (!checkDeviceAccess_W(authentication, deviceId)) {
+                    return new ResponseEntity<>("Access denied to delete image: " + filename, HttpStatus.FORBIDDEN);
+                }
+
+                File imageFile = new File(DEVICE_IMAGE_UPLOAD_DIR + filename);
+                if (imageFile.exists() && !imageFile.delete()) {
+                    return new ResponseEntity<>("Failed to delete file: " + filename, HttpStatus.INTERNAL_SERVER_ERROR);
+                }
+
+                deviceImageService.removeDeviceImage(filename);
+            }
+
+            return ResponseEntity.ok("Images deleted successfully.");
+        } catch (Exception e) {
+            System.out.println("Error while deleting images: " + e.getMessage());
+            return ResponseEntity.status(500).body("Error while deleting images.");
+        }
+    }
 
 	@PostMapping(path="update", produces = "application/json")
 	public ResponseEntity<List<Map<String, Object>>> updateDevice(@RequestBody String device) {
