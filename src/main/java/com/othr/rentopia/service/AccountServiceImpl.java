@@ -223,6 +223,7 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
             entityManager.createQuery(query)
                     .setParameter("accountId", accountId)
                     .executeUpdate();
+            entityManager.clear();
         } catch (PersistenceException e) {
             System.err.println("ERROR removing Account with ID " + accountId + ": " + e.getMessage());
         }

@@ -19,10 +19,16 @@ export function GetAuthUser(){
     useEffect(() =>{
         if(JWTTokenExists()){
             FetchBackend('GET', 'user/me',null)
-                .then(response => response.json())
-                .then(data => {
-                    setAuthUser(data);
+                .then(response => {
+                    if(response.ok){
+                        return  response.json();
+                    }
+                    else if(response.status === 401){
+                        Logout();
+                        return null;
+                    }
                 })
+                .then(data => setAuthUser(data))
                 .catch(error => console.log(error))
         }
     }, []);

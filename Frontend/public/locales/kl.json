@@ -47,7 +47,8 @@
         "city": "veng",
         "country": "veng",
         "create_account": "ghun Huch",
-        "login": "nga'"
+        "login": "nga'",
+        "email_invalid" : "wovchu'meH QIb rIntaH potlh"
     },
     "forgotpassword": {
         "error_mail": "nav ngeHlaHbe'. yIqaHqa'.",
@@ -101,7 +102,9 @@
         "owner" : "'oSrIq",
         "category_general" : "Sa'",
         "title_error_input" : "'ej chuQunghomlaw'",
-        "status_new" : "chu'"
+        "status_new" : "chu'",
+        "category_delete_account" : "vay' Dalo'DI' bIghoSqu'",
+        "delete_user" : "vaj qeylIS mInDu'Daj ruv"
     },
     "profile_menu": {
         "admin_tickesystem": "ADM nav QuS",

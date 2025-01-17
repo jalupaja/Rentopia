@@ -11,7 +11,8 @@ import {
     IconButton,
     InputAdornment,
     Stack,
-    TextField, Typography, RadioGroup, Radio, FormControlLabel, Grid2
+    TextField, Typography, RadioGroup, Radio, FormControlLabel, Grid2,
+    FormHelperText
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import Appbar from "../components/Appbar.js";
@@ -122,32 +123,41 @@ function RegisterSite() {
     const [userInfo, setUserInfo] = React.useState(defaultUserInfo);
     const postSubmitValidation = (userInfo) => {
         //all necessary values nonempty
+        let error = false;
         for (let attribute in userInfo) {
             if (attribute === "company" && userInfo["usage"].value === "private") {
-
                 continue;
             }
 
             if (!userInfo[attribute].value) {
-                return false;
+                setError(attribute,attribute + t("error_empty"));
+                error = true;
             }
+        }
+
+        if(error){
+            return false;
+        }
+
+        if(!validateEmail(userInfo["email"].value)){
+            setError("email", t("email_invalid"));
+            return false;
         }
 
         //passwords identical
         if (userInfo.password1.value !== userInfo.password2.value) {
-            setUserInfo({
-                ...userInfo,
-                ["password2"]: {
-                    ...userInfo["password2"],
-                    errorMessage: t("error_identical"),
-                    error: true
-                }
-            });
-
+            setError("password2", t("error_identical"));
             return false;
         }
         return true;
-    }
+    };
+    const validateEmail = (email) => {
+        return String(email)
+            .toLowerCase()
+            .match(
+                /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+            );
+    };
     const handleRegister = (e) => {
         e.preventDefault();
 
@@ -159,18 +169,23 @@ function RegisterSite() {
             }
 
             FetchBackend('POST', 'register', registerData)
-                .then(response => response.json())
+                .then(response => {
+                    if(response.ok){
+                        return response.json();
+                    }
+                    return null;
+                })
                 .then(data => {
-                    if (data.status) {
+                    if (data && data.success) {
                         setRegisterStatusLabel(<ResponsePopup reason={"success"} message={t("succ_register")} />);
-                        Cookies.set(JWT_TOKEN, data.jwt);
-                        navigation("/");
+                        navigation("/login");
                     }
                     else {
-                        setRegisterStatusLabel(<ResponsePopup reason={"error"} message={data.message} />);
+                        setRegisterStatusLabel(<ResponsePopup reason={"error"} message={t("error_unknown")} />);
                     }
                 })
                 .catch((error) => {
+                    console.log(error);
                     setRegisterStatusLabel(<ResponsePopup message={t("error_unknown")} reason={"error"} />);
                 });
         };
@@ -195,6 +210,18 @@ function RegisterSite() {
             }
         });
     };
+    const setError = (attributeName, errorMessage) => {
+        setUserInfo(prevState =>{
+            return {
+                ...prevState,
+                [attributeName]: {
+                    ...prevState[attributeName],
+                    errorMessage: errorMessage,
+                    error: true
+                }
+            }
+        });
+    }
 
     const [registerStatusLabel, setRegisterStatusLabel] = React.useState(null);
     return (
@@ -210,6 +237,7 @@ function RegisterSite() {
                     name="usage" value={userInfo.usage.value}>
                     <FormControlLabel value="private" control={<Radio />} label={t("private")} required />
                     <FormControlLabel value="commercial" control={<Radio />} label={t("commercial")} required />
+                    <FormHelperText error={userInfo.usage.error} open={userInfo.usage.error}>{userInfo.usage.errorMessage}</FormHelperText>
                 </RadioGroup>
                 <TextField required sx={{ ...InputFieldStyle, display: userInfo.usage.value === "commercial" ? "inherit" : "none" }}
                     id="companyTextField" label={t("company_name")}

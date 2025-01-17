@@ -48,9 +48,10 @@
         "street": "Street",
         "postal_code": "Postal code",
         "city": "City",
-        "country": "City",
+        "country": "Country",
         "create_account": "Create Account",
-        "login": "Login"
+        "login": "Login",
+        "email_invalid" : "Email is invalid"
     },
     "forgotpassword": {
         "error_mail": "Sending Mail was not successful. Please try again.",
@@ -66,6 +67,7 @@
         "prename": "Prename",
         "company": "Company",
         "email": "Email",
+        "country" : "Country",
         "edit_profile": "Edit Profile",
         "profile_tabs": "Profile Tabs",
         "your_tools": "Your Tools",
@@ -104,7 +106,9 @@
         "owner" : "Owner",
         "category_general" : "general",
         "title_error_input" : "Title must not be empty",
-        "status_new" : "New"
+        "status_new" : "New",
+        "category_delete_account" : "Request deletion of your account",
+        "delete_user" : "Delete account of user"
     },
     "profile_menu": {
         "admin_tickesystem": "ADM Ticket System",

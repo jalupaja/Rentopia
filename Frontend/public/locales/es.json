@@ -47,7 +47,8 @@
         "city": "Ciudad",
         "country": "País",
         "create_account": "Crear cuenta",
-        "login": "Iniciar sesión"
+        "login": "Iniciar sesión",
+        "email_invalid" : "El correo electrónico no es válido"
     },
     "forgotpassword": {
         "error_mail": "El envío del correo no fue exitoso. Por favor, inténtalo de nuevo.",
@@ -101,7 +102,9 @@
         "owner" : "Dueño",
         "category_general" : "general",
         "title_error_input" : "El título no debe estar vacío",
-        "status_new" : "nuevo"
+        "status_new" : "nuevo",
+        "category_delete_account" : "Solicitar la eliminación de su cuenta",
+        "delete_user" : "Eliminar cuenta de usuario"
     },
     "profile_menu": {
         "admin_tickesystem": "Sistema de tickets ADM",

@@ -2,6 +2,8 @@ package com.othr.rentopia.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDateTime;
 
@@ -13,7 +15,7 @@ public class ChatMessage {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(referencedColumnName = "id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Chat chat;
 
     @Column(nullable = false, length = 1024)
@@ -26,6 +28,6 @@ public class ChatMessage {
     private Boolean isRead = false;
 
     @ManyToOne
-    @JoinColumn(name="sender", referencedColumnName = "id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Account sender;
 }

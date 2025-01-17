@@ -2,6 +2,8 @@ package com.othr.rentopia.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDateTime;
 
@@ -13,7 +15,7 @@ public class Ticket {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name="owner", referencedColumnName = "id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Account owner;
 
     @Column(nullable = false)
@@ -28,16 +30,13 @@ public class Ticket {
     @Column(nullable = false)
     private LocalDateTime timestamp = LocalDateTime.now();
 
-    @Column
-    private Long targetDeviceId; //meaning depends on category
-
     @Column(length = 1024)
     private String details;
 
     @Column(length = 1024)
     private String adminResponse;
     public enum Category {
-        general, owndevices, renteddevices
+        general, delete_account
     }
 
     public enum Status {

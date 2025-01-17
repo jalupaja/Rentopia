@@ -48,7 +48,8 @@
         "city": "Stadt",
         "country": "Land",
         "create_account": "Konto erstellen",
-        "login": "Anmelden"
+        "login": "Anmelden",
+        "email_invalid" : "Email ist ungültig"
     },
     "forgotpassword": {
         "error_mail": "Das Senden der E-Mail war nicht erfolgreich. Bitte versuchen Sie es erneut.",
@@ -102,7 +103,9 @@
         "owner" : "Inhaber",
         "category_general" : "Allgemein",
         "title_error_input" : "Titel darf nicht leer sein",
-        "status_new" : "Neu"
+        "status_new" : "Neu",
+        "category_delete_account" : "Anfrage für Account Löschung",
+        "delete_user" : "Lösche User Account"
     },
     "profile_menu": {
         "admin_tickesystem": "ADM-Ticketsystem",
