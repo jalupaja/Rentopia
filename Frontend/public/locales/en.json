@@ -49,7 +49,8 @@
         "city": "City",
         "country": "Country",
         "create_account": "Create Account",
-        "login": "Login"
+        "login": "Login",
+        "email_invalid" : "Email is invalid"
     },
     "forgotpassword": {
         "error_mail": "Sending Mail was not successful. Please try again.",

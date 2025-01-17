@@ -47,7 +47,8 @@
         "city": "veng",
         "country": "veng",
         "create_account": "ghun Huch",
-        "login": "nga'"
+        "login": "nga'",
+        "email_invalid" : "wovchu'meH QIb rIntaH potlh"
     },
     "forgotpassword": {
         "error_mail": "nav ngeHlaHbe'. yIqaHqa'.",

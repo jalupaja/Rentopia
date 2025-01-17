@@ -139,13 +139,25 @@ function RegisterSite() {
             return false;
         }
 
+        if(!validateEmail(userInfo["email"].value)){
+            setError("email", t("email_invalid"));
+            return false;
+        }
+
         //passwords identical
         if (userInfo.password1.value !== userInfo.password2.value) {
             setError("password2", t("error_identical"));
             return false;
         }
         return true;
-    }
+    };
+    const validateEmail = (email) => {
+        return String(email)
+            .toLowerCase()
+            .match(
+                /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+            );
+    };
     const handleRegister = (e) => {
         e.preventDefault();
 
@@ -157,14 +169,19 @@ function RegisterSite() {
             }
 
             FetchBackend('POST', 'register', registerData)
-                .then(response => response.json())
+                .then(response => {
+                    if(response.ok){
+                        return response.json();
+                    }
+                    return null;
+                })
                 .then(data => {
-                    if (data.success) {
+                    if (data && data.success) {
                         setRegisterStatusLabel(<ResponsePopup reason={"success"} message={t("succ_register")} />);
                         navigation("/login");
                     }
                     else {
-                        setRegisterStatusLabel(<ResponsePopup reason={"error"} message={data.message} />);
+                        setRegisterStatusLabel(<ResponsePopup reason={"error"} message={t("error_unknown")} />);
                     }
                 })
                 .catch((error) => {

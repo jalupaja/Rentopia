@@ -349,11 +349,32 @@ public class UserController {
 
         accountService.saveAccount(newAccount);
 
+        if(!SendWelcomeEmail(newAccount)){
+            return new ResponseEntity<>(authResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
         authResponse.setSuccess(true);
-
-
         authResponse.setMessage("Registration successful");
-        return new ResponseEntity<AuthResponse>(authResponse, HttpStatus.OK);
+        return new ResponseEntity<>(authResponse, HttpStatus.OK);
+    }
+
+    private boolean SendWelcomeEmail(Account user) {
+        try{
+            String subject = "Welcome to Rentopia!";
+            String body = "<h1>Hello, " + user.getName() + "!</h1>\n"
+                    + "<p>Thank you for joining Rentopia</p>\n"
+                    + "<p>You're ready to insert or rent your first device.</p>"
+                    + "<a href=\"http://localhost:3000/\" class=\"button\">Visit Rentopia</a>\n";
+            EmailService.Email mail = new EmailService.Email(EmailService.GmailUsername, user.getEmail(), subject, body);
+            mail.loadTemplate(subject, body);
+
+            emailService.sendEmail(mail);
+
+            return true;
+        }catch(Exception e){
+            System.out.println("Sending welcome mail after register threw exception: "+e.getMessage());
+            return false;
+        }
     }
 
     @PostMapping(path = "user/password")

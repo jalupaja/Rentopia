@@ -47,7 +47,8 @@
         "city": "Ville",
         "country": "Pays",
         "create_account": "Créer un compte",
-        "login": "Se connecter"
+        "login": "Se connecter",
+        "email_invalid" : "L'e-mail n'est pas valide"
     },
     "forgotpassword": {
         "error_mail": "L'envoi de l'email a échoué. Veuillez réessayer.",

@@ -47,7 +47,8 @@
         "city": "Stadt",
         "country": "Land",
         "create_account": "Konto erstellen",
-        "login": "Anmelden"
+        "login": "Anmelden",
+        "email_invalid" : "Email ist ungültig"
     },
     "forgotpassword": {
         "error_mail": "Das Senden der E-Mail war nicht erfolgreich. Bitte versuchen Sie es erneut.",
