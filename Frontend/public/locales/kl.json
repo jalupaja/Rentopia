@@ -54,7 +54,8 @@
         "succ_mail": "nav ngeHchu'. yInav yIlegh.",
         "forgot_password": "mu'wIj Dargh?",
         "write_mail": "mu'wIj chenmoHmeH email yIghItlh:",
-        "send_mail": "nav ngeH"
+        "send_mail": "nav ngeH",
+        "no_existent_user" : "ngeDbe'chugh vay' ngaSbe'chugh vay'"
     },
     "profile": {
         "user": "loDnal",
@@ -69,7 +70,20 @@
         "rent_history": "DaH tlhap lut",
         "insert_device": "luch pong yIchel",
         "tool_nr": "mIw mI'",
-        "country": "pIqaD"
+        "country": "pIqaD",
+        "general_error" : "'ej ghu'vam vIpabmeH ghu'vam yIPumchoH.",
+        "passwords_dont_match" : "lo'laHbe'chugh vaj bIvHa'moHbe'",
+        "input_empty" : "chIm ra'nISba'",
+        "change_password_success" : "ja'chuqmeH mIS'a'",
+        "password_invalid" : "qo' voDleH Damoj",
+        "old_password" : "QI'tu'",
+        "new_password" : "leng chaw'",
+        "confirm_password" : "Qu'wIj",
+        "forgot_password" : "qaStaHvIS ramjep, joH quv.",
+        "change_password" : "qorneS",
+        "password_dialog_title" : "quvHa'lIj pov quvHa'lIj",
+        "change" : "choH",
+        "cancel" : "qIl"
     },
     "helpcenter": {
         "error_unavailable": "QaH ghom SamlaHbe'. yIqaHqa'.",
@@ -105,5 +119,23 @@
     "chat" : {
         "your_chats" : "layerteS",
         "message_hint" : "QIH"
+    },
+    "new_password" : {
+        "title_new_password" : "mu'wIj pegh yIQoy",
+        "password" : "leng chaw'",
+        "reset_password" : "ghopDu'",
+        "general_error" : "'ej ghu'vam yISambe'choHlu'.",
+        "invalid_token" : "Hegh qo' HochDaq lengmeH mIw wIlo'",
+        "update_success" : "ghojmeylIj bIvo'chugh, vaj yInlIj ngo'"
+    },
+    "confirm_account": {
+        "general_error": "Qagh luqaS, yIghoSqa'",
+        "token_expired": "ghItlhwI'ghomwIj poH rIn",
+        "token_invalid": "ghItlhwI'ghomwIj luj",
+        "confirm title": "cha'DIch ngoq",
+        "description": "SoHvaD De' QIn wIngeHpu'. ghItlhwI'ghomwIj yIlo'. ghItlhwI'ghomwIj yIlo' 'ej SoH ngoQ yI'ang.",
+        "verify": "ngoq yIlo'",
+        "send again": "QIn DaghItlhpu'be'? yIngeHqa'",
+        "email_sent_again": "QIn ghItlhwI'ghomwIj wIngeHqa'"
     }
 }

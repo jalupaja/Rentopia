@@ -9,4 +9,5 @@ public interface FinanceService {
     public void saveFinance(Finance finance);
     public List<Finance> getFinancesByAccount(Long accountId);
     public List<Device> getRentHistory(Long accountId);
+    public List<Finance> getBookedDates(Long deviceId);
 }

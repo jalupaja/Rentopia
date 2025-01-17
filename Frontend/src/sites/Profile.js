@@ -18,9 +18,11 @@ import BookmarksIcon from '@mui/icons-material/Bookmarks';
 import HandymanIcon from '@mui/icons-material/Handyman';
 import AddDeviceDialog from "../components/AddDeviceDialog";
 import EditProfileDialog from "../components/EditProfileDialog";
+import ChangePasswordDialog from "../components/ChangePasswordDialog";
 import PropTypes from "prop-types";
 import FetchBackend, {JWTTokenExists} from "../helper/BackendHelper";
 import { useTranslation } from "react-i18next";
+import {ReturnHomeWhenLoggedOut} from "../helper/BackendHelper";
 
 const Item = styled(Paper)(({ theme }) => ({
     padding: theme.spacing(1),
@@ -64,11 +66,13 @@ function a11yProps(index) {
 }
 
 function ProfileSite() {
+    ReturnHomeWhenLoggedOut();
 
     const [authUser, setAuthUser] = useState(undefined);
     const [ownerId, setOwnerId] = useState("");
     const [openAddItem, setOpenAddItem] = React.useState(false);
     const [openEditProfile, setOpenEditProfile] = React.useState(false);
+    const [openChangePassword, setOpenChangePassword] = React.useState(false);
     const [clickedDevice, setClickedDevice] = React.useState(null);
     const [tabValue, setTabValue] = React.useState(0);
     const [deviceList, setDeviceList] = React.useState([]);
@@ -165,47 +169,56 @@ function ProfileSite() {
                 <Box sx={{ width: '100%' }}>
                     <Grid container direction='row' columnSpacing={3} margin={'2% 10%'} sx={{ justifyContent: 'center' }}>
                         <Grid container columns={2} rowSpacing={2} direction='column' width={"49%"}>
-                            <Item sx={{ boxShadow: 3, display: 'flex', height: 'min-content', maxHeight: 'min-content' }}>
-                                <Avatar
-                                    sx={{ width: 100, height: 100, margin: '24px' }}
-                                    alt={t("user")}
-                                />
-                                <Box>
-                                    <Input
-                                        fullWidth
-                                        disabled
-                                        defaultValue={t("name")}
-                                        sx={{ alignSelf: 'center', margin: '24px 0 12px 0' }}
-                                        value={authUser.name}
+                            <Item sx={{ boxShadow: 3, display: 'flex', flexDirection : "column", height: 'min-content', maxHeight: 'min-content' }}>
+                                <Box sx={{display : "flex", flexDirection : "row"}}>
+                                    <Avatar
+                                        sx={{ width: 100, height: 100, margin: '24px' }}
+                                        alt={t("user")}
                                     />
-                                    <Input
-                                        fullWidth
-                                        disabled
-                                        defaultValue={t("email")}
-                                        sx={{ alignSelf: 'center', margin: '12px 0 12px 0' }}
-                                        value={authUser.email}
-                                    />
+                                    <Box>
+                                        <Input
+                                            fullWidth
+                                            disabled
+                                            defaultValue={t("name")}
+                                            sx={{ alignSelf: 'center', margin: '24px 0 12px 0' }}
+                                            value={authUser.name}
+                                        />
+                                        <Input
+                                            fullWidth
+                                            disabled
+                                            defaultValue={t("email")}
+                                            sx={{ alignSelf: 'center', margin: '12px 0 12px 0' }}
+                                            value={authUser.email}
+                                        />
+                                    </Box>
+                                    <Box sx={{ margin: ' 0 24px 24px 24px', justifyContent : "flex-end" }}>
+                                        <Input
+                                            fullWidth
+                                            disabled
+                                            defaultValue={t("company")}
+                                            sx={{ alignSelf: 'center', margin: '24px 0 12px 0'}}
+                                            value={authUser.company}
+                                        />
+                                        <Input
+                                            fullWidth
+                                            disabled
+                                            defaultValue={t("country")}
+                                            sx={{ alignSelf: 'center', margin: '12px 0 12px 0' }}
+                                            value={authUser.location.country}
+                                        />
+                                    </Box>
                                 </Box>
-                                <Box sx={{ margin: ' 0 24px 24px 24px' }}>
-                                    <Input
-                                        fullWidth
-                                        disabled
-                                        defaultValue={t("company")}
-                                        sx={{ alignSelf: 'center', margin: '24px 0 12px 0'}}
-                                        value={authUser.company}
-                                    />
-                                    <Input
-                                        fullWidth
-                                        disabled
-                                        defaultValue={t("country")}
-                                        sx={{ alignSelf: 'center', margin: '12px 0 12px 0' }}
-                                        value={authUser.location.country}
-                                    />
+                                <Box sx={{display : "flex", justifyContent : "flex-start"}}>
                                     <Button
                                         variant={"contained"}
                                         onClick={handleEditDialogOpen}
-                                        sx={{ float: "right" }}>
+                                        sx={{ marginRight : "24px" }}>
                                         {t("edit_profile")}
+                                    </Button>
+                                    <Button
+                                        variant={"contained"}
+                                        onClick={() => setOpenChangePassword(!openChangePassword)}>
+                                        {t("change_password")}
                                     </Button>
                                 </Box>
                             </Item>
@@ -307,6 +320,7 @@ function ProfileSite() {
                                        handleEditDialogClose={handleEditDialogClose}
                     />
                 ) : ('')}
+                <ChangePasswordDialog open={openChangePassword} handleEditDialogClose={() => setOpenChangePassword(false)} />
             </Box>
         </React.Fragment>
     )

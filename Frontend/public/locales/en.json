@@ -15,7 +15,8 @@
         "bookmarked": "Bookmarked",
         "add_bookmark": "Add to Bookmarks",
         "rent": "Rent Now",
-        "StartConversation" : "Start Conversation"
+        "StartConversation" : "Start Conversation",
+        "day": "Day"
     },
     "login": {
         "error_password": "Wrong email or password!",
@@ -56,7 +57,8 @@
         "succ_mail": "Send mail succeeded. Please look at your mail.",
         "forgot_password": "Forgot your password?",
         "write_mail": "Type in your email for resetting your password:",
-        "send_mail": "Send Email"
+        "send_mail": "Send Email",
+        "no_existent_user" : "User with this email does not exist"
     },
     "profile": {
         "user": "User",
@@ -71,7 +73,20 @@
         "rent_history": "Rent History",
         "insert_device": "Insert Device Name here",
         "tool_nr": "Tool Nr ",
-        "country": "Country"
+        "country": "Country",
+        "general_error" : "An error occurred, please try again.",
+        "passwords_dont_match" : "Passwords do not match",
+        "input_empty" : "Input fields cannot be empty",
+        "change_password_success" : "Changing password was successful",
+        "password_invalid" : "Your old password is not correct",
+        "old_password" : "old password",
+        "new_password" : "new password",
+        "confirm_password" : "confirm password",
+        "forgot_password" : "Forgot your password?",
+        "change_password" : "Change Password",
+        "password_dialog_title" : "Change your password",
+        "change" : "change",
+        "cancel" : "cancel"
     },
     "helpcenter": {
         "error_unavailable": "Help Center is currently not available. Please try again",
@@ -82,7 +97,7 @@
         "submit_ticket" : "Submit Ticket",
         "delete_ticket" : "Delete Ticket",
         "close_ticket" : "Close Ticket",
-        "error_ticket_action" : "An error occured, please try again",
+        "error_ticket_action" : "An error occurred, please try again",
         "success_ticket_creation" : "Creating Ticket was successful",
         "success_ticket_delete" : "Deleting Ticket was successful",
         "success_ticket_close" : "Closing ticket was successful",
@@ -107,5 +122,23 @@
     "chat" : {
         "your_chats" : "Your Chats",
         "message_hint" : "Type a message"
+    },
+    "new_password" : {
+        "title_new_password" : "Type in your new password",
+        "password" : "password",
+        "reset_password" : "Update password",
+        "general_error" : "An error occurred, please try again",
+        "invalid_token" : "Cannot update password due to invalid token",
+        "update_success" : "Updating your password was successful"
+    },
+    "confirm_account" : {
+        "general_error" : "An error occurred, please try again",
+        "token_expired" : "Your authentication code is expired",
+        "token_invalid" : "Your authentication code is invalid",
+        "confirm title" : "Two-Factor authentication",
+        "description" : "We just sent you a message to your email address with your authentication code. Enter the code in the form above to verify your identity.",
+        "verify" : "verify",
+        "send again" : "Didn't receive an email? Send again",
+        "email_sent_again" : "An email with an authentication code was sent again"
     }
 }

@@ -15,6 +15,7 @@ import com.othr.rentopia.service.BookmarkService;
 import com.othr.rentopia.service.RatingService;
 import com.othr.rentopia.service.AccountService;
 import com.othr.rentopia.service.DeviceImageService;
+import com.othr.rentopia.api.EmailService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -60,6 +61,9 @@ public class DeviceController {
     @Autowired
     private FinanceService financeService;
 
+    @Autowired
+    private EmailService emailService;
+
     // save to Frontend...
     private static final String UPLOAD_DIR = System.getProperty("user.dir") + "/Frontend/public/images/";
     private static final String DEVICE_IMAGE_UPLOAD_DIR = UPLOAD_DIR + "devices/";
@@ -95,7 +99,8 @@ public class DeviceController {
         Long principalId = accountService.getId(principalEmail);
 
         // if device does not exist or if current logged in person is not its owner
-        if (device_ownerId == null || (device_ownerId != principalId && accountService.isAdmin(principalId)))
+        //TODO: If smth doesnt work remove !account.... and Test again pls
+        if (device_ownerId == null || (device_ownerId != principalId && !accountService.isAdmin(principalId))) 
             return false;
 
         return true;
@@ -499,11 +504,51 @@ public class DeviceController {
 			updDevcie.setLocation(location);
 			updDevcie = deviceService.updateDevice(updDevcie);
 
+            // Send mails to all users who bookmarked this device
+            List<Bookmark> bookmarks = bookmarkService.getUserBookmarksByDevice(Long.valueOf((Integer) request.get("id")));
+
+            Device tmp_device;
+            Account user;
+            for (Bookmark b : bookmarks) {
+                tmp_device = deviceService.getDevice(b.getDeviceId());
+                user = accountService.getAccount(b.getOwnerId());
+
+                String subject = "🚀 Your Bookmarked Device Just Got Better! Check Out the Latest Update!";
+                String body = "<h1>Good news, " + user.getName() + "!</h1>\n"
+                    + "<p>One of your bookmarked devices has just been updated! 🎉</p>\n"
+                    + "<p><strong>Device:</strong> " + tmp_device.getTitle() + "</p>\n"
+                    + "<p>We think you'll love these new improvements! Click the button below to see all the details and make the most of the update.</p>\n"
+                    + "<a href=\"http://localhost:3000/device/" + tmp_device.getId() + "\" class=\"button\">View Update</a>\n";
+
+                EmailService.Email mail = new EmailService.Email(null, user.getEmail(), null, null);
+                mail.loadTemplate(subject, body);
+
+                emailService.sendEmail(mail);
+            }
+
 			return getYourDevices(Long.valueOf((Integer) request.get("ownerId")));
 		}
 
 		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 	}
+
+    @GetMapping(path = "/bookedDates/{deviceId}")
+    public ResponseEntity<List<Map<String, Object>>> getBookedDates(@PathVariable("deviceId") Long deviceId) {
+        List<Map<String, Object>> bookedDates = new ArrayList<>();
+
+        List<Finance> finances = financeService.getBookedDates(deviceId);
+        for (Finance finance : finances) {
+            if(finance.getStartDate() != null && finance.getEndDate() != null) {
+                Map<String, Object> dateMap = new HashMap<>();
+                dateMap.put("startDate", finance.getStartDate());
+                dateMap.put("endDate", finance.getEndDate());
+                dateMap.put("key", "selection");
+                bookedDates.add(dateMap);
+            }
+        }
+
+        return new ResponseEntity<>(bookedDates, HttpStatus.OK);
+    }
 
 	private double priceToDouble(Object priceObj) {
 
