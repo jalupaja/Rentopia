@@ -460,11 +460,13 @@ public class DeviceController {
 
         List<Finance> finances = financeService.getBookedDates(deviceId);
         for (Finance finance : finances) {
-            Map<String, Object> dateMap = new HashMap<>();
-            dateMap.put("startDate", finance.getStartDate());
-            dateMap.put("endDate", finance.getEndDate());
-            dateMap.put("key", "selection");
-            bookedDates.add(dateMap);
+            if(finance.getStartDate() != null && finance.getEndDate() != null) {
+                Map<String, Object> dateMap = new HashMap<>();
+                dateMap.put("startDate", finance.getStartDate());
+                dateMap.put("endDate", finance.getEndDate());
+                dateMap.put("key", "selection");
+                bookedDates.add(dateMap);
+            }
         }
 
         return new ResponseEntity<>(bookedDates, HttpStatus.OK);

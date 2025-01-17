@@ -94,10 +94,23 @@ function DeviceSite() {
 
     useEffect(() => {
         FetchBackend('GET', 'device/bookedDates/' + deviceId, null)
-        .then(response => response.json())
-        .then(data => setBookedDates(data))
-        .catch(error => console.log(error))
+            .then(response => response.json())
+            .then(data => {
+                const dates = [];
+                data.forEach(({ startDate, endDate }) => {
+                    const start = new Date(startDate);
+                    const end = new Date(endDate);
+                    // Generate all dates in the range
+                    while (start <= end) {
+                        dates.push(new Date(start));
+                        start.setDate(start.getDate() + 1); // Increment by 1 day
+                    }
+                });
+                setBookedDates(dates);
+            })
+            .catch(error => console.log(error));
     }, []);
+
 
     // navigate back to Home if the device is hidden or invalid
     if (device === null) {

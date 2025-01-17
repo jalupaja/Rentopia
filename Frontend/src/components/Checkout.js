@@ -14,14 +14,16 @@ import {differenceInDays, format} from "date-fns";
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
 import { DateRangePicker } from 'react-date-range';
+import {useNavigate} from "react-router-dom";
 
 function CheckoutDialog({ open, handleCheckoutClose, device, authUser, bookedRanges = [] }) {
     const [step, setStep] = useState(1);
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
+    const navigation = useNavigate();
 
     const calculateDateDifference = (startDate, endDate) => {
-        return differenceInDays(new Date(endDate), new Date(startDate));
+        return differenceInDays(new Date(endDate), new Date(startDate)) + 1;
     };
 
     const [newFinance, setNewFinance] = useState({
@@ -42,7 +44,7 @@ function CheckoutDialog({ open, handleCheckoutClose, device, authUser, bookedRan
 
     const updateDates = (ranges) => {
         const { startDate, endDate } = ranges.selection;
-        const days = (startDate === endDate ? 1 : calculateDateDifference(startDate, endDate))
+        const days = calculateDateDifference(startDate, endDate)
         const updatedAmount = (days * parseFloat(device.price)).toFixed(2).toString();
         setNewFinance((prev) => ({
             ...prev,
@@ -70,8 +72,10 @@ function CheckoutDialog({ open, handleCheckoutClose, device, authUser, bookedRan
         if (JWTTokenExists()) {
             FetchBackend('POST', 'finance/add', newFinance)
                 .then(res => res.json())
-                .then((data) => console.log(data))
+                .then((data) => null)
                 .catch((err) => console.log(err));
+
+            navigation("/");
         }
     };
 
@@ -80,7 +84,6 @@ function CheckoutDialog({ open, handleCheckoutClose, device, authUser, bookedRan
             open={open}
             onClose={() => {
                 handleCheckoutClose();
-                setStep(1);
             }}
             maxWidth="sm"
             fullWidth
