@@ -237,9 +237,9 @@ function AddDeviceDialog({open, handleAddDialogClose, iDevice, setDeviceList, au
                                 <span>No images uploaded</span>
                             </Box>
                         ) : (
-                            <Box>
+                            <Box sx={{ display: 'flex'}}>
                                 {images.map((image, index) => (
-                                    <Card key={image.id} sx={{maxWidth: 100}}>
+                                    <Card key={image.id} sx={{maxWidth: 100, marginRight: '5px'}}>
                                         <CardMedia
                                             component="img"
                                             alt={image.name}
@@ -258,7 +258,7 @@ function AddDeviceDialog({open, handleAddDialogClose, iDevice, setDeviceList, au
                                     </Card>
                                 ))}
                                 {oldImages.map((image, index) => (
-                                    <Card key={image.id} sx={{maxWidth: 100}}>
+                                    <Card key={image.id} sx={{maxWidth: 100, marginRight: '5px'}}>
                                         <CardMedia
                                             component="img"
                                             alt={image.name}

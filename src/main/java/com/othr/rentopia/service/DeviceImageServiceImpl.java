@@ -66,20 +66,21 @@ public class DeviceImageServiceImpl implements DeviceImageService {
         return deviceImages;
     }
 
+    @Transactional
     @Override
     public void removeDeviceImage(String deviceImage) {
-        String query = "DELETE FROM DeviceImage WHERE name = :deviceImage";
+        String query = "DELETE FROM DeviceImage c WHERE c.name = :fileName";
+
         try {
             entityManager
                 .createQuery(query)
-                .setParameter("deviceImage", deviceImage)
+                .setParameter("fileName", deviceImage)
                 .executeUpdate();
-
-            // TODO delete actual file -> currently done when this is method is called
         } catch (PersistenceException e) {
             System.err.println("ERROR removing DeviceImage with the name " + deviceImage + ": " + e.getMessage());
         }
     }
+
 
     @Override
     public void removeAllDeviceImages(Long deviceId) {
