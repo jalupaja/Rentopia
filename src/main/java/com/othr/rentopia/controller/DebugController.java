@@ -66,7 +66,7 @@ public class DebugController {
             l1.setPostalCode("93047");
 
             Account u1 = new Account();
-            u1.setEmail("u");
+            u1.setEmail("u@rentopia.local");
             u1.setPassword(passwordEncoder.encode("u"));
             u1.setName("Lukas Müller");
             u1.setRole(Account.Role.USER);
@@ -81,7 +81,7 @@ public class DebugController {
             l2.setPostalCode("93047");
 
             Account u2 = new Account();
-            u2.setEmail("a");
+            u2.setEmail("a@rentopia.local");
             u2.setPassword(passwordEncoder.encode("a"));
             u2.setName("Anna Schneider");
             u2.setRole(Account.Role.ADMIN);
@@ -96,7 +96,7 @@ public class DebugController {
             l3.setPostalCode("93053");
 
             Account u3 = new Account();
-            u3.setEmail("c");
+            u3.setEmail("c@rentopia.local");
             u3.setPassword(passwordEncoder.encode("c"));
             u3.setName("OTH Regensburg");
             u3.setRole(Account.Role.COMPANY);
@@ -111,7 +111,7 @@ public class DebugController {
             l4.setPostalCode("93053");
 
             Account u4 = new Account();
-            u4.setEmail("u2");
+            u4.setEmail("u2@rentopia.local");
             u4.setPassword(passwordEncoder.encode("u2"));
             u4.setName("Maximilian Weber");
             u4.setRole(Account.Role.USER);
