@@ -190,7 +190,7 @@ function Appbar({ showLogin = true, authUser = null, searchVisibility = 'hidden'
                         />
                     </Box>
                     <FormControl fullWidth margin="normal">
-                        <InputLabel>{t("Sort_By")}</InputLabel>
+                        <InputLabel>{t("sort_by")}</InputLabel>
                         <Select
                             value={filterOptions.sortOption}
                             onChange={(e) => {
