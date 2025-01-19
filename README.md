@@ -4,13 +4,8 @@
 
 ### docker
 update docker images (This will copy the current database. This should be disabled for actual use):
-`docker compose build`
+`docker build -t obviousboxer/rentopia .`
 
 run docker images:
-`docker compose up`
+`docker run -p 8080:8080 -p 3000:3000 obviousboxer/rentopia`
 
-export docker image:
-`docker save -o rentopia.tar rentopia-backend rentopia-frontend`
-
-import docker image:
-`docker load -i rentopia.tar`
