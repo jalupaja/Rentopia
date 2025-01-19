@@ -163,6 +163,10 @@ public class DebugController {
                 Double price = prices[i];
                 boolean isPublic = (i < 5) ? false : true;
 
+                if (i >= 20) {
+                    ownerId = u1.getId();
+                }
+
                 Device device = new Device();
                 device.setTitle(title);
                 device.setDescription(description);
