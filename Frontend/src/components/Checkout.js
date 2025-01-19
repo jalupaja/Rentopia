@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import {
     Dialog,
     DialogActions,
@@ -11,9 +11,11 @@ import {
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import FetchBackend, {JWTTokenExists} from "../helper/BackendHelper";
 import {differenceInDays, format} from "date-fns";
-import 'react-date-range/dist/styles.css'; // main style file
-import 'react-date-range/dist/theme/default.css'; // theme css file
+import 'react-date-range/dist/styles.css';
+import 'react-date-range/dist/theme/default.css';
 import { DateRangePicker } from 'react-date-range';
+import i18n from "../i18n.js"
+import {de, enUS, es, fr} from "date-fns/locale";
 import {useNavigate} from "react-router-dom";
 import {useTranslation} from "react-i18next";
 
@@ -23,6 +25,23 @@ function CheckoutDialog({ open, handleCheckoutClose, device, authUser, bookedRan
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
     const navigation = useNavigate();
+    const [locale, setLocale] = useState(de);
+
+    useEffect(() => {
+        switch (i18n.language) {
+            case "de":
+                setLocale(de);
+                break;
+            case "es":
+                setLocale(es);
+                break;
+            case "fr":
+                setLocale(fr);
+                break;
+            default:
+                setLocale(enUS);
+        }
+    }, [i18n.language])
 
     const calculateDateDifference = (startDate, endDate) => {
         return differenceInDays(new Date(endDate), new Date(startDate)) + 1;
@@ -114,6 +133,7 @@ function CheckoutDialog({ open, handleCheckoutClose, device, authUser, bookedRan
                                 onChange={updateDates}
                                 disabledDates={bookedRanges}
                                 minDate={tomorrow}
+                                locale={locale}
                             />
                         </Box>
                     </Box>
