@@ -14,6 +14,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EuroIcon from '@mui/icons-material/Euro';
 import {useState} from "react";
 import FetchBackend, {FetchBackendMultiPart} from "../helper/BackendHelper";
+import {useTranslation} from "react-i18next";
 
 const StyledSelect = styled(Select)(({ theme }) => ({
     '& .MuiOutlinedInput-notchedOutline': {
@@ -42,7 +43,7 @@ function AddDeviceDialog({open, handleAddDialogClose, iDevice, setDeviceList, au
         location: authUser.location,
     };
     const [newDeviceData, setNewDeviceData] = React.useState(initialValues);
-
+    const { t } = useTranslation("", { keyPrefix: "deviceDialog" });
     const clearFields = () => {
         setNewDeviceData({...initialValues});
     }
@@ -151,7 +152,7 @@ function AddDeviceDialog({open, handleAddDialogClose, iDevice, setDeviceList, au
                         <Grid container spacing={2}>
                             <TextField
                                 variant="outlined"
-                                label={"Name"}
+                                label={t("name")}
                                 value={newDeviceData.title}
                                 onChange={(e) => {
                                     setNewDeviceData(prevState => ({
@@ -163,7 +164,7 @@ function AddDeviceDialog({open, handleAddDialogClose, iDevice, setDeviceList, au
                             />
                             <TextField
                                 variant="outlined"
-                                label={"Price"}
+                                label={t("price")}
                                 value={newDeviceData.price}
                                 onChange={(e) => {
                                     setNewDeviceData(prevState => ({
@@ -204,7 +205,7 @@ function AddDeviceDialog({open, handleAddDialogClose, iDevice, setDeviceList, au
                                 fullWidth
                                 variant="outlined"
                                 multiline rows={5}
-                                label={"Description"}
+                                label={t("description")}
                                 value={newDeviceData.description}
                                 onChange={(e) => {
                                     setNewDeviceData(prevState => ({
@@ -280,7 +281,7 @@ function AddDeviceDialog({open, handleAddDialogClose, iDevice, setDeviceList, au
                         )}
                     </Box>
                     <Button variant="contained" component="label" sx={{marginLeft: '24px'}}>
-                        Upload Images
+                        {t("upload_images")}
                         <input
                             type="file"
                             hidden
@@ -291,8 +292,8 @@ function AddDeviceDialog({open, handleAddDialogClose, iDevice, setDeviceList, au
                     </Button>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={closeDialog} color={"error"}>Cancel</Button>
-                    <Button onClick={handleSave} type="submit">Save</Button>
+                    <Button onClick={closeDialog} color={"error"}>{t("cancel")}</Button>
+                    <Button onClick={handleSave} type="submit">{t("save")}</Button>
                 </DialogActions>
             </Dialog>
         </React.Fragment>

@@ -15,9 +15,11 @@ import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
 import { DateRangePicker } from 'react-date-range';
 import {useNavigate} from "react-router-dom";
+import {useTranslation} from "react-i18next";
 
 function CheckoutDialog({ open, handleCheckoutClose, device, authUser, bookedRanges = [] }) {
     const [step, setStep] = useState(1);
+    const { t } = useTranslation("", { keyPrefix: "checkout" });
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
     const navigation = useNavigate();
@@ -60,7 +62,7 @@ function CheckoutDialog({ open, handleCheckoutClose, device, authUser, bookedRan
         if(newFinance.dateDiff != null) {
             setStep(2);
         } else {
-            window.alert("Please Select a Date!");
+            window.alert(t("select_date_error"));
         }
     };
 
@@ -89,7 +91,7 @@ function CheckoutDialog({ open, handleCheckoutClose, device, authUser, bookedRan
             fullWidth
             PaperProps={{ component: "form" }}
         >
-            <DialogTitle>Checkout</DialogTitle>
+            <DialogTitle>{t("checkout")}</DialogTitle>
 
             <DialogContent>
                 {step === 1 && (
@@ -122,19 +124,19 @@ function CheckoutDialog({ open, handleCheckoutClose, device, authUser, bookedRan
                         <Box>
                             <Typography variant="h5">Order Details</Typography>
                             <Typography variant="body1" gutterBottom>
-                                Product: {device.title}
+                                {t("product")}: {device.title}
                             </Typography>
                             <Typography variant="body1" gutterBottom>
-                                Price (per day): {device.price} €
+                                {t("price_p_day")}: {device.price} €
                             </Typography>
                             <Typography variant="body1" gutterBottom>
-                                Total Days: {newFinance.dateDiff}
+                                {t("total_days")}: {newFinance.dateDiff}
                             </Typography>
                             <Typography variant="body1">
-                                Total Price: {newFinance.amount} €
+                                {t("total_price")}: {newFinance.amount} €
                             </Typography>
                             <Typography variant="body1">
-                                Date Range: {newFinance.startDate ? format(newFinance.startDate, 'yyyy-MM-dd') : 'N/A'} -> {newFinance.endDate ? format(newFinance.endDate, 'yyyy-MM-dd') : 'N/A'}
+                                {t("date_range")}: {newFinance.startDate ? format(newFinance.startDate, 'yyyy-MM-dd') : 'N/A'} -> {newFinance.endDate ? format(newFinance.endDate, 'yyyy-MM-dd') : 'N/A'}
                             </Typography>
                         </Box>
 
@@ -179,18 +181,18 @@ function CheckoutDialog({ open, handleCheckoutClose, device, authUser, bookedRan
                     }}
                     color="error"
                 >
-                    Cancel
+                    {t("cancel")}
                 </Button>
 
                 {step === 1 && (
                     <Button onClick={handleNext} variant="contained">
-                        Continue
+                        {t("continue")}
                     </Button>
                 )}
 
                 {step === 2 && (
                     <Button onClick={handleBack} variant="outlined">
-                        Back
+                        {t("back")}
                     </Button>
                 )}
             </DialogActions>

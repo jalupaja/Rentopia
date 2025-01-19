@@ -139,7 +139,7 @@ function Appbar({ showLogin = true, authUser = null, searchVisibility = 'hidden'
                                     title: e.target.value,
                                 }));
                             }}
-                            placeholder="Search"
+                            placeholder={t("search")}
                             onKeyDown={(event) => {
                                 if (event.key === 'Enter') handleSearch();
                             }}
@@ -155,11 +155,11 @@ function Appbar({ showLogin = true, authUser = null, searchVisibility = 'hidden'
 
             {/*Filter Popup*/}
             <Dialog open={openFilter} onClose={handleFilterClose}>
-                <DialogTitle>Filters</DialogTitle>
+                <DialogTitle>{t("filters")}</DialogTitle>
                 <DialogContent>
                     {/* Postal Code */}
                     <TextField
-                        label="Postal Code"
+                        label={t("postal_code")}
                         variant="outlined"
                         fullWidth
                         margin="normal"
@@ -172,7 +172,7 @@ function Appbar({ showLogin = true, authUser = null, searchVisibility = 'hidden'
                         }}
                     />
                     <Box>
-                        <InputLabel>Price Range</InputLabel>
+                        <InputLabel>{t("price_range")}</InputLabel>
                         <Slider
                             sx={{width:'97%'}}
                             value={filterOptions.priceRange}
@@ -190,7 +190,7 @@ function Appbar({ showLogin = true, authUser = null, searchVisibility = 'hidden'
                         />
                     </Box>
                     <FormControl fullWidth margin="normal">
-                        <InputLabel>Sort By</InputLabel>
+                        <InputLabel>{t("Sort_By")}</InputLabel>
                         <Select
                             value={filterOptions.sortOption}
                             onChange={(e) => {
@@ -199,22 +199,22 @@ function Appbar({ showLogin = true, authUser = null, searchVisibility = 'hidden'
                                     sortOption: e.target.value
                                 }));
                             }}
-                            label="Sort By"
+                            label={t("sort_by")}
                          variant={"outlined"}>
-                            <MenuItem value="priceAsc">Price (Low to High)</MenuItem>
-                            <MenuItem value="priceDesc">Price (High to Low)</MenuItem>
+                            <MenuItem value="priceAsc">{t("price_lth")}</MenuItem>
+                            <MenuItem value="priceDesc">{t("price_htl")}</MenuItem>
                         </Select>
                     </FormControl>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleFilterCancel} color="primary">
-                        Cancel
+                        {t("cancel")}
                     </Button>
                     <Button color="primary" onClick={handleFilterClose}>
-                        Apply Filters
+                        {t("apply_filters")}
                     </Button>
                     <Button  onClick={handleFilterReset} color="error">
-                        Reset Filters
+                        {t("reset_filters")}
                     </Button>
                 </DialogActions>
             </Dialog>

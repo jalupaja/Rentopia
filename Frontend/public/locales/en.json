@@ -9,7 +9,16 @@
         "media": "Media",
         "home": "Home",
         "sign_in": "Sign in",
-        "logout": "Logout"
+        "logout": "Logout",
+        "filters": "Filter",
+        "postal_code": "Post Code",
+        "price_range": "Price Range",
+        "sort_by": "Sort By",
+        "price_lth": "Price (Low to High)",
+        "price_htl": "Price (High to Low)",
+        "cancel": "Cancel",
+        "apply_filters": "Apply Filter",
+        "reset_filters": "Reset Filter"
     },
     "device": {
         "bookmarked": "Bookmarked",
@@ -67,7 +76,7 @@
         "prename": "Prename",
         "company": "Company",
         "email": "Email",
-        "country" : "Country",
+        "country": "Country",
         "edit_profile": "Edit Profile",
         "profile_tabs": "Profile Tabs",
         "your_tools": "Your Tools",
@@ -75,7 +84,6 @@
         "rent_history": "Rent History",
         "insert_device": "Insert Device Name here",
         "tool_nr": "Tool Nr ",
-        "country": "Country",
         "general_error" : "An error occurred, please try again.",
         "passwords_dont_match" : "Passwords do not match",
         "input_empty" : "Input fields cannot be empty",
@@ -88,7 +96,12 @@
         "change_password" : "Change Password",
         "password_dialog_title" : "Change your password",
         "change" : "change",
-        "cancel" : "cancel"
+        "cancel" : "cancel",
+        "description": "Description",
+        "post_code": "Post Code",
+        "city": "City",
+        "street": "Street",
+        "save": "Save"
     },
     "helpcenter": {
         "error_unavailable": "Help Center is currently not available. Please try again",
@@ -144,5 +157,25 @@
         "verify" : "verify",
         "send again" : "Didn't receive an email? Send again",
         "email_sent_again" : "An email with an authentication code was sent again"
+    },
+    "deviceDialog" : {
+        "name": "Name",
+        "price": "Price",
+        "description": "Description",
+        "upload_images": "Upload Images",
+        "cancel": "Cancel",
+        "save": "Save"
+    },
+    "checkout": {
+        "select_date_error": "Please Select a valid Date!",
+        "checkout": "Checkout",
+        "Product": "Product",
+        "price_p_day": "Price per Day",
+        "total_days": "Total Days",
+        "total_price": "Total Price",
+        "date_range": "Date Range",
+        "cancel": "Cancel",
+        "continue": "Continue",
+        "back": "Back"
     }
 }

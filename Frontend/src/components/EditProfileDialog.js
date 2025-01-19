@@ -11,9 +11,11 @@ import {useEffect, useState} from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import UploadIcon from '@mui/icons-material/Upload';
 import FetchBackend from "../helper/BackendHelper";
+import {useTranslation} from "react-i18next";
 
 function EditProfileDialog({open, userData, setUserData, handleEditDialogClose}) {
 
+    const { t } = useTranslation("", { keyPrefix: "profile" });
     const [avatar, setAvatar] = useState(null);
     const initialUserData = {
         id: userData.id,
@@ -80,7 +82,7 @@ function EditProfileDialog({open, userData, setUserData, handleEditDialogClose})
                     component: 'form'
                 }}
             >
-                <DialogTitle>Edit Profile</DialogTitle>
+                <DialogTitle>{t("edit_profile")}</DialogTitle>
                 <DialogContent>
                     <Box display="flex" mb={2}>
                         <Avatar
@@ -105,7 +107,7 @@ function EditProfileDialog({open, userData, setUserData, handleEditDialogClose})
                     </Box>
                     <Box display="flex" justifyContent={"space-between"}>
                         <TextField
-                            label="name"
+                            label={t("name")}
                             margin="normal"
                             name="name"
                             value={newUserData.name}
@@ -114,7 +116,7 @@ function EditProfileDialog({open, userData, setUserData, handleEditDialogClose})
                         />
                     </Box>
                     <TextField
-                        label="Email"
+                        label={t("email")}
                         fullWidth
                         margin="normal"
                         name="email"
@@ -123,7 +125,7 @@ function EditProfileDialog({open, userData, setUserData, handleEditDialogClose})
                     />
 
                     <TextField
-                        label="Description"
+                        label={t("description")}
                         multiline
                         rows={4}
                         fullWidth
@@ -142,7 +144,7 @@ function EditProfileDialog({open, userData, setUserData, handleEditDialogClose})
                             sx={{width: "49%"}}
                         />
                         <TextField
-                            label="Country"
+                            label={t("country")}
                             margin="normal"
                             name="country"
                             value={newUserData.country}
@@ -152,7 +154,7 @@ function EditProfileDialog({open, userData, setUserData, handleEditDialogClose})
                     </Box>
                     <Box display={"flex"} justifyContent={"space-between"} flexWrap={"wrap"}>
                         <TextField
-                            label="Post Code"
+                            label={t("post_code")}
                             margin="normal"
                             name="postCode"
                             value={newUserData.postCode}
@@ -160,7 +162,7 @@ function EditProfileDialog({open, userData, setUserData, handleEditDialogClose})
                             sx={{width: "29%"}}
                         />
                         <TextField
-                            label="City"
+                            label={t("city")}
                             margin="normal"
                             name="city"
                             value={newUserData.city}
@@ -168,7 +170,7 @@ function EditProfileDialog({open, userData, setUserData, handleEditDialogClose})
                             sx={{width: "69%"}}
                         />
                         <TextField
-                            label="Street"
+                            label={t("street")}
                             margin="normal"
                             name="street"
                             value={newUserData.street}
@@ -178,8 +180,8 @@ function EditProfileDialog({open, userData, setUserData, handleEditDialogClose})
                     </Box>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={closeDialog} color={"error"}>Cancel</Button>
-                    <Button onClick={handleSave} type="submit">Save</Button>
+                    <Button onClick={closeDialog} color={"error"}>{t("cancel")}</Button>
+                    <Button onClick={handleSave} type="submit">{t("save")}</Button>
                 </DialogActions>
             </Dialog>
         </React.Fragment>
