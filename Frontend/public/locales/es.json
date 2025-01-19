@@ -8,17 +8,29 @@
         "tools": "Herramientas",
         "media": "Medios",
         "home": "Inicio",
-        "sign_in": "Iniciar sesión"
+        "sign_in": "Iniciar sesión",
+        "logout": "Cerrar sesión",
+        "filters": "Filtro",
+        "postal_code": "Código postal",
+        "price_range": "Rango de precios",
+        "sort_by": "Ordenar por",
+        "price_lth": "Precio (de menor a mayor)",
+        "price_htl": "Precio (de mayor a menor)",
+        "cancel": "Cancelar",
+        "apply_filters": "Aplicar filtro",
+        "reset_filters": "Restablecer filtro"
     },
     "device": {
-        "bookmarked": "Marcado",
-        "add_bookmark": "Agregar a marcadores",
+        "bookmarked": "Guardado",
+        "add_bookmark": "Añadir a favoritos",
         "rent": "Alquilar ahora",
-        "StartConversation" : "Iniciar conversación"
+        "StartConversation": "Iniciar conversación",
+        "day": "Día"
     },
     "login": {
         "error_password": "¡Correo o contraseña incorrectos!",
         "error_unknown": "Ocurrió un error. Por favor, inténtalo de nuevo.",
+        "error_not_google": "La cuenta no fue creada con Google",
         "welcome": "Bienvenido a Rentopia",
         "email": "Correo electrónico",
         "password": "Contraseña",
@@ -48,15 +60,15 @@
         "country": "País",
         "create_account": "Crear cuenta",
         "login": "Iniciar sesión",
-        "email_invalid" : "El correo electrónico no es válido"
+        "email_invalid": "El correo electrónico no es válido"
     },
     "forgotpassword": {
-        "error_mail": "El envío del correo no fue exitoso. Por favor, inténtalo de nuevo.",
-        "succ_mail": "Correo enviado con éxito. Por favor, revisa tu correo.",
+        "error_mail": "No se pudo enviar el correo. Por favor, inténtalo de nuevo.",
+        "succ_mail": "Correo enviado con éxito. Por favor, revisa tu bandeja de entrada.",
         "forgot_password": "¿Olvidaste tu contraseña?",
         "write_mail": "Escribe tu correo electrónico para restablecer tu contraseña:",
         "send_mail": "Enviar correo",
-        "no_existent_user" : "El usuario con este correo electrónico no existe"
+        "no_existent_user": "No existe un usuario con este correo"
     },
     "profile": {
         "user": "Usuario",
@@ -64,47 +76,52 @@
         "prename": "Nombre de pila",
         "company": "Empresa",
         "email": "Correo electrónico",
+        "country": "País",
         "edit_profile": "Editar perfil",
-        "profile_tabs": "Pestañas de perfil",
+        "profile_tabs": "Pestañas del perfil",
         "your_tools": "Tus herramientas",
-        "bookmarks": "Marcadores",
-        "rent_history": "Historial de alquiler",
-        "insert_device": "Inserte el nombre del dispositivo aquí",
-        "tool_nr": "Herramienta Nr ",
-        "country": "país",
-        "general_error" : "Ocurrió un error, por favor inténtalo nuevamente.",
-        "passwords_dont_match" : "Las contraseñas no coinciden",
-        "input_empty" : "Los campos de entrada no pueden estar vacíos",
-        "change_password_success" : "El cambio de contraseña fue exitoso",
-        "password_invalid" : "Su contraseña anterior no es correcta",
-        "old_password" : "Contraseña anterior",
-        "new_password" : "Nueva contraseña",
-        "confirm_password" : "confirmar Contraseña",
-        "forgot_password" : "¿Olvidaste tu contraseña?",
-        "change_password" : "Cambiar la contraseña",
-        "password_dialog_title" : "Cambia tu contraseña",
-        "change" : "Cambiar",
-        "cancel" : "Cancelar"
+        "bookmarks": "Favoritos",
+        "rent_history": "Historial de alquileres",
+        "insert_device": "Introduce el nombre del dispositivo aquí",
+        "tool_nr": "Herramienta N.º",
+        "general_error": "Ocurrió un error. Por favor, inténtalo de nuevo.",
+        "passwords_dont_match": "Las contraseñas no coinciden",
+        "input_empty": "Los campos no pueden estar vacíos",
+        "change_password_success": "Cambio de contraseña exitoso",
+        "password_invalid": "Tu contraseña antigua no es correcta",
+        "old_password": "contraseña antigua",
+        "new_password": "nueva contraseña",
+        "confirm_password": "confirmar contraseña",
+        "forgot_password": "¿Olvidaste tu contraseña?",
+        "change_password": "Cambiar contraseña",
+        "password_dialog_title": "Cambia tu contraseña",
+        "change": "cambiar",
+        "cancel": "cancelar",
+        "description": "Descripción",
+        "post_code": "Código postal",
+        "city": "Ciudad",
+        "street": "Calle",
+        "save": "Guardar"
     },
     "helpcenter": {
-        "error_unavailable": "El centro de ayuda no está disponible actualmente. Por favor, inténtalo de nuevo.",
+        "error_unavailable": "El centro de ayuda no está disponible en este momento. Por favor, inténtalo de nuevo.",
         "status": "Estado",
         "status_open": "Abierto",
         "status_closed": "Cerrado",
         "new_ticket": "Nuevo ticket",
-        "submit_ticket" : "Enviar ticket",
-        "delete_ticket" : "Eliminar billete",
-        "close_ticket" : "Cerrar ticket",
-        "error_ticket_action" : "Ocurrió un error, por favor intente nuevamente",
-        "success_ticket_creation" : "La creación del ticket fue exitosa",
-        "success_ticket_delete" : "La eliminación del ticket fue exitosa",
-        "success_ticket_close" : "El cierre del ticket fue exitoso",
-        "owner" : "Dueño",
-        "category_general" : "general",
-        "title_error_input" : "El título no debe estar vacío",
-        "status_new" : "nuevo",
-        "category_delete_account" : "Solicitar la eliminación de su cuenta",
-        "delete_user" : "Eliminar cuenta de usuario"
+        "submit_ticket": "Enviar ticket",
+        "delete_ticket": "Eliminar ticket",
+        "close_ticket": "Cerrar ticket",
+        "error_ticket_action": "Ocurrió un error. Por favor, inténtalo de nuevo.",
+        "success_ticket_creation": "Creación del ticket exitosa",
+        "success_ticket_delete": "Eliminación del ticket exitosa",
+        "success_ticket_close": "Cierre del ticket exitoso",
+        "owner": "Propietario",
+        "category_general": "general",
+        "title_error_input": "El título no puede estar vacío",
+        "status_new": "Nuevo",
+        "category_delete_account": "Solicitar la eliminación de tu cuenta",
+        "delete_user": "Eliminar cuenta de usuario"
     },
     "profile_menu": {
         "admin_tickesystem": "Sistema de tickets ADM",
@@ -113,32 +130,52 @@
         "ticketsystem": "Centro de ayuda",
         "logout": "Cerrar sesión",
         "settings": "Configuración",
-        "chat" : "Chat"
+        "chat": "Chat"
     },
     "languageselector": {
-        "select_language": "Seleccionar un idioma",
+        "select_language": "Selecciona un idioma",
         "search": "Buscar…"
     },
-    "chat" : {
-        "your_chats" : "Definir  Chats",
-        "message_hint" : "Escribe un mensaje"
+    "chat": {
+        "your_chats": "Tus chats",
+        "message_hint": "Escribe un mensaje"
     },
-    "new_password" : {
-        "title_new_password" : "Escriba su nueva contraseña",
-        "password" : "Contraseña",
-        "reset_password" : "Actualizar contraseña",
-        "general_error" : "Ocurrió un error, por favor inténtalo nuevamente",
-        "invalid_token" : "No se puede actualizar la contraseña debido a un token no válido",
-        "update_success" : "La actualización de su contraseña fue exitosa"
+    "new_password": {
+        "title_new_password": "Escribe tu nueva contraseña",
+        "password": "contraseña",
+        "reset_password": "Actualizar contraseña",
+        "general_error": "Ocurrió un error. Por favor, inténtalo de nuevo.",
+        "invalid_token": "No se puede actualizar la contraseña debido a un token no válido",
+        "update_success": "Tu contraseña se ha actualizado correctamente"
     },
-    "confirm_account" : {
-        "general_error" : "Ocurrió un error, por favor intente de nuevo",
-        "token_expired" : "Su código de autenticación ha expirado",
-        "token_invalid" : "Su código de autenticación es inválido",
-        "confirm title" : "Autenticación de dos factores",
-        "description" : "Acabamos de enviarle un mensaje a su dirección de correo electrónico con su código de autenticación. Ingrese el código en el formulario para verificar su identidad.",
-        "verify" : "verificar",
-        "send again" : "¿No recibió un correo electrónico? Enviar de nuevo",
-        "email_sent_again" : "Se envió nuevamente un correo electrónico con un código de autenticación"
+    "confirm_account": {
+        "general_error": "Ocurrió un error. Por favor, inténtalo de nuevo.",
+        "token_expired": "Tu código de autenticación ha expirado",
+        "token_invalid": "Tu código de autenticación no es válido",
+        "confirm title": "Autenticación de dos factores",
+        "description": "Acabamos de enviarte un correo con tu código de autenticación. Ingresa el código en el formulario de arriba para verificar tu identidad.",
+        "verify": "Verificar",
+        "send again": "¿No recibiste un correo? Enviar de nuevo",
+        "email_sent_again": "Se ha enviado nuevamente un correo con un código de autenticación"
+    },
+    "deviceDialog": {
+        "name": "Nombre",
+        "price": "Precio",
+        "description": "Descripción",
+        "upload_images": "Subir imágenes",
+        "cancel": "Cancelar",
+        "save": "Guardar"
+    },
+    "checkout": {
+        "select_date_error": "¡Selecciona una fecha válida!",
+        "checkout": "Pagar",
+        "product": "Producto",
+        "price_p_day": "Precio por día",
+        "total_days": "Total de días",
+        "total_price": "Precio total",
+        "date_range": "Rango de fechas",
+        "cancel": "Cancelar",
+        "continue": "Continuar",
+        "back": "Atrás"
     }
 }

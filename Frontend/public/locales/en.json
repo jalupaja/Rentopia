@@ -169,7 +169,7 @@
     "checkout": {
         "select_date_error": "Please Select a valid Date!",
         "checkout": "Checkout",
-        "Product": "Product",
+        "product": "Product",
         "price_p_day": "Price per Day",
         "total_days": "Total Days",
         "total_price": "Total Price",
