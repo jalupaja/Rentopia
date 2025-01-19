@@ -284,9 +284,6 @@ function DeviceSite() {
                                             <Box
                                                 display="flex"
                                                 alignItems="center"
-                                                sx={{
-                                                    cursor: 'pointer',
-                                                }}
                                                 mb={2}
                                                 mx={boxStyle}
                                             >
